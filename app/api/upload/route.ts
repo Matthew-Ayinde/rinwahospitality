@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
           folder: 'rinwa-admin',
-          resource_type: resourceType === 'auto' ? 'auto' : resourceType,
+          resource_type: (resourceType === 'auto' ? 'auto' : resourceType) as 'auto' | 'image' | 'video' | 'raw',
         },
         (error, result) => {
           if (error) reject(error);

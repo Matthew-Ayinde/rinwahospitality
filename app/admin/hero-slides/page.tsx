@@ -194,7 +194,7 @@ export default function HeroSlidesPage() {
         </div>
         <AdminButton
           onClick={() => {
-            reset({ imageUrl: '', videoUrl: '', title: '', description: '', order: '' });
+            reset({ imageUrl: '', videoUrl: '', title: '', description: '', order: 0 });
             setEditingId(null);
             setIsModalOpen(true);
           }}

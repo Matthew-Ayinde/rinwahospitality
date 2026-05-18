@@ -7,6 +7,8 @@ export function SplashScreen() {
   const [showSplash, setShowSplash] = useState(false);
   const [isAnimatingOut, setIsAnimatingOut] = useState(false);
   const shouldReduceMotion = useReducedMotion();
+  const doorEase = [0.4, 0, 0.2, 1] as const;
+  const textEase = [0.25, 0.46, 0.45, 0.94] as const;
 
   useEffect(() => {
     // Check if we've already shown the splash in this session
@@ -45,7 +47,7 @@ export function SplashScreen() {
     animate: { width: "50%" },
     exit: {
       width: 0,
-      transition: { duration: 1, ease: [0.4, 0, 0.2, 1] },
+      transition: { duration: 1, ease: doorEase },
     },
   };
 
@@ -61,7 +63,7 @@ export function SplashScreen() {
           scale: 1,
           transition: {
             duration: 0.95,
-            ease: [0.25, 0.46, 0.45, 0.94],
+            ease: textEase,
             delay: 0.3,
           },
         },
@@ -69,7 +71,7 @@ export function SplashScreen() {
       opacity: 0,
       y: -12,
       scale: 0.98,
-      transition: { duration: 0.8, ease: [0.4, 0, 0.2, 1] },
+      transition: { duration: 0.8, ease: doorEase },
     },
   };
 
@@ -80,7 +82,7 @@ export function SplashScreen() {
           initial={{ opacity: shouldReduceMotion ? 1 : 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+          transition={{ duration: 0.6, ease: doorEase }}
           className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden"
           onClick={handleDismiss}
           role="presentation"
