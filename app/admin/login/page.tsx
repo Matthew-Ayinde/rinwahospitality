@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
@@ -85,9 +86,13 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <p className="text-xs text-white/40 mt-6 text-center">
-            Contact support for account issues
-          </p>
+          <div className="mt-6 text-center">
+            <Link href="/admin/forgot-password" className="text-sm text-white/60 underline hover:text-white/80 transition">
+              Forgot password?
+            </Link>
+          </div>
+
+          <p className="text-xs text-white/40 mt-6 text-center">Contact support for account issues</p>
         </div>
       </div>
     </div>

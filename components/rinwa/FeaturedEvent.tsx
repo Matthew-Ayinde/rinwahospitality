@@ -1,22 +1,78 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import { useEffect, useState } from "react";
+
+type EventMedia = {
+  _id: string;
+  imageUrl: string;
+  mediaType?: 'image' | 'video';
+  posterUrl?: string;
+  caption?: string;
+  order?: number;
+  isActive?: boolean;
+};
+
+type FeaturedEventData = {
+  _id?: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  location: string;
+  date: string;
+  time: string;
+  media: EventMedia[];
+  isActive: boolean;
+};
 
 /**
  * Editorial featured block.
  * A subtle parallax lift keeps the event feeling immersive without becoming distracting.
+ * Now fetches from API with fallback to defaults.
  */
 export function FeaturedEvent() {
   const shouldReduceMotion = useReducedMotion();
-  const sectionRef = useRef<HTMLElement | null>(null);
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
-  const imageY = useTransform(scrollYProgress, [0, 1], [40, -40]);
-  const imageScale = useTransform(scrollYProgress, [0, 1], [1.08, 1.02]);
+  
+  const [event, setEvent] = useState<FeaturedEventData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchEvent() {
+      try {
+        const res = await fetch('/api/featured-event');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.isActive) {
+            setEvent(data);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch featured event:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchEvent();
+  }, []);
+
+  // Show nothing while loading
+  if (isLoading) {
+    return null;
+  }
+
+  // Show nothing if no active event
+  if (!event) {
+    return null;
+  }
+
+  // Get background image/video from first media item
+  const backgroundMedia = event.media?.[0];
+  const backgroundSrc = backgroundMedia?.imageUrl || "https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=1800&q=80";
 
   return (
-    <section ref={sectionRef} className="px-5 py-24 sm:px-8 lg:px-12 lg:py-28">
+    <section className="px-5 py-24 sm:px-8 lg:px-12 lg:py-28">
       <div className="mx-auto max-w-7xl">
         <motion.div
           initial={shouldReduceMotion ? false : { opacity: 0, y: 24 }}
@@ -25,14 +81,33 @@ export function FeaturedEvent() {
           transition={{ duration: 0.85, ease: "easeOut" }}
           className="relative overflow-hidden rounded-[2.5rem] border border-white/10"
         >
-          <motion.div style={{ y: shouldReduceMotion ? 0 : imageY, scale: shouldReduceMotion ? 1 : imageScale }} className="absolute inset-0">
-            <Image
-              src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=1800&q=80"
-              alt="Featured event background"
-              fill
-              sizes="100vw"
-              className="object-cover object-center"
-            />
+          <motion.div
+            initial={shouldReduceMotion ? false : { scale: 1.06 }}
+            animate={shouldReduceMotion ? undefined : { scale: 1.02 }}
+            transition={{ duration: 1.2, ease: "easeOut" }}
+            className="absolute inset-0"
+          >
+            {backgroundMedia?.mediaType === 'video' ? (
+              <video
+                className="h-full w-full object-cover"
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="metadata"
+                poster={backgroundMedia?.posterUrl || backgroundSrc}
+              >
+                <source src={backgroundSrc} />
+              </video>
+            ) : (
+              <Image
+                src={backgroundSrc}
+                alt={event.subtitle}
+                fill
+                sizes="100vw"
+                className="object-cover object-center"
+              />
+            )}
           </motion.div>
 
           <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(4,17,20,0.94)_10%,rgba(4,17,20,0.52)_55%,rgba(4,17,20,0.84)_100%)]" />
@@ -41,23 +116,25 @@ export function FeaturedEvent() {
           <div className="relative grid gap-10 px-6 py-10 sm:px-10 sm:py-12 lg:grid-cols-[1.08fr_0.92fr] lg:px-12 lg:py-16">
             <div className="max-w-2xl">
               <p className="text-[0.72rem] uppercase tracking-[0.38em] text-teal-200/75">Featured event</p>
-              <h2 className="mt-4 font-serif text-[clamp(3rem,7vw,5.5rem)] leading-[0.92] tracking-[-0.05em] text-white">
-                Wine &amp; Dine Wednesdays
+              <h2 className="mt-4 font-serif text-[clamp(3rem,7vw,5.5rem)] leading-[0.92] tracking-tighter text-white">
+                {event.title}
               </h2>
               <p className="mt-5 max-w-xl text-lg leading-8 text-white/74">
-                Your after-work ritual to unwind, connect &amp; engage with like minds through shared conversations, games &amp; meaningful moments.
+                {event.description}
               </p>
 
               <div className="mt-8 grid gap-4 text-white/82 sm:grid-cols-3">
                 {[
-                  ["Location", "The Terrace, Lekki Phase 1"],
-                  ["Date", "April 8th"],
-                  ["Time", "6PM – 9PM"],
+                  ["Location", event.location],
+                  ["Date", event.date],
+                  ["Time", event.time],
                 ].map(([label, value]) => (
-                  <div key={label} className="rounded-2xl border border-white/10 bg-white/6 px-4 py-4 backdrop-blur-md">
-                    <p className="text-xs uppercase tracking-[0.28em] text-teal-100/68">{label}</p>
-                    <p className="mt-2 text-base text-white/90">{value}</p>
-                  </div>
+                  value && (
+                    <div key={label} className="rounded-2xl border border-white/10 bg-white/6 px-4 py-4 backdrop-blur-md">
+                      <p className="text-xs uppercase tracking-[0.28em] text-teal-100/68">{label}</p>
+                      <p className="mt-2 text-base text-white/90">{value}</p>
+                    </div>
+                  )
                 ))}
               </div>
             </div>
@@ -70,7 +147,7 @@ export function FeaturedEvent() {
               >
                 <p className="text-sm uppercase tracking-[0.28em] text-teal-100/70">Next ritual</p>
                 <p className="mt-4 font-serif text-3xl leading-tight text-white">
-                  An evening that feels composed, warm, and effortlessly considered.
+                  {event.subtitle}
                 </p>
                 <div className="mt-7 flex flex-wrap gap-3">
                   <button className="rounded-full bg-teal-300 px-5 py-3 text-sm font-semibold text-slate-950 transition duration-300 hover:bg-teal-200">

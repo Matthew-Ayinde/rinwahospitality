@@ -8,11 +8,11 @@ import { Toaster } from 'react-hot-toast';
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-  const isLoginPage = pathname === '/admin/login';
+  const isPublicAuthPage = pathname === '/admin/login' || pathname === '/admin/forgot-password';
 
   return (
     <SessionProvider>
-      {isLoginPage ? (
+      {isPublicAuthPage ? (
         <>
           {children}
           <Toaster

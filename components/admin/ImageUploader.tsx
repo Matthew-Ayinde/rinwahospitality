@@ -13,18 +13,9 @@ interface ImageUploaderProps {
 }
 
 export default function ImageUploader({ value, onChange, label = 'Image', required, error }: ImageUploaderProps) {
-  const [mode, setMode] = useState<'url' | 'upload'>('url');
-  const [urlInput, setUrlInput] = useState(value);
   const [isUploading, setIsUploading] = useState(false);
   const [preview, setPreview] = useState(value);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const url = e.target.value;
-    setUrlInput(url);
-    setPreview(url);
-    onChange(url);
-  };
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -68,65 +59,29 @@ export default function ImageUploader({ value, onChange, label = 'Image', requir
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center justify-between">
-        <label className="text-sm font-medium text-white/90">
-          {label}
-          {required && <span className="text-red-400 ml-1">*</span>}
-        </label>
-        <div className="flex gap-2">
-          <button
-            type="button"
-            onClick={() => setMode('url')}
-            className={`px-3 py-1 text-xs rounded-lg transition ${
-              mode === 'url'
-                ? 'bg-teal-500/30 text-teal-300'
-                : 'bg-white/5 text-white/60 hover:bg-white/10'
-            }`}
-          >
-            URL
-          </button>
-          <button
-            type="button"
-            onClick={() => setMode('upload')}
-            className={`px-3 py-1 text-xs rounded-lg transition ${
-              mode === 'upload'
-                ? 'bg-teal-500/30 text-teal-300'
-                : 'bg-white/5 text-white/60 hover:bg-white/10'
-            }`}
-          >
-            Upload
-          </button>
-        </div>
-      </div>
+      <label className="text-sm font-medium text-white/90">
+        {label}
+        {required && <span className="text-red-400 ml-1">*</span>}
+      </label>
 
-      {mode === 'url' ? (
+      <div
+        className="relative border-2 border-dashed border-white/20 rounded-lg p-8 text-center cursor-pointer hover:border-teal-400/50 transition"
+        onClick={() => fileInputRef.current?.click()}
+      >
         <input
-          type="url"
-          value={urlInput}
-          onChange={handleUrlChange}
-          placeholder="https://example.com/image.jpg"
-          className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/40 focus:outline-none focus:border-teal-400/50 transition"
+          ref={fileInputRef}
+          type="file"
+          accept="image/png,image/jpeg,image/webp"
+          onChange={handleFileSelect}
+          disabled={isUploading}
+          className="hidden"
         />
-      ) : (
-        <div
-          className="relative border-2 border-dashed border-white/20 rounded-lg p-6 text-center cursor-pointer hover:border-white/40 transition"
-          onClick={() => fileInputRef.current?.click()}
-        >
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/png,image/jpeg,image/webp"
-            onChange={handleFileSelect}
-            disabled={isUploading}
-            className="hidden"
-          />
-          <Upload size={24} className="mx-auto mb-2 text-white/50" />
-          <p className="text-sm text-white/70">
-            {isUploading ? 'Uploading...' : 'Click to upload image'}
-          </p>
-          <p className="text-xs text-white/40 mt-1">PNG, JPG, or WebP up to 5MB</p>
-        </div>
-      )}
+        <Upload size={28} className="mx-auto mb-3 text-white/50" />
+        <p className="text-sm font-medium text-white/75">
+          {isUploading ? 'Uploading...' : 'Click to upload image'}
+        </p>
+        <p className="text-xs text-white/40 mt-2">PNG, JPG, or WebP up to 5MB</p>
+      </div>
 
       {error && <p className="text-xs text-red-400">{error}</p>}
 

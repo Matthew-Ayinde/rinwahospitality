@@ -156,3 +156,42 @@ export async function sendInquiryEmails({ submission, adminEmail }: InquiryEmail
     warnings,
   };
 }
+
+type GenericEmailPayload = {
+  to: string;
+  subject: string;
+  text?: string;
+  html?: string;
+  from?: string;
+};
+
+export async function sendEmail({ to, subject, text, html, from }: GenericEmailPayload): Promise<EmailResult> {
+  const transporter = buildTransporter();
+  const warnings: string[] = [];
+
+  if (!transporter) {
+    warnings.push('SMTP credentials are not configured');
+    return { sent: false, warnings };
+  }
+
+  const _from = from || process.env.SMTP_FROM || process.env.SMTP_USER;
+
+  if (!_from) {
+    warnings.push('SMTP_FROM is missing');
+    return { sent: false, warnings };
+  }
+
+  try {
+    await transporter.sendMail({
+      from: _from,
+      to,
+      subject,
+      text: text || '',
+      html: html || text || '',
+    });
+    return { sent: true, warnings };
+  } catch (err) {
+    warnings.push('Failed to send email');
+    return { sent: false, warnings };
+  }
+}

@@ -8,6 +8,9 @@ export interface IUser extends Document {
   role: 'admin' | 'editor';
   createdAt: Date;
   updatedAt: Date;
+  resetCode?: string | null;
+  resetExpires?: Date | null;
+  resetVerifiedUntil?: Date | null;
   comparePassword(password: string): Promise<boolean>;
 }
 
@@ -35,6 +38,17 @@ const UserSchema = new Schema<IUser>(
       type: String,
       enum: ['admin', 'editor'],
       default: 'admin',
+    },
+    resetCode: {
+      type: String,
+      select: false,
+    },
+    resetExpires: {
+      type: Date,
+    },
+    resetVerifiedUntil: {
+      type: Date,
+      select: false,
     },
   },
   { timestamps: true }

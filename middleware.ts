@@ -4,9 +4,10 @@ import { NextRequest, NextResponse } from "next/server";
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const token = await getToken({ req: request });
+  const isPublicAdminAuthPage = pathname === "/admin/login" || pathname === "/admin/forgot-password";
 
-  // If already authenticated, do not allow returning to login page.
-  if (pathname === "/admin/login") {
+  // Public auth pages should be accessible without a session.
+  if (isPublicAdminAuthPage) {
     if (token && (token.role === "admin" || token.role === "editor")) {
       return NextResponse.redirect(new URL("/admin", request.url));
     }

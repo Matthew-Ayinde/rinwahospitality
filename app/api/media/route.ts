@@ -8,6 +8,8 @@ import { Types } from 'mongoose';
 
 const MediaItemSchema = z.object({
   imageUrl: z.string().url('Invalid image URL'),
+  mediaType: z.enum(['image', 'video']).default('image'),
+  posterUrl: z.string().url('Invalid poster URL').optional().or(z.literal('')),
   caption: z.string().optional(),
   eventId: z.string().optional(),
   order: z.number().min(0).optional(),
@@ -47,9 +49,13 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
     const validated = MediaItemSchema.parse(body);
+    const payload = {
+      ...validated,
+      posterUrl: validated.posterUrl || undefined,
+    };
 
     await connectDB();
-    const item = await MediaItem.create(validated);
+    const item = await MediaItem.create(payload);
 
     return NextResponse.json(item, { status: 201 });
   } catch (error) {

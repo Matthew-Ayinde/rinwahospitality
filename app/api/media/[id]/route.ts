@@ -8,6 +8,8 @@ import { Types } from 'mongoose';
 
 const UpdateMediaItemSchema = z.object({
   imageUrl: z.string().url('Invalid image URL').optional(),
+  mediaType: z.enum(['image', 'video']).optional(),
+  posterUrl: z.string().url('Invalid poster URL').optional().or(z.literal('')),
   caption: z.string().optional(),
   eventId: z.string().optional(),
   order: z.number().min(0).optional(),
@@ -36,9 +38,13 @@ export async function PUT(
 
     const body = await request.json();
     const validated = UpdateMediaItemSchema.parse(body);
+    const payload = {
+      ...validated,
+      posterUrl: validated.posterUrl || undefined,
+    };
 
     await connectDB();
-    const item = await MediaItem.findByIdAndUpdate(id, validated, { new: true });
+    const item = await MediaItem.findByIdAndUpdate(id, payload, { new: true });
 
     if (!item) {
       return NextResponse.json(
