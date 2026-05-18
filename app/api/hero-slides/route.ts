@@ -7,7 +7,11 @@ import { z } from 'zod';
 
 const HeroSlideSchema = z.object({
   imageUrl: z.string().url('Invalid image URL'),
-  videoUrl: z.string().url('Invalid video URL').optional(),
+  videoUrl: z.union([
+    z.string().url('Invalid video URL'),
+    z.literal(''),
+    z.undefined(),
+  ]),
   title: z.string().min(1, 'Title is required'),
   description: z.string().optional(),
   order: z.number().min(0, 'Order must be a positive number'),

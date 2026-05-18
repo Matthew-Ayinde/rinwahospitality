@@ -8,7 +8,11 @@ import { Types } from 'mongoose';
 
 const UpdateHeroSlideSchema = z.object({
   imageUrl: z.string().url('Invalid image URL').optional(),
-  videoUrl: z.string().url('Invalid video URL').optional().or(z.literal('')),
+  videoUrl: z.union([
+    z.string().url('Invalid video URL'),
+    z.literal(''),
+    z.undefined(),
+  ]),
   title: z.string().min(1, 'Title is required').optional(),
   description: z.string().optional(),
   order: z.number().min(0, 'Order must be a positive number').optional(),
