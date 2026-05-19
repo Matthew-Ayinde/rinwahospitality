@@ -85,7 +85,14 @@ export function ContactForm() {
         throw new Error(error.error || "Failed to submit");
       }
 
-      toast.success("Thank you! We'll be in touch within 48 hours.");
+      const data = await res.json();
+
+      if (data.emailDelivered === false) {
+        const warning = Array.isArray(data.emailWarnings) && data.emailWarnings.length > 0 ? data.emailWarnings[0] : "We received your inquiry, but email delivery failed on our side.";
+        toast.error(warning);
+      } else {
+        toast.success("Thank you! We'll be in touch within 48 hours.");
+      }
       setFormData({
         fullName: "",
         email: "",
@@ -304,7 +311,7 @@ function FormField({
         value={value}
         onChange={onChange}
         placeholder={label}
-        className="w-full min-h-[56px] rounded-2xl border border-white/10 bg-[#041114]/60 px-4 py-4 text-white placeholder:text-white/28 outline-none transition focus:border-teal-300/50 focus:bg-[#07171a] focus:shadow-[0_0_0_4px_rgba(125,211,207,0.08)]"
+        className="w-full min-h-14 rounded-2xl border border-white/10 bg-[#041114]/60 px-4 py-4 text-white placeholder:text-white/28 outline-none transition focus:border-teal-300/50 focus:bg-[#07171a] focus:shadow-[0_0_0_4px_rgba(125,211,207,0.08)]"
       />
     </label>
   );

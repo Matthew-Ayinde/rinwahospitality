@@ -111,7 +111,7 @@ async function main() {
     // Create Settings
     console.log('Creating settings...');
     await Settings.create({
-      partnershipEmail: 'rinwahospitality@gmail.com',
+      partnershipEmail: process.env.ADMIN_EMAIL || 'rinwahospitality@gmail.com',
       tagline: 'Come here, you\'ve arrived home',
       siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
     });

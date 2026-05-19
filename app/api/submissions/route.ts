@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
     });
 
     const settings = await Settings.findOne().select('partnershipEmail');
-    const adminEmail = settings?.partnershipEmail || process.env.ADMIN_EMAIL || 'rinwahospitality@gmail.com';
+    const adminEmail = process.env.ADMIN_EMAIL || settings?.partnershipEmail || 'rinwahospitality@gmail.com';
     const emailResult = await sendInquiryEmails({
       submission: {
         ...validated,
@@ -56,6 +56,10 @@ export async function POST(request: NextRequest) {
       },
       adminEmail,
     });
+
+    if (!emailResult.sent) {
+      console.warn('Inquiry saved but one or more emails failed to send:', emailResult.warnings);
+    }
 
     return NextResponse.json(
       {
