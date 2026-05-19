@@ -13,7 +13,7 @@ const navItems = [
   { href: '/admin/hero-slides', label: 'Hero Slides', icon: Image },
   { href: '/admin/brand-partners', label: 'Brand Partners', icon: Users },
   { href: '/admin/events', label: 'Events', icon: Play },
-  { href: '/admin/media', label: 'Media Gallery', icon: Image },
+  // { href: '/admin/media', label: 'Media Gallery', icon: Image },
   { href: '/admin/submissions', label: 'Submissions', icon: MessageSquare },
   { href: '/admin/testimonials', label: 'Testimonials', icon: MessageSquare },
   { href: '/admin/settings', label: 'Settings', icon: Settings },

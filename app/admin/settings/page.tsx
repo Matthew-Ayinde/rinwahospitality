@@ -77,13 +77,13 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="p-8 max-w-2xl mx-auto">
+    <div className="p-8 max-w-7xl mx-auto">
       <div className="mb-8">
         <h1 className="font-serif text-4xl text-white/90">Settings</h1>
-        <p className="text-white/50 mt-2">Manage global site settings</p>
+        {/* <p className="text-white/50 mt-2">Manage global site settings</p> */}
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="bg-white/5 border border-white/10 rounded-[2.25rem] p-8 backdrop-blur-sm space-y-6">
+      {/* <form onSubmit={handleSubmit(onSubmit)} className="bg-white/5 border border-white/10 rounded-[2.25rem] p-8 backdrop-blur-sm space-y-6">
         <AdminInput
           label="Partnership Email"
           type="email"
@@ -125,7 +125,7 @@ export default function SettingsPage() {
             {isSubmitting ? 'Saving...' : 'Save Settings'}
           </AdminButton>
         </div>
-      </form>
+      </form> */}
 
       <div className="mt-8 bg-white/5 border border-white/10 rounded-[2.25rem] p-6">
         <h2 className="text-white/90 font-semibold mb-2">Password Management</h2>

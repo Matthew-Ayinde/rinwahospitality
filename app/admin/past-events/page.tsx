@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { Check, Edit2, Plus, Trash2, Eye, EyeOff } from 'lucide-react';
+import { Edit2, Film, Plus, Trash2 } from 'lucide-react';
 import AdminButton from '@/components/admin/AdminButton';
 import AdminInput from '@/components/admin/AdminInput';
 import AdminTextarea from '@/components/admin/AdminTextarea';
@@ -116,11 +116,6 @@ export default function PastEventsPage() {
   async function handleAddMedia() {
     if (!selectedEventId || !mediaUrl) {
       toast.error('Media URL is required');
-      return;
-    }
-
-    if (mediaType === 'video' && !posterUrl) {
-      toast.error('Add a poster image for the video preview');
       return;
     }
 
@@ -355,7 +350,6 @@ export default function PastEventsPage() {
                   <AdminButton
                     onClick={() => openAddMediaModal(event._id)}
                     variant="secondary"
-                    size="sm"
                   >
                     <Plus size={14} className="mr-1 inline" />
                     Add Media
@@ -382,7 +376,7 @@ export default function PastEventsPage() {
                               muted
                               playsInline
                               preload="metadata"
-                              poster={media.posterUrl || media.imageUrl}
+                              poster={media.posterUrl || undefined}
                             >
                               <source src={media.imageUrl} />
                             </video>
@@ -394,6 +388,12 @@ export default function PastEventsPage() {
                             />
                           )}
                         </div>
+                        {media.mediaType === 'video' && (
+                          <div className="absolute right-2 top-2 z-10 flex items-center gap-1 rounded-full bg-black/70 px-2 py-1 text-[10px] font-medium text-white backdrop-blur-sm">
+                            <Film size={10} />
+                            <span>Video</span>
+                          </div>
+                        )}
                         <div className="absolute inset-0 flex items-center justify-center gap-1 bg-black/40 opacity-0 transition group-hover:opacity-100">
                           <button
                             onClick={() => openEditMediaModal(event._id, media)}
@@ -514,10 +514,6 @@ export default function PastEventsPage() {
           ) : (
             <VideoUploader label="Video" value={mediaUrl} onChange={setMediaUrl} required />
           )}
-
-          {mediaType === 'video' ? (
-            <ImageUploader label="Poster image" value={posterUrl} onChange={setPosterUrl} required />
-          ) : null}
 
           <AdminInput
             label="Caption (optional)"

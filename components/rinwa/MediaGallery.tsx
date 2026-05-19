@@ -50,7 +50,7 @@ export function MediaGallery() {
           .map((item) => ({
             _id: item._id,
             imageUrl: item.imageUrl,
-            mediaType: item.mediaType === "video" ? "video" : "image",
+            mediaType: (item.mediaType === "video" ? "video" : "image") as "image" | "video",
             posterUrl: item.posterUrl || item.imageUrl,
             caption: item.caption || "",
             order: item.order ?? 0,

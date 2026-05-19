@@ -118,7 +118,7 @@ export function FeaturedEventCarousel() {
 
   return (
     <section className="px-5 py-12 sm:px-8 lg:px-12 lg:py-16">
-      <div className="mx-auto max-w-5xl">
+      <div className="mx-auto max-w-7xl">
         {/* Section Header - Compact */}
         <div className="mb-6 flex items-end justify-between gap-4">
           <div>

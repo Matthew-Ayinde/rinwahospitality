@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     const maxOrder = await FeaturedEvent.findOne()
       .sort({ order: -1 })
       .select('order')
-      .lean();
+      .lean() as { order?: number } | null;
 
     const newEvent = new FeaturedEvent({
       ...body,

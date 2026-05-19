@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type EventMedia = {
   _id: string;
@@ -36,6 +36,9 @@ export function PastEventsGallery() {
   const [events, setEvents] = useState<PastEventData[]>([]);
   const [activeEvent, setActiveEvent] = useState<PastEventData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [carouselIndex, setCarouselIndex] = useState(0);
+  const carouselPausedRef = useRef(false);
+  const carouselTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     async function fetchEvents() {
@@ -43,7 +46,6 @@ export function PastEventsGallery() {
         const res = await fetch('/api/past-events');
         if (res.ok) {
           const data = await res.json();
-          // Filter to only active events
           const activeEvents = Array.isArray(data) ? data.filter(e => e.isActive) : [];
           setEvents(activeEvents);
         }
@@ -58,16 +60,38 @@ export function PastEventsGallery() {
   }, []);
 
   useEffect(() => {
+    if (carouselTimerRef.current) clearInterval(carouselTimerRef.current);
+    setCarouselIndex(0);
+    carouselPausedRef.current = false;
+
     if (!activeEvent) return;
 
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setActiveEvent(null);
-    };
+    const mediaCount = activeEvent.media?.length || 0;
 
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setActiveEvent(null);
+    };
     window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
+
+    if (mediaCount > 1) {
+      carouselTimerRef.current = setInterval(() => {
+        if (!carouselPausedRef.current) {
+          setCarouselIndex(i => (i + 1) % mediaCount);
+        }
+      }, 5000);
+    }
+
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      if (carouselTimerRef.current) clearInterval(carouselTimerRef.current);
+    };
   }, [activeEvent]);
 
+  function handleVideoPause() {
+    carouselPausedRef.current = true;
+  }
+
+  
   return (
     <section className="px-5 py-24 sm:px-8 lg:px-12 lg:py-28">
       <div className="mx-auto max-w-7xl">
@@ -112,7 +136,7 @@ export function PastEventsGallery() {
                       muted
                       playsInline
                       preload="metadata"
-                      poster={firstMedia?.posterUrl || firstMedia?.imageUrl}
+                      poster={firstMedia?.posterUrl || undefined}
                     >
                       <source src={firstMedia?.imageUrl} type="video/mp4" />
                     </video>
@@ -168,54 +192,95 @@ export function PastEventsGallery() {
                 Close
               </button>
 
-              <div className="grid lg:grid-cols-[1.15fr_0.85fr]">
-                <div className="relative min-h-88 lg:min-h-136">
-                  {activeEvent.media?.[0]?.mediaType === "video" ? (
-                    <video
-                      className="h-full w-full object-cover"
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      controls
-                      poster={activeEvent.media[0]?.posterUrl || activeEvent.media[0]?.imageUrl}
-                    >
-                      <source src={activeEvent.media[0]?.imageUrl} type="video/mp4" />
-                    </video>
-                  ) : (
-                    <Image 
-                      src={activeEvent.media?.[0]?.imageUrl || ""} 
-                      alt={activeEvent.title} 
-                      fill 
-                      sizes="(max-width: 1024px) 100vw, 60vw" 
-                      className="object-cover object-center" 
-                    />
-                  )}
-                </div>
-                <div className="flex flex-col justify-between gap-8 p-6 sm:p-8">
-                  <div>
-                    <p className="text-xs uppercase tracking-[0.32em] text-teal-100/70">{activeEvent.category}</p>
-                    <h3 className="mt-4 font-serif text-4xl leading-tight text-white">{activeEvent.title}</h3>
-                    <p className="mt-3 text-sm uppercase tracking-[0.26em] text-white/45">{activeEvent.year}</p>
-                    <p className="mt-6 max-w-md text-base leading-8 text-white/70">
-                      {activeEvent.description || "A quiet archive moment selected to feel like an exhibit wall — spacious, tactile, and emotionally grounded."}
-                    </p>
-                  </div>
+              {(() => {
+                const media = activeEvent.media ?? [];
+                const currentMedia = media[carouselIndex];
+                const hasMultiple = media.length > 1;
+                return (
+                  <div className="grid lg:grid-cols-[1.15fr_0.85fr]">
+                    <div className="relative min-h-88 lg:min-h-136">
+                      <AnimatePresence mode="wait">
+                        <motion.div
+                          key={carouselIndex}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.4 }}
+                          className="absolute inset-0"
+                        >
+                          {currentMedia?.mediaType === "video" ? (
+                            <video
+                              key={`video-${carouselIndex}`}
+                              className="h-full w-full object-cover"
+                              autoPlay
+                              loop
+                              muted
+                              playsInline
+                              controls
+                              onPause={handleVideoPause}
+                              poster={currentMedia.posterUrl || undefined}
+                            >
+                              <source src={currentMedia.imageUrl} type="video/mp4" />
+                            </video>
+                          ) : (
+                            <Image
+                              src={currentMedia?.imageUrl || ""}
+                              alt={activeEvent.title}
+                              fill
+                              sizes="(max-width: 1024px) 100vw, 60vw"
+                              className="object-cover object-center"
+                            />
+                          )}
+                        </motion.div>
+                      </AnimatePresence>
 
-                  <div className="grid gap-3 text-sm text-white/72 sm:grid-cols-2">
-                    <div className="rounded-2xl border border-white/10 bg-white/4 p-4">
-                      <p className="text-[0.65rem] uppercase tracking-[0.28em] text-teal-100/70">Format</p>
-                      <p className="mt-2 text-white">
-                        {activeEvent.media?.[0]?.mediaType === "video" ? "Motion clip" : "Image frame"}
-                      </p>
+                      {hasMultiple && (
+                        <div className="absolute bottom-4 left-0 right-0 z-10 flex justify-center gap-2">
+                          {media.map((_, i) => (
+                            <button
+                              key={i}
+                              type="button"
+                              onClick={() => {
+                                carouselPausedRef.current = false;
+                                setCarouselIndex(i);
+                              }}
+                              className={`h-1.5 rounded-full transition-all duration-300 ${
+                                i === carouselIndex
+                                  ? "w-6 bg-white"
+                                  : "w-1.5 bg-white/40 hover:bg-white/70"
+                              }`}
+                            />
+                          ))}
+                        </div>
+                      )}
                     </div>
-                    <div className="rounded-2xl border border-white/10 bg-white/4 p-4">
-                      <p className="text-[0.65rem] uppercase tracking-[0.28em] text-teal-100/70">Media Count</p>
-                      <p className="mt-2 text-white">{activeEvent.media?.length || 0} item{(activeEvent.media?.length || 0) !== 1 ? 's' : ''}</p>
+
+                    <div className="flex flex-col justify-between gap-8 p-6 sm:p-8">
+                      <div>
+                        <p className="text-xs uppercase tracking-[0.32em] text-teal-100/70">{activeEvent.category}</p>
+                        <h3 className="mt-4 font-serif text-4xl leading-tight text-white">{activeEvent.title}</h3>
+                        <p className="mt-3 text-sm uppercase tracking-[0.26em] text-white/45">{activeEvent.year}</p>
+                        <p className="mt-6 max-w-md text-base leading-8 text-white/70">
+                          {activeEvent.description || "A quiet archive moment selected to feel like an exhibit wall — spacious, tactile, and emotionally grounded."}
+                        </p>
+                      </div>
+
+                      <div className="grid gap-3 text-sm text-white/72 sm:grid-cols-2">
+                        <div className="rounded-2xl border border-white/10 bg-white/4 p-4">
+                          <p className="text-[0.65rem] uppercase tracking-[0.28em] text-teal-100/70">Format</p>
+                          <p className="mt-2 text-white">
+                            {currentMedia?.mediaType === "video" ? "Motion clip" : "Image frame"}
+                          </p>
+                        </div>
+                        <div className="rounded-2xl border border-white/10 bg-white/4 p-4">
+                          <p className="text-[0.65rem] uppercase tracking-[0.28em] text-teal-100/70">Media Count</p>
+                          <p className="mt-2 text-white">{media.length} item{media.length !== 1 ? "s" : ""}</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
+                );
+              })()}
             </motion.div>
           </motion.div>
         ) : null}

@@ -8,11 +8,12 @@ import { FeaturedEvent } from '@/models/FeaturedEvent';
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB();
-    const event = await FeaturedEvent.findById(params.id);
+    const { id } = await params;
+    const event = await FeaturedEvent.findById(id);
 
     if (!event) {
       return NextResponse.json(
@@ -37,10 +38,11 @@ export async function GET(
  */
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB();
+    const { id } = await params;
     const body = await request.json();
 
     // Validate required fields if provided
@@ -71,7 +73,7 @@ export async function PUT(
     }
 
     const event = await FeaturedEvent.findByIdAndUpdate(
-      params.id,
+      id,
       body,
       { new: true, runValidators: true }
     );
@@ -100,12 +102,13 @@ export async function PUT(
  */
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB();
+    const { id } = await params;
 
-    const event = await FeaturedEvent.findById(params.id);
+    const event = await FeaturedEvent.findById(id);
     if (!event) {
       return NextResponse.json(
         { error: 'Featured event not found' },
@@ -114,7 +117,7 @@ export async function DELETE(
     }
 
     const deletedOrder = event.order;
-    await FeaturedEvent.deleteOne({ _id: params.id });
+    await FeaturedEvent.deleteOne({ _id: id });
 
     // Reorder remaining events
     await FeaturedEvent.updateMany(

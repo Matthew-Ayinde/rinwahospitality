@@ -73,7 +73,7 @@ export default function Page() {
       <FeaturedEventCarousel />
       <PastEventsGallery />
       <TestimonialsSection />
-      <MediaGallery />
+      {/* <MediaGallery /> */}
       <ContactForm />
       <SocialPresence />
       <PartnershipDivider />
