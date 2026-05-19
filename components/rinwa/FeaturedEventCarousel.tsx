@@ -122,9 +122,9 @@ export function FeaturedEventCarousel() {
         {/* Section Header - Compact */}
         <div className="mb-6 flex items-end justify-between gap-4">
           <div>
-            <p className="text-[0.65rem] uppercase tracking-[0.36em] text-teal-200/60">Featured moment</p>
-            <h2 className="mt-2 font-serif text-[clamp(1.5rem,3.5vw,2.4rem)] leading-none tracking-tight text-white">
-              This week's highlight
+            <p className="text-[0.72rem] uppercase tracking-[0.36em] text-teal-200/60">Featured moment</p>
+           <h2 className="mt-4 font-serif text-[clamp(3rem,7vw,5.2rem)] leading-[0.92] tracking-tighter text-white">
+             This week's highlight
             </h2>
           </div>
           {events.length > 1 && (

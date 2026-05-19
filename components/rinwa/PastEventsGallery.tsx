@@ -77,6 +77,7 @@ export function PastEventsGallery() {
             A gallery of moments, not just memories.
           </h2>
         </div>
+        
 
         {isLoading ? (
           <div className="mt-10 grid auto-rows-[220px] gap-4 sm:auto-rows-[240px] md:grid-cols-2 xl:grid-cols-4">

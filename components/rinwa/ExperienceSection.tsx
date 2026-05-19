@@ -1,154 +1,150 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { useMemo, useState } from "react";
-import { cityOptions, weekdayEvents } from "./data";
+import { motion, useReducedMotion } from "framer-motion";
 
-/**
- * Interactive discovery section.
- * The interface can switch between location-led and day-led discovery without losing the editorial pacing.
- */
+const principles = [
+  {
+    label: "Intention",
+    body: "From the guest list to the smallest detail, every element is designed with purpose — not just how it looks, but how it feels, how it flows, and what it leaves behind.",
+  },
+  {
+    label: "Empathy",
+    body: "Anticipating needs before they are spoken. Designing for comfort, inclusion, mental wellness, and awareness — because how people are treated shapes the experience itself.",
+  },
+  {
+    label: "Belonging",
+    body: "Each gathering is designed to leave people feeling seen, restored, and impacted — whether through connection, emotional depth, or a renewed sense of self.",
+  },
+];
+
+const practiceAreas = [
+  { area: "Mental Health & Wellness", tag: "Facilitated Spaces" },
+  { area: "Inclusion & Belonging", tag: "Honest Dialogue" },
+  { area: "Community Building", tag: "Cross-Cultural" },
+];
+
 export function ExperienceSection() {
   const shouldReduceMotion = useReducedMotion();
-  const [mode, setMode] = useState<"city" | "weekday">("city");
-  const [selectedCity, setSelectedCity] = useState(cityOptions[0].city);
-
-  const selectedCityData = useMemo(
-    () => cityOptions.find((item) => item.city === selectedCity) ?? cityOptions[0],
-    [selectedCity],
-  );
 
   return (
     <section id="experiences" className="px-5 py-24 sm:px-8 lg:px-12 lg:py-28">
-      <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.92fr_1.08fr] lg:gap-12">
+      <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-2 lg:gap-16">
+
+        {/* Left column — Manifesto */}
         <div>
-          <p className="text-[0.72rem] uppercase tracking-[0.38em] text-teal-200/75">Experience discovery</p>
-          <h2 className="mt-4 max-w-lg font-serif text-[clamp(3rem,7vw,4.75rem)] leading-[0.94] tracking-[-0.05em] text-white">
-            Find the moment that matches your pace.
+          <p className="text-[0.72rem] uppercase tracking-[0.38em] text-teal-200/75">
+            The Practice
+          </p>
+          <h2 className="mt-4 font-serif text-[clamp(2.5rem,5.5vw,4.25rem)] leading-[0.94] tracking-[-0.05em] text-white">
+            Hospitality is not just a Service —
+            <br />
+            It&apos;s Design.
           </h2>
-          <p className="mt-5 max-w-xl text-base leading-8 text-white/68">
-            Explore our experiences by place or by day — two different ways to enter the world.
+          <p className="mt-6 max-w-lg text-base leading-8 text-white/60">
+            The Badést experiences begin with intention. Not just how it looks,
+            but how it feels, how it flows, and what it leaves behind. From the
+            guest list to the smallest detail, everything is designed with
+            purpose.
           </p>
 
-          <div className="mt-9 inline-flex rounded-full border border-white/10 bg-white/5 p-1">
-            <button
-              type="button"
-              className={`rounded-full px-4 py-2 text-sm transition duration-300 ${mode === "city" ? "bg-teal-300 text-slate-950" : "text-white/72"}`}
-              onClick={() => setMode("city")}
-            >
-              Find us in your city
-            </button>
-            <button
-              type="button"
-              className={`rounded-full px-4 py-2 text-sm transition duration-300 ${mode === "weekday" ? "bg-teal-300 text-slate-950" : "text-white/72"}`}
-              onClick={() => setMode("weekday")}
-            >
-              Pick your day
-            </button>
+          <div className="mt-10 space-y-4">
+            {principles.map((principle, i) => (
+              <motion.div
+                key={principle.label}
+                initial={shouldReduceMotion ? false : { opacity: 0, x: -18 }}
+                whileInView={shouldReduceMotion ? undefined : { opacity: 1, x: 0 }}
+                viewport={{ once: true, amount: 0.4 }}
+                transition={{ duration: 0.6, ease: "easeOut", delay: i * 0.1 }}
+                className="flex gap-5 rounded-[1.6rem] border border-white/8 bg-[#041114]/40 p-5"
+              >
+                <div className="mt-1 flex-shrink-0">
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full border border-teal-300/30 bg-teal-300/10">
+                    <span className="h-1.5 w-1.5 rounded-full bg-teal-300" />
+                  </span>
+                </div>
+                <div>
+                  <p className="text-[0.68rem] uppercase tracking-[0.28em] text-teal-100/62">
+                    {principle.label}
+                  </p>
+                  <p className="mt-2 text-sm leading-7 text-white/65">
+                    {principle.body}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
           </div>
 
-          <div className="mt-8 rounded-4xl border border-white/10 bg-[#07171a]/78 p-5 shadow-[0_18px_80px_rgba(0,0,0,0.25)]">
-            <AnimatePresence mode="wait">
-              {mode === "city" ? (
-                <motion.div
-                  key="city"
-                  initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 14 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: -14 }}
-                  transition={{ duration: 0.45, ease: "easeInOut" }}
-                  className="space-y-3"
-                >
-                  {cityOptions.map((option) => (
-                    <button
-                      key={option.city}
-                      type="button"
-                      onClick={() => setSelectedCity(option.city)}
-                      className={`w-full rounded-[1.35rem] border p-4 text-left transition-all duration-300 ${
-                        selectedCity === option.city
-                          ? "border-teal-300/50 bg-teal-300/10"
-                          : "border-white/10 bg-white/2 hover:border-white/20 hover:bg-white/4"
-                      }`}
-                    >
-                      <div className="flex items-center justify-between gap-4">
-                        <div>
-                          <p className="font-serif text-2xl text-white">{option.city}</p>
-                          <p className="mt-1 max-w-md text-sm leading-6 text-white/62">{option.note}</p>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-[0.66rem] uppercase tracking-[0.28em] text-teal-100/70">{option.region}</p>
-                          <p className="mt-2 text-xs uppercase tracking-[0.26em] text-white/45">{option.date}</p>
-                        </div>
-                      </div>
-                    </button>
-                  ))}
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="weekday"
-                  initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 14 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: -14 }}
-                  transition={{ duration: 0.45, ease: "easeInOut" }}
-                  className="grid gap-3"
-                >
-                  {weekdayEvents.map((event) => (
-                    <div key={event.day} className="rounded-[1.35rem] border border-white/10 bg-white/3 p-4">
-                      <div className="flex flex-wrap items-start justify-between gap-4">
-                        <div>
-                          <p className="text-xs uppercase tracking-[0.28em] text-teal-100/70">{event.day}</p>
-                          <p className="mt-2 font-serif text-2xl text-white">{event.title}</p>
-                        </div>
-                        <p className="max-w-sm text-sm leading-6 text-white/62">{event.detail}</p>
-                      </div>
-                    </div>
-                  ))}
-                </motion.div>
-              )}
-            </AnimatePresence>
+          <div className="mt-9 inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/4 px-5 py-3">
+            <span className="h-1.5 w-1.5 rounded-full bg-teal-300" />
+            <span className="text-[0.68rem] uppercase tracking-[0.28em] text-white/55">
+              Operating between Canada &amp; Nigeria
+            </span>
           </div>
         </div>
 
+        {/* Right column — Philosophy cards */}
         <motion.div
           initial={shouldReduceMotion ? false : { opacity: 0, y: 24 }}
           whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.28 }}
+          viewport={{ once: true, amount: 0.22 }}
           transition={{ duration: 0.85, ease: "easeOut" }}
-          className="relative overflow-hidden rounded-[2.25rem] border border-white/10 bg-white/3 p-6"
+          className="flex flex-col gap-5"
         >
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_20%,rgba(125,211,207,0.18),transparent_28%),radial-gradient(circle_at_80%_80%,rgba(15,118,110,0.22),transparent_24%)]" />
-          <div className="relative grid gap-6 sm:grid-cols-[1fr_auto]">
-            <div>
-              <p className="text-xs uppercase tracking-[0.32em] text-teal-100/70">Selected mode</p>
-              <p className="mt-3 font-serif text-4xl text-white">{selectedCityData.city}</p>
-              <p className="mt-4 max-w-md text-base leading-8 text-white/70">{selectedCityData.note}</p>
-            </div>
-            <div className="rounded-3xl border border-white/10 bg-black/20 px-5 py-4 text-right">
-              <p className="text-xs uppercase tracking-[0.26em] text-teal-100/70">Availability</p>
-              <p className="mt-3 text-lg text-white">{selectedCityData.date}</p>
+          {/* Core belief */}
+          <div className="rounded-[2.25rem] border border-white/10 bg-[#041114]/50 p-8 shadow-[0_20px_60px_rgba(0,0,0,0.38)]">
+            <p className="text-[0.72rem] uppercase tracking-[0.38em] text-teal-200/75">
+              Core Belief
+            </p>
+            <p className="mt-5 font-serif text-[clamp(1.5rem,3vw,2.2rem)] leading-[1.12] tracking-[-0.03em] text-white">
+              Experiences should improve the quality of human life.
+            </p>
+            <p className="mt-5 text-base leading-8 text-white/60">
+              Whether through connection, emotional depth, or a sense of
+              belonging — each gathering is designed to leave people feeling
+              seen, restored, and impacted. To her, a meaningful experience is
+              not just something you attend. It is something you feel. Something
+              that stays with you.
+            </p>
+          </div>
+
+          {/* Practice areas */}
+          <div className="rounded-[2.25rem] border border-white/10 bg-[#041114]/50 p-8 shadow-[0_20px_60px_rgba(0,0,0,0.38)]">
+            <p className="text-[0.72rem] uppercase tracking-[0.38em] text-teal-200/75">
+              Practice Areas
+            </p>
+            <div className="mt-5 space-y-3">
+              {practiceAreas.map((item) => (
+                <div
+                  key={item.area}
+                  className="flex items-center justify-between rounded-[1.35rem] border border-white/8 bg-white/3 px-5 py-4"
+                >
+                  <p className="text-sm font-medium text-white/82">{item.area}</p>
+                  <span className="rounded-full border border-white/10 bg-white/4 px-3 py-1 text-[0.62rem] uppercase tracking-[0.24em] text-white/48">
+                    {item.tag}
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
 
-          <div className="relative mt-8 overflow-hidden rounded-[1.8rem] border border-white/10">
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(4,17,20,0.1),rgba(4,17,20,0.62))]" />
-            <div className="grid min-h-104 place-items-center bg-[radial-gradient(circle_at_center,rgba(125,211,207,0.12),transparent_42%),linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.01))] p-8">
-              <div className="relative grid w-full max-w-md gap-4 rounded-3xl border border-white/10 bg-[#07171a]/65 p-5 backdrop-blur-xl">
-                <div className="absolute inset-0 rounded-3xl bg-[linear-gradient(135deg,transparent,rgba(125,211,207,0.06),transparent)]" />
-                <p className="text-xs uppercase tracking-[0.32em] text-teal-100/70">Map-inspired pulse</p>
-                <div className="grid grid-cols-2 gap-3 text-white/72">
-                  <div className="rounded-2xl border border-white/10 bg-white/4 p-4">
-                    <p className="text-xs uppercase tracking-[0.26em] text-white/48">Region</p>
-                    <p className="mt-2 font-serif text-2xl text-white">{selectedCityData.region}</p>
-                  </div>
-                  <div className="rounded-2xl border border-white/10 bg-white/4 p-4">
-                    <p className="text-xs uppercase tracking-[0.26em] text-white/48">Mode</p>
-                    <p className="mt-2 font-serif text-2xl text-white">{mode === "city" ? "City" : "Day"}</p>
-                  </div>
-                </div>
-                <p className="text-sm leading-7 text-white/68">
-                  The discovery layer is intentionally minimal, so the emotional weight stays with the content and not the chrome.
+          {/* Pull quote */}
+          <div className="rounded-[2.25rem] border border-white/10 bg-[#041114]/50 p-8 shadow-[0_20px_60px_rgba(0,0,0,0.38)]">
+            <p className="text-[0.72rem] uppercase tracking-[0.38em] text-teal-200/75">
+              On Meaningful Experiences
+            </p>
+            <blockquote className="mt-5">
+              <p className="font-serif text-[1.1rem] italic leading-9 text-white/75">
+                "Even if the most memorable part of an experience is something
+                as simple as the food, a renewed sense of confidence, a new
+                friendship, or a deeper sense of self-awareness — then the
+                event has done its job. It has fulfilled a human need."
+              </p>
+              <footer className="mt-4">
+                <p className="text-[0.68rem] uppercase tracking-[0.28em] text-white/40">
+                  — Badé Obasa
                 </p>
-              </div>
-            </div>
+              </footer>
+            </blockquote>
           </div>
         </motion.div>
       </div>
