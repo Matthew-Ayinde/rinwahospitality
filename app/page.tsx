@@ -2,7 +2,7 @@ import { BrandMarquee } from "@/components/rinwa/BrandMarquee";
 import AboutSections from "@/components/rinwa/AboutSections";
 import { ContactForm } from "@/components/rinwa/ContactForm";
 import { ExperienceSection } from "@/components/rinwa/ExperienceSection";
-import { FeaturedEvent } from "@/components/rinwa/FeaturedEvent";
+import { FeaturedEventCarousel } from "@/components/rinwa/FeaturedEventCarousel";
 import { HeroCarousel } from "@/components/rinwa/HeroCarousel";
 import { MediaGallery } from "@/components/rinwa/MediaGallery";
 import { PastEventsGallery } from "@/components/rinwa/PastEventsGallery";
@@ -70,7 +70,7 @@ export default function Page() {
       <BrandMarquee />
       <AboutSections />
       <ExperienceSection />
-      <FeaturedEvent />
+      <FeaturedEventCarousel />
       <PastEventsGallery />
       <TestimonialsSection />
       <MediaGallery />

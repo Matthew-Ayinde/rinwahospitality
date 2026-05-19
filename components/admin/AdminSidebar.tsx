@@ -8,7 +8,7 @@ import { useState } from 'react';
 
 const navItems = [
   { href: '/admin', label: 'Dashboard', icon: LayoutGrid },
-  { href: '/admin/featured-event', label: 'Featured Event', icon: Play },
+  { href: '/admin/featured-events', label: 'Featured Events', icon: Play },
   { href: '/admin/past-events', label: 'Past Events', icon: Image },
   { href: '/admin/hero-slides', label: 'Hero Slides', icon: Image },
   { href: '/admin/brand-partners', label: 'Brand Partners', icon: Users },
