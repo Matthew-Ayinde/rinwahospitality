@@ -61,7 +61,15 @@ export default function SubmissionsPage() {
       label: 'Industry',
       render: (_: any, row: any) => (row.industries?.length ? row.industries.join(', ') : row.industry || '—'),
     },
-    { key: 'estimatedBudget', label: 'Budget (₦)' },
+    {
+      key: 'estimatedBudget',
+      label: 'Budget',
+      render: (_: any, row: any) => {
+        const symbols: Record<string, string> = { NGN: '₦', USD: '$', CAD: 'CA$', GBP: '£', EUR: '€' };
+        const sym = symbols[row.currency] ?? '₦';
+        return `${sym}${row.estimatedBudget?.toLocaleString()}`;
+      },
+    },
     {
       key: 'actions',
       label: 'Actions',
@@ -148,9 +156,18 @@ export default function SubmissionsPage() {
               <p className="text-xs uppercase text-white/50 tracking-widest mb-1">Project Date</p>
               <p className="text-white/90">{selectedSubmission.projectDate}</p>
             </div>
+            {selectedSubmission.location && (
+              <div>
+                <p className="text-xs uppercase text-white/50 tracking-widest mb-1">Location</p>
+                <p className="text-white/90">{selectedSubmission.location}</p>
+              </div>
+            )}
             <div>
               <p className="text-xs uppercase text-white/50 tracking-widest mb-1">Budget</p>
-              <p className="text-white/90">₦{selectedSubmission.estimatedBudget.toLocaleString()}</p>
+              <p className="text-white/90">
+                {({ NGN: '₦', USD: '$', CAD: 'CA$', GBP: '£', EUR: '€' } as Record<string, string>)[selectedSubmission.currency] ?? '₦'}
+                {selectedSubmission.estimatedBudget.toLocaleString()}
+              </p>
             </div>
             <div>
               <p className="text-xs uppercase text-white/50 tracking-widest mb-1">Description</p>

@@ -5,8 +5,10 @@ export interface IContactSubmission extends Document {
   email: string;
   phone: string;
   company: string;
+  location: string;
   projectDate: string;
   estimatedBudget: number;
+  currency: string;
   description: string;
   industries: string[];
   industry?: string;
@@ -35,6 +37,10 @@ const ContactSubmissionSchema = new Schema<IContactSubmission>(
       type: String,
       required: true,
     },
+    location: {
+      type: String,
+      required: true,
+    },
     projectDate: {
       type: String,
       required: true,
@@ -42,6 +48,11 @@ const ContactSubmissionSchema = new Schema<IContactSubmission>(
     estimatedBudget: {
       type: Number,
       required: true,
+    },
+    currency: {
+      type: String,
+      required: true,
+      default: 'NGN',
     },
     description: {
       type: String,

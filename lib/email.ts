@@ -6,8 +6,10 @@ type InquiryEmailPayload = {
     email: string;
     phone: string;
     company: string;
+    location: string;
     projectDate: string;
     estimatedBudget: number;
+    currency: string;
     description: string;
     industries: string[];
     goals?: string[];
@@ -52,6 +54,16 @@ function buildTransporter() {
 
 function formatList(items: string[]) {
   return items.length ? items.join(' • ') : 'Not provided';
+}
+
+function getCurrencySymbol(code: string): string {
+  const map: Record<string, string> = { NGN: '₦', USD: '$', CAD: 'CA$', GBP: '£', EUR: '€' };
+  return map[code] ?? code;
+}
+
+function formatBudget(amount: number, currencyCode: string): string {
+  const symbol = getCurrencySymbol(currencyCode);
+  return symbol + amount.toLocaleString();
 }
 
 function buildAdminEmailHtml(submission: InquiryEmailPayload['submission']) {
@@ -107,7 +119,7 @@ function buildAdminEmailHtml(submission: InquiryEmailPayload['submission']) {
             <tr><td style="padding:0 32px 24px;">
               <table width="100%" cellpadding="0" cellspacing="0" style="background:#041114;border:1px solid rgba(255,255,255,0.07);border-radius:12px;">
                 <tr>
-                  ${statCell('Budget', '&#8358;' + submission.estimatedBudget.toLocaleString())}
+                  ${statCell('Budget', escapeHtml(formatBudget(submission.estimatedBudget, submission.currency)))}
                   ${statCell('Timeline', escapeHtml(submission.projectDate))}
                   <td style="padding:18px 20px;text-align:center;">
                     <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.22em;color:#7dd3cf;margin-bottom:6px;">Industries</div>
@@ -127,6 +139,7 @@ function buildAdminEmailHtml(submission: InquiryEmailPayload['submission']) {
                 ${row('Email', '<a href="mailto:' + escapeHtml(submission.email) + '" style="color:#7dd3cf;text-decoration:none;">' + escapeHtml(submission.email) + '</a>')}
                 ${row('Phone', escapeHtml(submission.phone))}
                 ${row('Company', escapeHtml(submission.company))}
+                ${row('Location', escapeHtml(submission.location))}
                 ${row('Goals', escapeHtml(formatList(submission.goals || [])))}
                 ${row('Description', escapeHtml(submission.description).replace(/\n/g, '<br>'))}
               </table>
@@ -219,10 +232,11 @@ function buildUserEmailHtml(submission: InquiryEmailPayload['submission']) {
             <tr><td style="padding:8px 16px 8px;">
               <table width="100%" cellpadding="0" cellspacing="0">
                 ${summaryRow('Company', escapeHtml(submission.company))}
+                ${summaryRow('Location', escapeHtml(submission.location))}
                 ${summaryRow('Industries', escapeHtml(formatList(submission.industries)))}
                 ${summaryRow('Goals', escapeHtml(formatList(submission.goals || [])))}
                 ${summaryRow('Timeline', escapeHtml(submission.projectDate))}
-                ${summaryRow('Budget', '&#8358;' + submission.estimatedBudget.toLocaleString())}
+                ${summaryRow('Budget', escapeHtml(formatBudget(submission.estimatedBudget, submission.currency)))}
               </table>
             </td></tr>
 
@@ -293,8 +307,9 @@ export async function sendInquiryEmails({ submission, adminEmail }: InquiryEmail
           `Email: ${submission.email}`,
           `Phone: ${submission.phone}`,
           `Company: ${submission.company}`,
+          `Location: ${submission.location}`,
           `Project Date: ${submission.projectDate}`,
-          `Budget: ₦${submission.estimatedBudget.toLocaleString()}`,
+          `Budget: ${formatBudget(submission.estimatedBudget, submission.currency)}`,
           `Industries: ${formatList(submission.industries)}`,
           `Goals: ${formatList(submission.goals || [])}`,
           '',
@@ -321,9 +336,10 @@ export async function sendInquiryEmails({ submission, adminEmail }: InquiryEmail
           '',
           'We received your inquiry and will respond within 48 hours.',
           '',
+          `Location: ${submission.location}`,
           `Industries: ${formatList(submission.industries)}`,
           `Project Date: ${submission.projectDate}`,
-          `Budget: ₦${submission.estimatedBudget.toLocaleString()}`,
+          `Budget: ${formatBudget(submission.estimatedBudget, submission.currency)}`,
         ].join('\n'),
         html: buildUserEmailHtml(submission),
       });

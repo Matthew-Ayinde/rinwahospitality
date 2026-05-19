@@ -5,6 +5,14 @@ import { useMemo, useState } from "react";
 import { contactGoals, contactIndustries } from "./data";
 import toast from "react-hot-toast";
 
+const CURRENCIES = [
+  { code: "NGN", symbol: "₦", label: "Naira" },
+  { code: "USD", symbol: "$", label: "USD" },
+  { code: "CAD", symbol: "CA$", label: "CAD" },
+  { code: "GBP", symbol: "£", label: "GBP" },
+  { code: "EUR", symbol: "€", label: "EUR" },
+] as const;
+
 /**
  * Refined inquiry form.
  * The fields are grouped into two intentional steps so the experience feels human and calm.
@@ -14,14 +22,15 @@ export function ContactForm() {
   const [step, setStep] = useState<1 | 2>(1);
   const [industries, setIndustries] = useState<string[]>([contactIndustries[0]]);
   const [goals, setGoals] = useState<string[]>([contactGoals[0]]);
+  const [currency, setCurrency] = useState<string>("NGN");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Form state
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     phone: "",
     company: "",
+    location: "",
     projectDate: "",
     estimatedBudget: "",
     description: "",
@@ -52,6 +61,7 @@ export function ContactForm() {
       !formData.email ||
       !formData.phone ||
       !formData.company ||
+      !formData.location ||
       !formData.projectDate ||
       !formData.estimatedBudget ||
       !formData.description ||
@@ -71,12 +81,14 @@ export function ContactForm() {
           email: formData.email,
           phone: formData.phone,
           company: formData.company,
+          location: formData.location,
           projectDate: formData.projectDate,
           estimatedBudget: parseInt(formData.estimatedBudget),
+          currency,
           description: formData.description,
-            industries,
-            industry: industries,
-          goals: goals,
+          industries,
+          industry: industries,
+          goals,
         }),
       });
 
@@ -98,10 +110,12 @@ export function ContactForm() {
         email: "",
         phone: "",
         company: "",
+        location: "",
         projectDate: "",
         estimatedBudget: "",
         description: "",
       });
+      setCurrency("NGN");
       setStep(1);
       setIndustries([contactIndustries[0]]);
       setGoals([contactGoals[0]]);
@@ -128,6 +142,7 @@ export function ContactForm() {
             <p className="text-xs uppercase tracking-[0.28em] text-teal-100/70">Project pulse</p>
             <div className="mt-4 space-y-2 text-sm text-white/72">
               <p>Step: {stepLabel}</p>
+              {formData.location && <p>Location: {formData.location}</p>}
               <p>Industries: {industries.join(" • ")}</p>
               <p>Goals: {goals.join(" • ")}</p>
             </div>
@@ -200,12 +215,48 @@ export function ContactForm() {
                     onChange={handleInputChange}
                   />
                   <FormField
-                    label="Budget (₦)"
-                    name="estimatedBudget"
-                    type="number"
-                    value={formData.estimatedBudget}
+                    label="Location / City"
+                    name="location"
+                    type="text"
+                    value={formData.location}
                     onChange={handleInputChange}
                   />
+
+                  {/* Budget + Currency — full width */}
+                  <div className="sm:col-span-2 space-y-3">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <span className="text-xs uppercase tracking-[0.24em] text-white/50">Estimated Budget</span>
+                      <div className="flex gap-1.5">
+                        {CURRENCIES.map((c) => (
+                          <button
+                            key={c.code}
+                            type="button"
+                            onClick={() => setCurrency(c.code)}
+                            className={`rounded-full border px-3 py-1 text-xs transition-all duration-300 ${
+                              currency === c.code
+                                ? "border-teal-300 bg-teal-300/15 text-teal-100"
+                                : "border-white/10 bg-white/5 text-white/55 hover:border-teal-300/40 hover:bg-white/10 hover:text-white"
+                            }`}
+                          >
+                            {c.symbol}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="relative">
+                      <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm text-white/45">
+                        {CURRENCIES.find((c) => c.code === currency)?.symbol}
+                      </span>
+                      <input
+                        type="number"
+                        name="estimatedBudget"
+                        value={formData.estimatedBudget}
+                        onChange={handleInputChange}
+                        placeholder="0"
+                        className="w-full min-h-14 rounded-2xl border border-white/10 bg-[#041114]/60 pl-8 pr-4 py-4 text-white placeholder:text-white/28 outline-none transition focus:border-teal-300/50 focus:bg-[#07171a] focus:shadow-[0_0_0_4px_rgba(125,211,207,0.08)]"
+                      />
+                    </div>
+                  </div>
                 </div>
 
                 <div className="mt-7">
