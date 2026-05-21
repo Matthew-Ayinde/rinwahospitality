@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/mongodb';
 import { PastEvent } from '@/models/PastEvent';
+import { deleteCloudinaryAssets } from '@/lib/cloudinary';
 import mongoose from 'mongoose';
 
 type RouteParams = { id: string };
@@ -73,6 +74,9 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     if (!event) {
       return NextResponse.json({ error: 'Event not found' }, { status: 404 });
     }
+
+    const mediaUrls = (event.media ?? []).flatMap((m: any) => [m.imageUrl, m.posterUrl]);
+    await deleteCloudinaryAssets(mediaUrls);
 
     return NextResponse.json({ message: 'Event deleted successfully' }, { status: 200 });
   } catch (error) {

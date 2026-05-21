@@ -42,6 +42,32 @@ export async function deleteImage(publicId: string): Promise<void> {
   }
 }
 
+function extractPublicId(url: string): string | null {
+  const match = url.match(/\/(?:image|video|raw)\/upload\/(?:v\d+\/)?(.+?)(?:\.[^.]+)?$/);
+  return match ? match[1] : null;
+}
+
+function detectResourceType(url: string): 'image' | 'video' | 'raw' {
+  if (url.includes('/video/upload/')) return 'video';
+  if (url.includes('/raw/upload/')) return 'raw';
+  return 'image';
+}
+
+export async function deleteCloudinaryAssets(urls: (string | undefined | null)[]): Promise<void> {
+  const valid = urls.filter((u): u is string => !!u && u.includes('cloudinary.com'));
+  await Promise.all(
+    valid.map(async (url) => {
+      const publicId = extractPublicId(url);
+      if (!publicId) return;
+      try {
+        await cloudinary.uploader.destroy(publicId, { resource_type: detectResourceType(url) });
+      } catch (err) {
+        console.error(`Cloudinary delete failed for ${publicId}:`, err);
+      }
+    })
+  );
+}
+
 export function getOptimizedUrl(
   publicId: string,
   width?: number,

@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import toast from 'react-hot-toast';
-import { Plus, Edit2, Trash2 } from 'lucide-react';
+import { Plus, Edit2, Trash2, Video, Image as ImageIcon } from 'lucide-react';
 import AdminButton from '@/components/admin/AdminButton';
 import AdminInput from '@/components/admin/AdminInput';
 import AdminTextarea from '@/components/admin/AdminTextarea';
@@ -16,13 +16,22 @@ import ConfirmationDialog from '@/components/admin/ConfirmationDialog';
 import ImageUploader from '@/components/admin/ImageUploader';
 import VideoUploader from '@/components/admin/VideoUploader';
 
-const HeroSlideSchema = z.object({
-  imageUrl: z.string().url('Invalid image URL'),
-  videoUrl: z.string().url('Invalid video URL').optional().or(z.literal('')),
-  title: z.string().min(1, 'Title is required'),
-  description: z.string().optional(),
-  order: z.number().min(0, 'Order must be positive'),
-});
+const HeroSlideSchema = z
+  .object({
+    imageUrl: z.string().url('Invalid image URL').optional().or(z.literal('')),
+    videoUrl: z.string().url('Invalid video URL').optional().or(z.literal('')),
+    title: z.string().min(1, 'Title is required'),
+    description: z.string().optional(),
+    order: z.number().min(0, 'Order must be positive'),
+  })
+  .refine(
+    (data) => {
+      const hasImage = !!(data.imageUrl && data.imageUrl !== '');
+      const hasVideo = !!(data.videoUrl && data.videoUrl !== '');
+      return hasImage !== hasVideo; // exactly one required — XOR
+    },
+    { message: 'Upload either an image or a video', path: ['imageUrl'] }
+  );
 
 type HeroSlideFormData = z.infer<typeof HeroSlideSchema>;
 
@@ -33,6 +42,7 @@ export default function HeroSlidesPage() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [mediaType, setMediaType] = useState<'image' | 'video'>('image');
 
   const {
     register,
@@ -59,10 +69,12 @@ export default function HeroSlidesPage() {
     if (editingId && slides.length > 0) {
       const slide = slides.find((s) => s._id === editingId);
       if (slide) {
+        const type: 'image' | 'video' = slide.videoUrl ? 'video' : 'image';
+        setMediaType(type);
         setTimeout(() => {
           reset({
-            imageUrl: slide.imageUrl,
-            videoUrl: slide.videoUrl || '',
+            imageUrl: type === 'image' ? (slide.imageUrl || '') : '',
+            videoUrl: type === 'video' ? (slide.videoUrl || '') : '',
             title: slide.title,
             description: slide.description || '',
             order: slide.order || 0,
@@ -143,6 +155,7 @@ export default function HeroSlidesPage() {
   }
 
   function openEditModal(slide: any) {
+    setMediaType(slide.videoUrl ? 'video' : 'image');
     setEditingId(slide._id);
     setIsModalOpen(true);
   }
@@ -150,16 +163,34 @@ export default function HeroSlidesPage() {
   function closeModal() {
     setIsModalOpen(false);
     setEditingId(null);
+    setMediaType('image');
     reset();
   }
 
   const columns = [
     {
       key: 'imageUrl',
-      label: 'Image',
-      render: (url: string) => (
-        <img src={url} alt="Slide" className="w-16 h-10 rounded object-cover" />
-      ),
+      label: 'Media',
+      render: (imageUrl: string, row: any) => {
+        if (row.videoUrl) {
+          return (
+            <div className="relative w-16 h-10 rounded overflow-hidden bg-black/40 flex items-center justify-center">
+              {imageUrl && (
+                <img src={imageUrl} alt="Slide" className="absolute inset-0 w-full h-full object-cover opacity-50" />
+              )}
+              <Video size={14} className="relative text-teal-300" />
+            </div>
+          );
+        }
+        if (imageUrl) {
+          return <img src={imageUrl} alt="Slide" className="w-16 h-10 rounded object-cover" />;
+        }
+        return (
+          <div className="w-16 h-10 rounded bg-white/10 flex items-center justify-center text-white/30 text-xs">
+            —
+          </div>
+        );
+      },
     },
     { key: 'title', label: 'Title', sortable: true },
     { key: 'order', label: 'Order' },
@@ -194,6 +225,7 @@ export default function HeroSlidesPage() {
         </div>
         <AdminButton
           onClick={() => {
+            setMediaType('image');
             reset({ imageUrl: '', videoUrl: '', title: '', description: '', order: 0 });
             setEditingId(null);
             setIsModalOpen(true);
@@ -219,19 +251,57 @@ export default function HeroSlidesPage() {
         title={editingId ? 'Edit Slide' : 'Add New Slide'}
       >
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          <ImageUploader
-            label="Image"
-            value={imageUrlValue || ''} 
-            onChange={(url) => setValue('imageUrl', url)}
-            error={errors.imageUrl?.message}
-            required
-          />
-          <VideoUploader
-            label="Video (Optional)"
-            value={videoUrlValue || ''}
-            onChange={(url) => setValue('videoUrl', url)}
-            error={errors.videoUrl?.message}
-          />
+          <div className="space-y-3">
+            <p className="text-xs text-white/40 uppercase tracking-widest">Media</p>
+            <div className="flex rounded-xl border border-white/10 bg-white/5 p-1 gap-1">
+              <button
+                type="button"
+                onClick={() => {
+                  setMediaType('image');
+                  setValue('videoUrl', '', { shouldValidate: true });
+                }}
+                className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium transition-all ${
+                  mediaType === 'image'
+                    ? 'bg-teal-300 text-slate-950'
+                    : 'text-white/50 hover:text-white'
+                }`}
+              >
+                <ImageIcon size={14} />
+                Image
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setMediaType('video');
+                  setValue('imageUrl', '', { shouldValidate: true });
+                }}
+                className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium transition-all ${
+                  mediaType === 'video'
+                    ? 'bg-teal-300 text-slate-950'
+                    : 'text-white/50 hover:text-white'
+                }`}
+              >
+                <Video size={14} />
+                Video
+              </button>
+            </div>
+
+            {mediaType === 'image' ? (
+              <ImageUploader
+                label="Image"
+                value={imageUrlValue || ''}
+                onChange={(url) => setValue('imageUrl', url, { shouldValidate: true })}
+                error={errors.imageUrl?.message}
+              />
+            ) : (
+              <VideoUploader
+                label="Video"
+                value={videoUrlValue || ''}
+                onChange={(url) => setValue('videoUrl', url, { shouldValidate: true })}
+                error={errors.videoUrl?.message}
+              />
+            )}
+          </div>
           <AdminInput
             label="Title"
               value={titleValue || ''}

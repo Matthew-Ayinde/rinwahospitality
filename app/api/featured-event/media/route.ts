@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/mongodb';
 import { FeaturedEvent } from '@/models/FeaturedEvent';
+import { deleteCloudinaryAssets } from '@/lib/cloudinary';
 
 export async function POST(request: NextRequest) {
   try {
@@ -99,8 +100,11 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
+    const removed = event.media.find((m: any) => m._id.toString() === mediaId);
     event.media = event.media.filter((m: any) => m._id.toString() !== mediaId);
     await event.save();
+
+    await deleteCloudinaryAssets([removed?.imageUrl, removed?.posterUrl]);
 
     return NextResponse.json(event, { status: 200 });
   } catch (error) {

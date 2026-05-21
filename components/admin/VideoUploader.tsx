@@ -4,6 +4,9 @@ import { useState, useRef } from 'react';
 import toast from 'react-hot-toast';
 import { Upload } from 'lucide-react';
 
+// Cloudinary's recommended minimum chunk size for chunked uploads
+const CHUNK_SIZE = 6 * 1024 * 1024; // 6 MB
+
 interface VideoUploaderProps {
   value: string;
   onChange: (url: string) => void;
@@ -14,6 +17,7 @@ interface VideoUploaderProps {
 
 export default function VideoUploader({ value, onChange, label = 'Video', required, error }: VideoUploaderProps) {
   const [isUploading, setIsUploading] = useState(false);
+  const [progress, setProgress] = useState(0);
   const [preview, setPreview] = useState(value);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -33,28 +37,71 @@ export default function VideoUploader({ value, onChange, label = 'Video', requir
 
     try {
       setIsUploading(true);
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('resourceType', 'video');
+      setProgress(0);
 
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
-      });
+      const sig = await fetch('/api/upload/signature').then((r) => r.json());
+      const formFields: Record<string, string> = {
+        api_key: sig.apiKey,
+        timestamp: String(sig.timestamp),
+        signature: sig.signature,
+        folder: sig.folder,
+      };
 
-      if (!res.ok) {
-        const error = await res.json();
-        throw new Error(error.error || 'Upload failed');
+      const uploadId = crypto.randomUUID();
+      const uploadUrl = `https://api.cloudinary.com/v1_1/${sig.cloudName}/video/upload`;
+      let start = 0;
+      let result: Record<string, unknown> = {};
+
+      while (start < file.size) {
+        const end = Math.min(start + CHUNK_SIZE, file.size);
+        const chunk = file.slice(start, end);
+        const chunkStart = start;
+
+        result = await new Promise<Record<string, unknown>>((resolve, reject) => {
+          const fd = new FormData();
+          fd.append('file', chunk);
+          Object.entries(formFields).forEach(([k, v]) => fd.append(k, v));
+
+          const xhr = new XMLHttpRequest();
+
+          xhr.upload.onprogress = (ev) => {
+            if (ev.lengthComputable) {
+              setProgress(Math.round(((chunkStart + ev.loaded) / file.size) * 100));
+            }
+          };
+
+          xhr.onload = () => {
+            if (xhr.status === 200) {
+              resolve(JSON.parse(xhr.responseText));
+            } else {
+              reject(new Error(`Upload failed (${xhr.status})`));
+            }
+          };
+
+          xhr.onerror = () => reject(new Error('Upload failed'));
+
+          xhr.open('POST', uploadUrl);
+          xhr.setRequestHeader('X-Unique-Upload-Id', uploadId);
+          xhr.setRequestHeader('Content-Range', `bytes ${chunkStart}-${end - 1}/${file.size}`);
+          xhr.send(fd);
+        });
+
+        start = end;
+        setProgress(Math.round((start / file.size) * 100));
       }
 
-      const data = await res.json();
-      setPreview(data.url);
-      onChange(data.url);
-      toast.success('Video uploaded successfully');
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Upload failed');
+      // Inject eo_7 (end-offset = 7 s) so Cloudinary serves only the first 7 seconds.
+      // The CDN caches this derived clip; full original is not streamed to clients.
+      const rawUrl = result.secure_url as string;
+      const url = rawUrl.replace('/upload/', '/upload/eo_7/');
+      setPreview(url);
+      onChange(url);
+      toast.success('Video uploaded — trimmed to first 7 seconds');
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Upload failed');
     } finally {
       setIsUploading(false);
+      setProgress(0);
     }
   };
 
@@ -67,7 +114,7 @@ export default function VideoUploader({ value, onChange, label = 'Video', requir
 
       <div
         className="relative border-2 border-dashed border-white/20 rounded-lg p-8 text-center cursor-pointer hover:border-teal-400/50 transition"
-        onClick={() => fileInputRef.current?.click()}
+        onClick={() => !isUploading && fileInputRef.current?.click()}
       >
         <input
           ref={fileInputRef}
@@ -79,9 +126,18 @@ export default function VideoUploader({ value, onChange, label = 'Video', requir
         />
         <Upload size={28} className="mx-auto mb-3 text-white/50" />
         <p className="text-sm font-medium text-white/75">
-          {isUploading ? 'Uploading...' : 'Click to upload video'}
+          {isUploading ? `Uploading... ${progress}%` : 'Click to upload video'}
         </p>
-        <p className="text-xs text-white/40 mt-2">MP4, WebM, or MOV up to 100MB</p>
+        {isUploading ? (
+          <div className="mt-3 w-full bg-white/10 rounded-full h-1.5">
+            <div
+              className="bg-teal-400 h-1.5 rounded-full transition-all duration-150"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+        ) : (
+          <p className="text-xs text-white/40 mt-2">MP4, WebM, or MOV up to 100MB · auto-trimmed to first 7 s</p>
+        )}
       </div>
 
       {error && <p className="text-xs text-red-400">{error}</p>}

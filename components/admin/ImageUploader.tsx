@@ -14,6 +14,7 @@ interface ImageUploaderProps {
 
 export default function ImageUploader({ value, onChange, label = 'Image', required, error }: ImageUploaderProps) {
   const [isUploading, setIsUploading] = useState(false);
+  const [progress, setProgress] = useState(0);
   const [preview, setPreview] = useState(value);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -26,34 +27,53 @@ export default function ImageUploader({ value, onChange, label = 'Image', requir
       return;
     }
 
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error('Image must be smaller than 5MB');
+    if (file.size > 20 * 1024 * 1024) {
+      toast.error('Image must be smaller than 20MB');
       return;
     }
 
     try {
       setIsUploading(true);
+      setProgress(0);
+
+      const sig = await fetch('/api/upload/signature').then((r) => r.json());
+
       const formData = new FormData();
       formData.append('file', file);
+      formData.append('api_key', sig.apiKey);
+      formData.append('timestamp', String(sig.timestamp));
+      formData.append('signature', sig.signature);
+      formData.append('folder', sig.folder);
 
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
+      const url = await new Promise<string>((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+
+        xhr.upload.onprogress = (ev) => {
+          if (ev.lengthComputable) setProgress(Math.round((ev.loaded / ev.total) * 100));
+        };
+
+        xhr.onload = () => {
+          if (xhr.status === 200) {
+            resolve(JSON.parse(xhr.responseText).secure_url);
+          } else {
+            reject(new Error('Upload failed'));
+          }
+        };
+
+        xhr.onerror = () => reject(new Error('Upload failed'));
+
+        xhr.open('POST', `https://api.cloudinary.com/v1_1/${sig.cloudName}/image/upload`);
+        xhr.send(formData);
       });
 
-      if (!res.ok) {
-        const error = await res.json();
-        throw new Error(error.error || 'Upload failed');
-      }
-
-      const data = await res.json();
-      setPreview(data.url);
-      onChange(data.url);
+      setPreview(url);
+      onChange(url);
       toast.success('Image uploaded successfully');
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Upload failed');
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Upload failed');
     } finally {
       setIsUploading(false);
+      setProgress(0);
     }
   };
 
@@ -66,7 +86,7 @@ export default function ImageUploader({ value, onChange, label = 'Image', requir
 
       <div
         className="relative border-2 border-dashed border-white/20 rounded-lg p-8 text-center cursor-pointer hover:border-teal-400/50 transition"
-        onClick={() => fileInputRef.current?.click()}
+        onClick={() => !isUploading && fileInputRef.current?.click()}
       >
         <input
           ref={fileInputRef}
@@ -78,9 +98,18 @@ export default function ImageUploader({ value, onChange, label = 'Image', requir
         />
         <Upload size={28} className="mx-auto mb-3 text-white/50" />
         <p className="text-sm font-medium text-white/75">
-          {isUploading ? 'Uploading...' : 'Click to upload image'}
+          {isUploading ? `Uploading... ${progress}%` : 'Click to upload image'}
         </p>
-        <p className="text-xs text-white/40 mt-2">PNG, JPG, or WebP up to 5MB</p>
+        {isUploading ? (
+          <div className="mt-3 w-full bg-white/10 rounded-full h-1.5">
+            <div
+              className="bg-teal-400 h-1.5 rounded-full transition-all duration-150"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+        ) : (
+          <p className="text-xs text-white/40 mt-2">PNG, JPG, or WebP up to 20MB</p>
+        )}
       </div>
 
       {error && <p className="text-xs text-red-400">{error}</p>}

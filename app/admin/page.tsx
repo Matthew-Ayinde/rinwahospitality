@@ -131,8 +131,8 @@ export default function AdminDashboard() {
         <h2 className="font-serif text-2xl text-white/90 mb-6">Quick Actions</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {[
-            { label: 'Add New Event', href: '/admin/events' },
-            { label: 'Upload Media', href: '/admin/media' },
+            { label: 'Add Featured Event', href: '/admin/featured-events' },
+            { label: 'Add Past Event', href: '/admin/past-events' },
             { label: 'View Submissions', href: '/admin/submissions' },
             { label: 'Manage Partners', href: '/admin/brand-partners' },
           ].map((action) => (

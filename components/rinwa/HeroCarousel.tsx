@@ -4,18 +4,25 @@ import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { heroSlides as fallbackSlides } from "./data";
-import { useAutoplayIndex } from "./use-autoplay-index";
 
-/**
- * Full-screen cinematic hero.
- * Crossfades between images and video while keeping controls minimal and keyboard-friendly.
- */
 export function HeroCarousel() {
   const shouldReduceMotion = useReducedMotion();
   const [slides, setSlides] = useState(fallbackSlides);
+  const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
-  const { index, setIndex, next, prev } = useAutoplayIndex(slides.length, 7200, paused);
-  const activeSlide = slides[index];
+
+  const activeSlide = slides[index] ?? slides[0];
+  const isVideo = activeSlide?.type === "video";
+
+  const next = () => setIndex(i => (i + 1) % slides.length);
+  const prev = () => setIndex(i => (i - 1 + slides.length) % slides.length);
+
+  // Images auto-advance after 5 s; videos advance via onEnded instead
+  useEffect(() => {
+    if (isVideo || paused || slides.length <= 1) return;
+    const timer = setTimeout(() => setIndex(i => (i + 1) % slides.length), 8000);
+    return () => clearTimeout(timer);
+  }, [index, isVideo, paused, slides.length]);
 
   useEffect(() => {
     fetch("/api/hero-slides")
@@ -31,9 +38,10 @@ export function HeroCarousel() {
             headline: slide.title as string,
           }));
           setSlides(mappedSlides);
+          setIndex(0);
         }
       })
-      .catch(() => setSlides(fallbackSlides));
+      .catch(() => { setSlides(fallbackSlides); setIndex(0); });
   }, []);
 
   return (
@@ -62,13 +70,14 @@ export function HeroCarousel() {
         >
           {activeSlide.type === "video" ? (
             <video
+              key={index}
               className="h-full w-full object-cover"
               autoPlay
               muted
-              loop
               playsInline
               preload="metadata"
               poster={activeSlide.poster}
+              onEnded={next}
             >
               <source src={activeSlide.src} type="video/mp4" />
             </video>
@@ -128,7 +137,7 @@ export function HeroCarousel() {
             >
               RÌNWÁ
               <span className="block text-[0.42em] font-sans font-normal tracking-[0.12em] text-teal-100/90 sm:text-[0.38em]">
-                Hospitality & Experiences
+                Come home to Rinwa, where ease lives
               </span>
             </motion.h1>
 
@@ -179,9 +188,10 @@ export function HeroCarousel() {
           >
             <p className="text-xs uppercase tracking-[0.3em] text-teal-100/70">Scene notes</p>
             <p className="mt-4 font-serif text-3xl leading-tight text-white">
-              Culture-first experiences shaped with warmth and precision.
+              <p>Home Rules. </p>
+              <p className="text-xl mr-20 text-white/70">This home is designed for:</p>
             </p>
-            <div className="mt-8 space-y-4 border-t border-white/10 pt-6 text-sm text-white/70">
+            <div className="mt-2 space-y-4 border-t border-white/10 pt-6 text-sm text-white/70">
               <p>Hospitality-led brands</p>
               <p>Creative founders</p>
               <p>Travel & tourism ecosystems</p>
@@ -210,9 +220,9 @@ export function HeroCarousel() {
           </div>
 
           <div className="flex items-center gap-2">
-            {slides.map((slide, slideIndex) => (
+            {slides.map((_, slideIndex) => (
               <button
-                key={slide.poster}
+                key={slideIndex}
                 type="button"
                 aria-label={`Go to slide ${slideIndex + 1}`}
                 aria-current={index === slideIndex}

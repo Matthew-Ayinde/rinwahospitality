@@ -1,5 +1,6 @@
 import { connectDB } from '@/lib/mongodb';
 import { BrandPartner } from '@/models/BrandPartner';
+import { deleteCloudinaryAssets } from '@/lib/cloudinary';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/auth';
 import { NextRequest, NextResponse } from 'next/server';
@@ -94,6 +95,8 @@ export async function DELETE(
         { status: 404 }
       );
     }
+
+    await deleteCloudinaryAssets([partner.logoUrl]);
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {

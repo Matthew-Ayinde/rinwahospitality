@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/mongodb';
 import { FeaturedEvent } from '@/models/FeaturedEvent';
+import { deleteCloudinaryAssets } from '@/lib/cloudinary';
 
 /**
  * GET /api/featured-events/[id]
@@ -124,6 +125,9 @@ export async function DELETE(
       { order: { $gt: deletedOrder } },
       { $inc: { order: -1 } }
     );
+
+    const mediaUrls = (event.media ?? []).flatMap((m: any) => [m.imageUrl, m.posterUrl]);
+    await deleteCloudinaryAssets(mediaUrls);
 
     return NextResponse.json(
       { message: 'Featured event deleted' },

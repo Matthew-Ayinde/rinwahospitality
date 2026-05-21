@@ -1,5 +1,6 @@
 import { connectDB } from '@/lib/mongodb';
 import { Event } from '@/models/Event';
+import { deleteCloudinaryAssets } from '@/lib/cloudinary';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/auth';
 import { NextRequest, NextResponse } from 'next/server';
@@ -102,6 +103,8 @@ export async function DELETE(
         { status: 404 }
       );
     }
+
+    await deleteCloudinaryAssets([event.imageUrl]);
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {

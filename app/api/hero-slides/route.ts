@@ -5,17 +5,22 @@ import { authOptions } from '@/auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
-const HeroSlideSchema = z.object({
-  imageUrl: z.string().url('Invalid image URL'),
-  videoUrl: z.union([
-    z.string().url('Invalid video URL'),
-    z.literal(''),
-    z.undefined(),
-  ]),
-  title: z.string().min(1, 'Title is required'),
-  description: z.string().optional(),
-  order: z.number().min(0, 'Order must be a positive number'),
-});
+const HeroSlideSchema = z
+  .object({
+    imageUrl: z.union([z.string().url('Invalid image URL'), z.literal(''), z.undefined()]),
+    videoUrl: z.union([z.string().url('Invalid video URL'), z.literal(''), z.undefined()]),
+    title: z.string().min(1, 'Title is required'),
+    description: z.string().optional(),
+    order: z.number().min(0, 'Order must be a positive number'),
+  })
+  .refine(
+    (data) => {
+      const hasImage = !!(data.imageUrl && data.imageUrl !== '');
+      const hasVideo = !!(data.videoUrl && data.videoUrl !== '');
+      return hasImage !== hasVideo; // XOR: exactly one required
+    },
+    { message: 'Provide either an image or a video, not both or neither', path: ['imageUrl'] }
+  );
 
 export async function GET() {
   try {

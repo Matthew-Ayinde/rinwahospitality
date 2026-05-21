@@ -1,22 +1,31 @@
 import { connectDB } from '@/lib/mongodb';
 import { HeroSlide } from '@/models/HeroSlide';
+import { deleteCloudinaryAssets } from '@/lib/cloudinary';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { Types } from 'mongoose';
 
-const UpdateHeroSlideSchema = z.object({
-  imageUrl: z.string().url('Invalid image URL').optional(),
-  videoUrl: z.union([
-    z.string().url('Invalid video URL'),
-    z.literal(''),
-    z.undefined(),
-  ]),
-  title: z.string().min(1, 'Title is required').optional(),
-  description: z.string().optional(),
-  order: z.number().min(0, 'Order must be a positive number').optional(),
-});
+const UpdateHeroSlideSchema = z
+  .object({
+    imageUrl: z.union([z.string().url('Invalid image URL'), z.literal(''), z.undefined()]),
+    videoUrl: z.union([z.string().url('Invalid video URL'), z.literal(''), z.undefined()]),
+    title: z.string().min(1, 'Title is required').optional(),
+    description: z.string().optional(),
+    order: z.number().min(0, 'Order must be a positive number').optional(),
+  })
+  .refine(
+    (data) => {
+      const imageFieldSent = data.imageUrl !== undefined;
+      const videoFieldSent = data.videoUrl !== undefined;
+      if (!imageFieldSent && !videoFieldSent) return true; // pure metadata update — skip
+      const hasImage = !!(data.imageUrl && data.imageUrl !== '');
+      const hasVideo = !!(data.videoUrl && data.videoUrl !== '');
+      return hasImage !== hasVideo; // XOR: exactly one required
+    },
+    { message: 'Provide either an image or a video, not both or neither', path: ['imageUrl'] }
+  );
 
 export async function GET(
   request: NextRequest,
@@ -134,6 +143,8 @@ export async function DELETE(
         { status: 404 }
       );
     }
+
+    await deleteCloudinaryAssets([slide.imageUrl, slide.videoUrl]);
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
