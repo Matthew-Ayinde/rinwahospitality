@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
 export interface IHeroSlide extends Document {
-  imageUrl: string;
+  imageUrl?: string;
   videoUrl?: string;
   title: string;
   description?: string;
@@ -15,10 +15,11 @@ const HeroSlideSchema = new Schema<IHeroSlide>(
   {
     imageUrl: {
       type: String,
-      required: true,
+      default: '',
     },
     videoUrl: {
       type: String,
+      default: '',
     },
     title: {
       type: String,

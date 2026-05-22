@@ -512,7 +512,13 @@ export default function PastEventsPage() {
           {mediaType === 'image' ? (
             <ImageUploader label="Image" value={mediaUrl} onChange={setMediaUrl} required />
           ) : (
-            <VideoUploader label="Video" value={mediaUrl} onChange={setMediaUrl} required />
+            <VideoUploader
+              label="Video"
+              value={mediaUrl}
+              onChange={setMediaUrl}
+              required
+              trimToFirstSeconds={false}
+            />
           )}
 
           <AdminInput

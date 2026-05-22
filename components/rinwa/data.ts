@@ -5,6 +5,7 @@ export type HeroSlide = {
   alt: string;
   eyebrow: string;
   headline: string;
+  subtitle?: string;
 };
 
 export type BrandItem = {

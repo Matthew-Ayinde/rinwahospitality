@@ -15,25 +15,7 @@ import LoadingSpinner from '@/components/admin/LoadingSpinner';
 import ConfirmationDialog from '@/components/admin/ConfirmationDialog';
 import ImageUploader from '@/components/admin/ImageUploader';
 import VideoUploader from '@/components/admin/VideoUploader';
-
-const HeroSlideSchema = z
-  .object({
-    imageUrl: z.string().url('Invalid image URL').optional().or(z.literal('')),
-    videoUrl: z.string().url('Invalid video URL').optional().or(z.literal('')),
-    title: z.string().min(1, 'Title is required'),
-    description: z.string().optional(),
-    order: z.number().min(0, 'Order must be positive'),
-  })
-  .refine(
-    (data) => {
-      const hasImage = !!(data.imageUrl && data.imageUrl !== '');
-      const hasVideo = !!(data.videoUrl && data.videoUrl !== '');
-      return hasImage !== hasVideo; // exactly one required — XOR
-    },
-    { message: 'Upload either an image or a video', path: ['imageUrl'] }
-  );
-
-type HeroSlideFormData = z.infer<typeof HeroSlideSchema>;
+import { heroSlideSchema, type HeroSlideFormData } from '../../../lib/hero-slides';
 
 export default function HeroSlidesPage() {
   const [slides, setSlides] = useState<any[]>([]);
@@ -43,6 +25,7 @@ export default function HeroSlidesPage() {
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [mediaType, setMediaType] = useState<'image' | 'video'>('image');
+  const [formFeedback, setFormFeedback] = useState<{ type: 'error' | 'success'; message: string } | null>(null);
 
   const {
     register,
@@ -52,7 +35,7 @@ export default function HeroSlidesPage() {
     setValue,
     watch,
   } = useForm<HeroSlideFormData>({
-    resolver: zodResolver(HeroSlideSchema),
+    resolver: zodResolver(heroSlideSchema),
     defaultValues: { order: 0 },
   });
 
@@ -100,10 +83,15 @@ export default function HeroSlidesPage() {
     try {
       setIsLoading(true);
       const res = await fetch('/api/hero-slides');
+      if (!res.ok) {
+        const error = await res.json().catch(() => null);
+        throw new Error(error?.error || 'Failed to fetch hero slides');
+      }
       const data = await res.json();
       setSlides(Array.isArray(data) ? data : []);
     } catch (error) {
-      toast.error('Failed to fetch hero slides');
+      const message = error instanceof Error ? error.message : 'Failed to fetch hero slides';
+      toast.error(message);
     } finally {
       setIsLoading(false);
     }
@@ -111,6 +99,7 @@ export default function HeroSlidesPage() {
 
   async function onSubmit(data: HeroSlideFormData) {
     try {
+      setFormFeedback(null);
       const method = editingId ? 'PUT' : 'POST';
       const url = editingId ? `/api/hero-slides/${editingId}` : '/api/hero-slides';
 
@@ -121,18 +110,31 @@ export default function HeroSlidesPage() {
       });
 
       if (!res.ok) {
-        const error = await res.json();
-        throw new Error(error.error || 'Failed to save slide');
+        const error = await res.json().catch(() => null);
+        const details = Array.isArray(error?.details) ? error.details : [];
+        throw new Error(details[0] || error?.error || 'Failed to save slide');
       }
 
+      setFormFeedback({
+        type: 'success',
+        message: editingId ? 'Slide updated successfully.' : 'Slide created successfully.',
+      });
       toast.success(editingId ? 'Slide updated' : 'Slide created');
       setIsModalOpen(false);
       setEditingId(null);
       reset();
       await fetchSlides();
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'An error occurred');
+      const message = error instanceof Error ? error.message : 'An error occurred';
+      setFormFeedback({ type: 'error', message });
+      toast.error(message);
     }
+  }
+
+  function onInvalid() {
+    const message = 'Check the highlighted fields and try again.';
+    setFormFeedback({ type: 'error', message });
+    toast.error(message);
   }
 
   async function handleDelete() {
@@ -164,6 +166,7 @@ export default function HeroSlidesPage() {
     setIsModalOpen(false);
     setEditingId(null);
     setMediaType('image');
+    setFormFeedback(null);
     reset();
   }
 
@@ -250,9 +253,26 @@ export default function HeroSlidesPage() {
         onClose={closeModal}
         title={editingId ? 'Edit Slide' : 'Add New Slide'}
       >
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="space-y-6">
+          <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/70">
+            Add exactly one media asset, then complete the title and order.
+          </div>
+
+          {formFeedback && (
+            <div
+              className={`rounded-2xl border px-4 py-3 text-sm ${
+                formFeedback.type === 'error'
+                  ? 'border-red-400/30 bg-red-500/10 text-red-100'
+                  : 'border-teal-300/30 bg-teal-500/10 text-teal-50'
+              }`}
+            >
+              {formFeedback.message}
+            </div>
+          )}
+
           <div className="space-y-3">
             <p className="text-xs text-white/40 uppercase tracking-widest">Media</p>
+            <p className="text-xs text-white/45">Choose image or video, then upload one file only.</p>
             <div className="flex rounded-xl border border-white/10 bg-white/5 p-1 gap-1">
               <button
                 type="button"
@@ -292,6 +312,7 @@ export default function HeroSlidesPage() {
                 value={imageUrlValue || ''}
                 onChange={(url) => setValue('imageUrl', url, { shouldValidate: true })}
                 error={errors.imageUrl?.message}
+                required={mediaType === 'image'}
               />
             ) : (
               <VideoUploader
@@ -299,6 +320,7 @@ export default function HeroSlidesPage() {
                 value={videoUrlValue || ''}
                 onChange={(url) => setValue('videoUrl', url, { shouldValidate: true })}
                 error={errors.videoUrl?.message}
+                required={mediaType === 'video'}
               />
             )}
           </div>

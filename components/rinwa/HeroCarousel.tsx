@@ -4,6 +4,7 @@ import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { heroSlides as fallbackSlides } from "./data";
+import { sub } from "framer-motion/client";
 
 export function HeroCarousel() {
   const shouldReduceMotion = useReducedMotion();
@@ -20,7 +21,7 @@ export function HeroCarousel() {
   // Images auto-advance after 5 s; videos advance via onEnded instead
   useEffect(() => {
     if (isVideo || paused || slides.length <= 1) return;
-    const timer = setTimeout(() => setIndex(i => (i + 1) % slides.length), 8000);
+    const timer = setTimeout(() => setIndex(i => (i + 1) % slides.length), 7000);
     return () => clearTimeout(timer);
   }, [index, isVideo, paused, slides.length]);
 
@@ -36,6 +37,7 @@ export function HeroCarousel() {
             alt: slide.title as string,
             eyebrow: "RÌNWÁ Experience",
             headline: slide.title as string,
+            subtitle: slide.description as string,
           }));
           setSlides(mappedSlides);
           setIndex(0);
@@ -156,7 +158,7 @@ export function HeroCarousel() {
               transition={{ delay: 1.05, duration: 0.85, ease: "easeInOut" }}
               className="mt-4 max-w-xl text-lg leading-8 text-white/68"
             >
-              A space for connection, culture, and curated moments.
+              {activeSlide.subtitle}
             </motion.p>
 
             <motion.div

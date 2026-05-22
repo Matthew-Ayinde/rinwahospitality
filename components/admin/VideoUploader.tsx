@@ -13,9 +13,17 @@ interface VideoUploaderProps {
   label?: string;
   required?: boolean;
   error?: string;
+  trimToFirstSeconds?: boolean;
 }
 
-export default function VideoUploader({ value, onChange, label = 'Video', required, error }: VideoUploaderProps) {
+export default function VideoUploader({
+  value,
+  onChange,
+  label = 'Video',
+  required,
+  error,
+  trimToFirstSeconds = true,
+}: VideoUploaderProps) {
   const [isUploading, setIsUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [preview, setPreview] = useState(value);
@@ -90,13 +98,11 @@ export default function VideoUploader({ value, onChange, label = 'Video', requir
         setProgress(Math.round((start / file.size) * 100));
       }
 
-      // Inject eo_7 (end-offset = 7 s) so Cloudinary serves only the first 7 seconds.
-      // The CDN caches this derived clip; full original is not streamed to clients.
       const rawUrl = result.secure_url as string;
-      const url = rawUrl.replace('/upload/', '/upload/eo_7/');
+      const url = trimToFirstSeconds ? rawUrl.replace('/upload/', '/upload/eo_7/') : rawUrl;
       setPreview(url);
       onChange(url);
-      toast.success('Video uploaded — trimmed to first 7 seconds');
+      toast.success(trimToFirstSeconds ? 'Video uploaded — trimmed to first 7 seconds' : 'Video uploaded successfully');
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Upload failed');
     } finally {
@@ -136,7 +142,10 @@ export default function VideoUploader({ value, onChange, label = 'Video', requir
             />
           </div>
         ) : (
-          <p className="text-xs text-white/40 mt-2">MP4, WebM, or MOV up to 100MB · auto-trimmed to first 7 s</p>
+          <p className="text-xs text-white/40 mt-2">
+            MP4, WebM, or MOV up to 100MB
+            {trimToFirstSeconds ? ' · auto-trimmed to first 7 s' : ''}
+          </p>
         )}
       </div>
 

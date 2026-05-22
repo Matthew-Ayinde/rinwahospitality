@@ -244,7 +244,7 @@ export function ContactForm() {
                       </div>
                     </div>
                     <div className="relative">
-                      <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm text-white/45">
+                      <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-sm text-white/45">
                         {CURRENCIES.find((c) => c.code === currency)?.symbol}
                       </span>
                       <input
@@ -253,7 +253,7 @@ export function ContactForm() {
                         value={formData.estimatedBudget}
                         onChange={handleInputChange}
                         placeholder="0"
-                        className="w-full min-h-14 rounded-2xl border border-white/10 bg-[#041114]/60 pl-8 pr-4 py-4 text-white placeholder:text-white/28 outline-none transition focus:border-teal-300/50 focus:bg-[#07171a] focus:shadow-[0_0_0_4px_rgba(125,211,207,0.08)]"
+                        className="w-full min-h-14 rounded-2xl border border-white/10 bg-[#041114]/60 pl-12 pr-4 py-4 text-white placeholder:text-white/28 outline-none transition focus:border-teal-300/50 focus:bg-[#07171a] focus:shadow-[0_0_0_4px_rgba(125,211,207,0.08)]"
                       />
                     </div>
                   </div>

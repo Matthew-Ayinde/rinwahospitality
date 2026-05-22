@@ -60,35 +60,34 @@ export function PastEventsGallery() {
   }, []);
 
   useEffect(() => {
-    if (carouselTimerRef.current) clearInterval(carouselTimerRef.current);
     setCarouselIndex(0);
-    carouselPausedRef.current = false;
 
     if (!activeEvent) return;
-
-    const mediaCount = activeEvent.media?.length || 0;
 
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") setActiveEvent(null);
     };
     window.addEventListener("keydown", onKeyDown);
 
-    if (mediaCount > 1) {
-      carouselTimerRef.current = setInterval(() => {
-        if (!carouselPausedRef.current) {
-          setCarouselIndex(i => (i + 1) % mediaCount);
-        }
-      }, 5000);
-    }
-
     return () => {
       window.removeEventListener("keydown", onKeyDown);
-      if (carouselTimerRef.current) clearInterval(carouselTimerRef.current);
     };
   }, [activeEvent]);
 
   function handleVideoPause() {
     carouselPausedRef.current = true;
+  }
+
+  function handlePreviousMedia(total: number) {
+    if (total <= 1) return;
+    carouselPausedRef.current = false;
+    setCarouselIndex((current) => (current - 1 + total) % total);
+  }
+
+  function handleNextMedia(total: number) {
+    if (total <= 1) return;
+    carouselPausedRef.current = false;
+    setCarouselIndex((current) => (current + 1) % total);
   }
 
   
@@ -235,6 +234,28 @@ export function PastEventsGallery() {
                       </AnimatePresence>
 
                       {hasMultiple && (
+                        <div className="absolute inset-y-0 left-0 right-0 z-10 flex items-center justify-between px-3 sm:px-4">
+                          <button
+                            type="button"
+                            aria-label="Previous media"
+                            onClick={() => handlePreviousMedia(media.length)}
+                            className="grid h-11 w-11 place-items-center rounded-full border border-white/12 bg-black/35 text-white/85 shadow-[0_10px_30px_rgba(0,0,0,0.25)] backdrop-blur-sm transition hover:bg-black/50 hover:text-white"
+                          >
+                            <span aria-hidden="true" className="text-xl leading-none">‹</span>
+                          </button>
+
+                          <button
+                            type="button"
+                            aria-label="Next media"
+                            onClick={() => handleNextMedia(media.length)}
+                            className="grid h-11 w-11 place-items-center rounded-full border border-white/12 bg-black/35 text-white/85 shadow-[0_10px_30px_rgba(0,0,0,0.25)] backdrop-blur-sm transition hover:bg-black/50 hover:text-white"
+                          >
+                            <span aria-hidden="true" className="text-xl leading-none">›</span>
+                          </button>
+                        </div>
+                      )}
+
+                      {hasMultiple && (
                         <div className="absolute bottom-4 left-0 right-0 z-10 flex justify-center gap-2">
                           {media.map((_, i) => (
                             <button
@@ -266,12 +287,12 @@ export function PastEventsGallery() {
                       </div>
 
                       <div className="grid gap-3 text-sm text-white/72 sm:grid-cols-2">
-                        <div className="rounded-2xl border border-white/10 bg-white/4 p-4">
+                        {/* <div className="rounded-2xl border border-white/10 bg-white/4 p-4">
                           <p className="text-[0.65rem] uppercase tracking-[0.28em] text-teal-100/70">Format</p>
                           <p className="mt-2 text-white">
                             {currentMedia?.mediaType === "video" ? "Motion clip" : "Image frame"}
                           </p>
-                        </div>
+                        </div> */}
                         <div className="rounded-2xl border border-white/10 bg-white/4 p-4">
                           <p className="text-[0.65rem] uppercase tracking-[0.28em] text-teal-100/70">Media Count</p>
                           <p className="mt-2 text-white">{media.length} item{media.length !== 1 ? "s" : ""}</p>

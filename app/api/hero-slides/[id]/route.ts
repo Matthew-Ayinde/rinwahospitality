@@ -6,26 +6,7 @@ import { authOptions } from '@/auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { Types } from 'mongoose';
-
-const UpdateHeroSlideSchema = z
-  .object({
-    imageUrl: z.union([z.string().url('Invalid image URL'), z.literal(''), z.undefined()]),
-    videoUrl: z.union([z.string().url('Invalid video URL'), z.literal(''), z.undefined()]),
-    title: z.string().min(1, 'Title is required').optional(),
-    description: z.string().optional(),
-    order: z.number().min(0, 'Order must be a positive number').optional(),
-  })
-  .refine(
-    (data) => {
-      const imageFieldSent = data.imageUrl !== undefined;
-      const videoFieldSent = data.videoUrl !== undefined;
-      if (!imageFieldSent && !videoFieldSent) return true; // pure metadata update — skip
-      const hasImage = !!(data.imageUrl && data.imageUrl !== '');
-      const hasVideo = !!(data.videoUrl && data.videoUrl !== '');
-      return hasImage !== hasVideo; // XOR: exactly one required
-    },
-    { message: 'Provide either an image or a video, not both or neither', path: ['imageUrl'] }
-  );
+import { updateHeroSlideSchema } from '../../../../lib/hero-slides';
 
 export async function GET(
   request: NextRequest,
@@ -84,7 +65,7 @@ export async function PUT(
     }
 
     const body = await request.json();
-    const validated = UpdateHeroSlideSchema.parse(body);
+    const validated = updateHeroSlideSchema.parse(body);
 
     await connectDB();
     const slide = await HeroSlide.findByIdAndUpdate(id, validated, { new: true });
@@ -99,8 +80,9 @@ export async function PUT(
     return NextResponse.json(slide, { status: 200 });
   } catch (error) {
     if (error instanceof z.ZodError) {
+      const issues = error.errors.map((issue) => issue.message);
       return NextResponse.json(
-        { error: error.errors[0].message, code: 'VALIDATION_ERROR' },
+        { error: issues[0], details: issues, code: 'VALIDATION_ERROR' },
         { status: 400 }
       );
     }

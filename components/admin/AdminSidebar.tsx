@@ -3,20 +3,31 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
-import { Menu, LayoutGrid, Image, Play, Users, MessageSquare, Settings, LogOut } from 'lucide-react';
+import {
+  Menu,
+  LayoutDashboard,
+  Trophy,
+  Archive,
+  MonitorPlay,
+  Handshake,
+  Inbox,
+  MessageSquareQuote,
+  Settings2,
+  LogOut,
+} from 'lucide-react';
 import { useState } from 'react';
 
 const navItems = [
-  { href: '/admin', label: 'Dashboard', icon: LayoutGrid },
-  { href: '/admin/featured-events', label: 'Featured Events', icon: Play },
-  { href: '/admin/past-events', label: 'Past Events', icon: Image },
-  { href: '/admin/hero-slides', label: 'Hero Slides', icon: Image },
-  { href: '/admin/brand-partners', label: 'Brand Partners', icon: Users },
-  { href: '/admin/events', label: 'Events', icon: Play },
+  { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/admin/featured-events', label: 'Featured Events', icon: Trophy },
+  { href: '/admin/past-events', label: 'Past Events', icon: Archive },
+  { href: '/admin/hero-slides', label: 'Hero Slides', icon: MonitorPlay },
+  { href: '/admin/brand-partners', label: 'Brand Partners', icon: Handshake },
+  // { href: '/admin/events', label: 'Events', icon: Play },
   // { href: '/admin/media', label: 'Media Gallery', icon: Image },
-  { href: '/admin/submissions', label: 'Submissions', icon: MessageSquare },
-  { href: '/admin/testimonials', label: 'Testimonials', icon: MessageSquare },
-  { href: '/admin/settings', label: 'Settings', icon: Settings },
+  { href: '/admin/submissions', label: 'Submissions', icon: Inbox },
+  { href: '/admin/testimonials', label: 'Testimonials', icon: MessageSquareQuote },
+  { href: '/admin/settings', label: 'Settings', icon: Settings2 },
 ];
 
 export default function AdminSidebar() {

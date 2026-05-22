@@ -3,24 +3,8 @@ import { HeroSlide } from '@/models/HeroSlide';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/auth';
 import { NextRequest, NextResponse } from 'next/server';
+import { heroSlideSchema } from '../../../lib/hero-slides';
 import { z } from 'zod';
-
-const HeroSlideSchema = z
-  .object({
-    imageUrl: z.union([z.string().url('Invalid image URL'), z.literal(''), z.undefined()]),
-    videoUrl: z.union([z.string().url('Invalid video URL'), z.literal(''), z.undefined()]),
-    title: z.string().min(1, 'Title is required'),
-    description: z.string().optional(),
-    order: z.number().min(0, 'Order must be a positive number'),
-  })
-  .refine(
-    (data) => {
-      const hasImage = !!(data.imageUrl && data.imageUrl !== '');
-      const hasVideo = !!(data.videoUrl && data.videoUrl !== '');
-      return hasImage !== hasVideo; // XOR: exactly one required
-    },
-    { message: 'Provide either an image or a video, not both or neither', path: ['imageUrl'] }
-  );
 
 export async function GET() {
   try {
@@ -47,7 +31,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const validated = HeroSlideSchema.parse(body);
+    const validated = heroSlideSchema.parse(body);
 
     await connectDB();
     const slide = await HeroSlide.create(validated);
@@ -55,8 +39,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(slide, { status: 201 });
   } catch (error) {
     if (error instanceof z.ZodError) {
+      const issues = error.errors.map((issue) => issue.message);
       return NextResponse.json(
-        { error: error.errors[0].message, code: 'VALIDATION_ERROR' },
+        { error: issues[0], details: issues, code: 'VALIDATION_ERROR' },
         { status: 400 }
       );
     }
