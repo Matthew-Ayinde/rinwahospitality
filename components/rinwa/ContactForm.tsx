@@ -155,7 +155,7 @@ export function ContactForm() {
         <div className="max-w-xl">
           <p className="text-[0.72rem] uppercase tracking-[0.38em] text-teal-200/75">Contact / inquiry</p>
           <h2 className="mt-4 font-serif text-[clamp(3rem,7vw,5.2rem)] leading-[0.94] tracking-tighter text-white">
-            Have a vision? We’re listening.
+            Share your vision with us.
           </h2>
           <p className="mt-5 text-lg leading-8 text-white/68">
             We partner with brands and institutions to design culture-driven experiences.

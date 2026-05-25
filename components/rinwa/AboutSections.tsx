@@ -13,8 +13,8 @@ export function AboutSections() {
           About
         </p>
         <h2 className="mt-4 font-serif text-[clamp(2.4rem,5vw,4rem)] leading-[0.96] tracking-[-0.04em] text-white">
-          Designed with intent.
-          <br />
+          {/* Designed with intent.
+          <br /> */}
           Built on lived experience.
         </h2>
         <p className="mx-auto mt-5 text-base leading-8 text-white/58">

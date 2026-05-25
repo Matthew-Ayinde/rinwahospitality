@@ -95,7 +95,7 @@ export function TestimonialsSection() {
         {/* Header */}
         <div className="mb-10 text-center px-6">
           <h2 className="font-serif text-3xl text-white/90">Testimonials</h2>
-          <p className="text-white/50 mt-2 text-sm">What people are saying about our events</p>
+          <p className="text-white/50 mt-2 text-sm">What our community is saying</p>
         </div>
 
         {/* Marquee stage */}

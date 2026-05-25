@@ -91,7 +91,7 @@ export function SocialPresence() {
         <div className="max-w-2xl">
           <p className="text-[0.72rem] uppercase tracking-[0.38em] text-teal-200/75">Social presence</p>
           <h2 id="social-presence" className="mt-4 font-serif text-[clamp(3rem,7vw,5.2rem)] leading-[0.92] tracking-[-0.05em] text-white">
-            Step into the room online.
+            Come online.
           </h2>
           <p className="mt-5 max-w-xl text-lg leading-8 text-white/68">
             Follow the narrative across image, motion, and long-form storytelling. Each platform holds a different chapter of RÌNWÁ.
