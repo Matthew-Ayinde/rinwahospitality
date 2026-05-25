@@ -193,7 +193,7 @@ export function HeroCarousel() {
             <p className="text-xs uppercase tracking-[0.3em] text-teal-100/70">House rules</p>
             <p className="mt-4 font-serif text-2xl leading-tight text-white">
               <p>Welcome to RÌNWÁ. Welcome to Self.</p>
-              <p className="text-xl mr-20 text-white/70">Honour these three rules to enter optimal flow states:</p>
+              <p className="text-xl mr-20 text-white/70">Honour these three rules to enter optimal flow state:</p>
             </p>
             <div className="mt-2 space-y-4 border-t border-white/10 pt-6 text-sm text-white/70">
               <p>1. Leave it</p>
