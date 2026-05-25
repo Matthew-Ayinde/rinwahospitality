@@ -117,12 +117,12 @@ export function SplashScreen() {
               className="flex flex-col items-center gap-4"
             >
               {/* Main brand text */}
-              <h1 className="font-serif text-[clamp(12.4rem,8vw,5.6rem)] font-black leading-[0.95] tracking-[-0.08em] text-foreground drop-shadow-[0_12px_30px_rgba(0,0,0,0.35)]">
+              <h1 className="font-serif text-[clamp(3rem,10vw,5.6rem)] md:text-[clamp(5.6rem,8vw,12.4rem)] font-black leading-[0.95] tracking-[-0.08em] text-foreground drop-shadow-[0_12px_30px_rgba(0,0,0,0.35)]">
                 RÌNWÁ
               </h1>
 
               {/* Subtitle */}
-              <p className="font-sans text-[clamp(0.875rem,2.5vw,1.4rem)] font-light tracking-[0.08em] text-foreground/92">
+              <p className="font-sans text-[clamp(0.7rem,3.5vw,1rem)] md:text-[clamp(0.875rem,2.5vw,1.4rem)] font-light tracking-[0.08em] text-foreground/92">
                 Hospitality and Experiences
               </p>
             </motion.div>
