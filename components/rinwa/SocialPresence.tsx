@@ -16,7 +16,7 @@ const platforms = [
   {
     name: "X / Twitter",
     handle: "@rinwahospitality",
-    link: "https://twitter.com/rinwahospitality",
+    link: "https://x.com/thebadestevents",
     followers: "6.1K",
     cta: "Read",
     gradient: "from-[#0f172a]/40 via-[#111827]/20 to-[#08161b]",
@@ -25,7 +25,7 @@ const platforms = [
   {
     name: "TikTok",
     handle: "@rinwahospitality",
-    link: "https://www.tiktok.com/@rinwahospitality",
+    link: "https://www.tiktok.com/@thebadestevents",
     followers: "22.7K",
     cta: "Watch",
     gradient: "from-[#7c2d12]/30 via-[#111827]/20 to-[#120b0a]",
@@ -33,12 +33,12 @@ const platforms = [
   },
   {
     name: "YouTube",
-    handle: "RÌNWÁ Stories",
+    handle: "RÌNWÁ TV",
     link: "https://www.youtube.com/@thebadestevents",
     followers: "9.8K",
     cta: "Join",
     gradient: "from-[#0c4a6e]/35 via-[#111827]/20 to-[#08131f]",
-    preview: "Mini-docs, event films, and longer narrative chapters.",
+    preview: "Mini-docs, event films, and longer narrative stories.",
   },
 ];
 

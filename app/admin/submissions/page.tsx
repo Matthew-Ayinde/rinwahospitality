@@ -62,6 +62,11 @@ export default function SubmissionsPage() {
       render: (_: any, row: any) => (row.industries?.length ? row.industries.join(', ') : row.industry || '—'),
     },
     {
+      key: 'feelings',
+      label: 'Feelings',
+      render: (_: any, row: any) => (row.feelings?.length ? row.feelings.slice(0, 2).join(' · ') : '—'),
+    },
+    {
       key: 'estimatedBudget',
       label: 'Budget',
       render: (_: any, row: any) => {
@@ -152,6 +157,18 @@ export default function SubmissionsPage() {
                 ))}
               </div>
             </div>
+            {selectedSubmission.feelings && selectedSubmission.feelings.length > 0 && (
+              <div>
+                <p className="text-xs uppercase text-white/50 tracking-widest mb-2">Feelings</p>
+                <div className="flex flex-wrap gap-2">
+                  {selectedSubmission.feelings.map((feeling: string, idx: number) => (
+                    <span key={idx} className="px-3 py-1 bg-teal-300/15 text-teal-200 rounded-full text-sm">
+                      {feeling}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
             <div>
               <p className="text-xs uppercase text-white/50 tracking-widest mb-1">Project Date</p>
               <p className="text-white/90">{selectedSubmission.projectDate}</p>

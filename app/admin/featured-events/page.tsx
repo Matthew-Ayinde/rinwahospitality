@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { Plus, Trash2, Eye, EyeOff, Edit2, GripVertical } from 'lucide-react';
+import { ArrowDown, ArrowUp, Edit2, Eye, EyeOff, GripVertical, Plus, Trash2 } from 'lucide-react';
 import AdminButton from '@/components/admin/AdminButton';
 import AdminInput from '@/components/admin/AdminInput';
 import AdminTextarea from '@/components/admin/AdminTextarea';
@@ -49,8 +49,6 @@ export default function FeaturedEventsPage() {
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [mediaUrl, setMediaUrl] = useState('');
   const [caption, setCaption] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [editingMediaId, setEditingMediaId] = useState<string | null>(null);
 
   const [formData, setFormData] = useState<Omit<FeaturedEvent, '_id' | 'createdAt'>>({
     title: '',
@@ -124,7 +122,34 @@ export default function FeaturedEventsPage() {
   function resetMediaForm() {
     setMediaUrl('');
     setCaption('');
-    setEditingMediaId(null);
+  }
+
+  async function persistEventOrder(nextEvents: FeaturedEvent[]) {
+    const reorderedEvents = nextEvents.map((event, index) => ({
+      ...event,
+      order: index,
+    }));
+
+    setEvents(reorderedEvents);
+
+    try {
+      const res = await fetch('/api/featured-events/reorder', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          events: reorderedEvents.map(({ _id, order }) => ({ _id, order })),
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to reorder');
+      }
+
+      toast.success('Events reordered');
+    } catch (error) {
+      toast.error('Failed to save reorder');
+      await fetchEvents();
+    }
   }
 
   async function handleSaveEvent() {
@@ -223,7 +248,7 @@ export default function FeaturedEventsPage() {
     resetMediaForm();
   }
 
-  async function handleDeleteMedia(mediaId?: string) {
+  async function handleDeleteMedia() {
     // For single-image mode, just clear the media array
     setFormData({ ...formData, media: [] });
     toast.success('Image removed');
@@ -263,8 +288,22 @@ export default function FeaturedEventsPage() {
     }
   }
 
-  async function handleDragStart(index: number) {
+  function handleDragStart(index: number) {
     setDraggedIndex(index);
+  }
+
+  function handleMoveEvent(index: number, direction: -1 | 1) {
+    const targetIndex = index + direction;
+
+    if (targetIndex < 0 || targetIndex >= events.length) {
+      return;
+    }
+
+    const nextEvents = [...events];
+    const [movedEvent] = nextEvents.splice(index, 1);
+    nextEvents.splice(targetIndex, 0, movedEvent);
+
+    void persistEventOrder(nextEvents);
   }
 
   async function handleDrop(targetIndex: number) {
@@ -276,32 +315,9 @@ export default function FeaturedEventsPage() {
     const newEvents = [...events];
     const [draggedEvent] = newEvents.splice(draggedIndex, 1);
     newEvents.splice(targetIndex, 0, draggedEvent);
-
-    // Update order field
-    const reorderedEvents = newEvents.map((event, index) => ({
-      ...event,
-      order: index,
-    }));
-
-    setEvents(reorderedEvents);
     setDraggedIndex(null);
 
-    // Save to backend
-    try {
-      const res = await fetch('/api/featured-events/reorder', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          events: reorderedEvents.map(({ _id, order }) => ({ _id, order })),
-        }),
-      });
-
-      if (!res.ok) throw new Error('Failed to reorder');
-      toast.success('Events reordered');
-    } catch (error) {
-      toast.error('Failed to save reorder');
-      await fetchEvents();
-    }
+    await persistEventOrder(newEvents);
   }
 
   if (isLoading) {
@@ -314,29 +330,32 @@ export default function FeaturedEventsPage() {
         <div className="flex justify-between items-center mb-8 border-b border-white/10 pb-6">
           <div className="max-w-2xl">
             <p className="text-[0.72rem] uppercase tracking-[0.38em] text-teal-200/75">
-              Spotlight management
+              Carousel curation
             </p>
             <h1 className="mt-4 font-serif text-4xl text-white/92 sm:text-5xl">
               Featured Events ({events.length})
             </h1>
             <p className="mt-3 max-w-xl text-sm leading-7 text-white/55">
-              Create and manage multiple featured events that appear in the carousel on the homepage. Add rich media galleries and curate the order to showcase your best moments.
+              Create the homepage carousel lineup, attach a single hero image to each event, and reorder entries with drag-and-drop or the move controls below.
             </p>
           </div>
           <AdminButton onClick={openCreateModal} className="flex items-center gap-2">
-            <Plus size={18} /> Add Event
+            <Plus size={18} /> Add Featured Event
           </AdminButton>
         </div>
 
         {events.length === 0 ? (
           <div className="bg-white/5 border border-white/10 border-dashed rounded-xl shadow p-12 text-center">
-            <p className="text-white/55 mb-4">No featured events yet. Create your first spotlight moment.</p>
+            <p className="text-white/55 mb-4">No featured events yet. Add the first carousel spotlight.</p>
             <AdminButton onClick={openCreateModal} className="flex items-center gap-2 mx-auto">
-              <Plus size={18} /> Create First Event
+              <Plus size={18} /> Create First Featured Event
             </AdminButton>
           </div>
         ) : (
           <div className="border border-white/10 rounded-xl bg-white/5 overflow-hidden">
+            <div className="border-b border-white/10 px-6 py-4 text-xs leading-6 text-white/55">
+              Tip: drag rows on desktop, or use the move buttons for touch and keyboard reordering.
+            </div>
             <table className="w-full">
               <thead className="bg-white/5 border-b border-white/10">
                 <tr>
@@ -346,6 +365,7 @@ export default function FeaturedEventsPage() {
                   <th className="px-6 py-4 text-left text-xs font-semibold text-white/70 uppercase tracking-[0.28em]">Date</th>
                   <th className="px-6 py-4 text-left text-xs font-semibold text-white/70 uppercase tracking-[0.28em]">Media</th>
                   <th className="px-6 py-4 text-left text-xs font-semibold text-white/70 uppercase tracking-[0.28em]">Status</th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-white/70 uppercase tracking-[0.28em]">Move</th>
                   <th className="px-6 py-4 text-left text-xs font-semibold text-white/70 uppercase tracking-[0.28em]">Actions</th>
                 </tr>
               </thead>
@@ -357,6 +377,7 @@ export default function FeaturedEventsPage() {
                     onDragStart={() => handleDragStart(index)}
                     onDragOver={(e) => e.preventDefault()}
                     onDrop={() => handleDrop(index)}
+                    onDragEnd={() => setDraggedIndex(null)}
                     className="border-b border-white/10 hover:bg-white/3 transition-colors"
                   >
                     <td className="px-6 py-4 cursor-grab active:cursor-grabbing">
@@ -387,19 +408,41 @@ export default function FeaturedEventsPage() {
                         )}
                       </button>
                     </td>
-                    <td className="px-6 py-4 flex gap-2">
-                      <button
-                        onClick={() => openEditModal(event)}
-                        className="text-teal-300/70 hover:text-teal-300 transition"
-                      >
-                        <Edit2 size={16} />
-                      </button>
-                      <button
-                        onClick={() => setDeleteConfirm(event._id)}
-                        className="text-red-400/70 hover:text-red-400 transition"
-                      >
-                        <Trash2 size={16} />
-                      </button>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => handleMoveEvent(index, -1)}
+                          disabled={index === 0}
+                          aria-label={`Move ${event.title} up`}
+                          className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-white/65 transition hover:border-teal-300/40 hover:text-teal-200 disabled:cursor-not-allowed disabled:opacity-30"
+                        >
+                          <ArrowUp size={15} />
+                        </button>
+                        <button
+                          onClick={() => handleMoveEvent(index, 1)}
+                          disabled={index === events.length - 1}
+                          aria-label={`Move ${event.title} down`}
+                          className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-white/65 transition hover:border-teal-300/40 hover:text-teal-200 disabled:cursor-not-allowed disabled:opacity-30"
+                        >
+                          <ArrowDown size={15} />
+                        </button>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => openEditModal(event)}
+                          className="text-teal-300/70 hover:text-teal-300 transition"
+                        >
+                          <Edit2 size={16} />
+                        </button>
+                        <button
+                          onClick={() => setDeleteConfirm(event._id)}
+                          className="text-red-400/70 hover:text-red-400 transition"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -485,10 +528,10 @@ export default function FeaturedEventsPage() {
 
               <AdminButton
                 onClick={handleAddMedia}
-                disabled={isSubmitting || !mediaUrl}
+                disabled={!mediaUrl}
                 className="w-full"
               >
-                {formData.media.length > 0 ? (isSubmitting ? 'Replacing...' : 'Replace Image') : (isSubmitting ? 'Adding...' : 'Add Image')}
+                {formData.media.length > 0 ? 'Replace Image' : 'Add Image'}
               </AdminButton>
             </div>
 

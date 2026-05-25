@@ -22,6 +22,7 @@ const ContactSubmissionSchema = z.object({
   industries: z.array(z.string().min(1)).optional(),
   industry: z.union([z.string().min(1), z.array(z.string().min(1))]).optional(),
   goals: z.array(z.string()).optional(),
+  feelings: z.array(z.string().min(1)).optional(),
 });
 
 export async function POST(request: NextRequest) {
@@ -47,6 +48,7 @@ export async function POST(request: NextRequest) {
     const submission = await ContactSubmission.create({
       ...validated,
       industries,
+      feelings: validated.feelings ?? [],
     });
 
     const settings = await Settings.findOne().select('partnershipEmail');
@@ -55,6 +57,7 @@ export async function POST(request: NextRequest) {
       submission: {
         ...validated,
         industries,
+        feelings: validated.feelings ?? [],
       },
       adminEmail,
     });

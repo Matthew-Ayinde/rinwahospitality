@@ -13,6 +13,7 @@ export interface IContactSubmission extends Document {
   industries: string[];
   industry?: string;
   goals: string[];
+  feelings: string[];
   isRead: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -63,6 +64,10 @@ const ContactSubmissionSchema = new Schema<IContactSubmission>(
       default: [],
     },
     goals: {
+      type: [String],
+      default: [],
+    },
+    feelings: {
       type: [String],
       default: [],
     },

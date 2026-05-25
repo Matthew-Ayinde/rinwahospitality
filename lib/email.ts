@@ -13,6 +13,7 @@ type InquiryEmailPayload = {
     description: string;
     industries: string[];
     goals?: string[];
+    feelings?: string[];
   };
   adminEmail: string;
 };
@@ -141,6 +142,7 @@ function buildAdminEmailHtml(submission: InquiryEmailPayload['submission']) {
                 ${row('Company', escapeHtml(submission.company))}
                 ${row('Location', escapeHtml(submission.location))}
                 ${row('Goals', escapeHtml(formatList(submission.goals || [])))}
+                ${row('Feelings', escapeHtml(formatList(submission.feelings || [])))}
                 ${row('Description', escapeHtml(submission.description).replace(/\n/g, '<br>'))}
               </table>
             </td></tr>
@@ -235,6 +237,7 @@ function buildUserEmailHtml(submission: InquiryEmailPayload['submission']) {
                 ${summaryRow('Location', escapeHtml(submission.location))}
                 ${summaryRow('Industries', escapeHtml(formatList(submission.industries)))}
                 ${summaryRow('Goals', escapeHtml(formatList(submission.goals || [])))}
+                ${summaryRow('Feelings', escapeHtml(formatList(submission.feelings || [])))}
                 ${summaryRow('Timeline', escapeHtml(submission.projectDate))}
                 ${summaryRow('Budget', escapeHtml(formatBudget(submission.estimatedBudget, submission.currency)))}
               </table>
@@ -312,6 +315,7 @@ export async function sendInquiryEmails({ submission, adminEmail }: InquiryEmail
           `Budget: ${formatBudget(submission.estimatedBudget, submission.currency)}`,
           `Industries: ${formatList(submission.industries)}`,
           `Goals: ${formatList(submission.goals || [])}`,
+          `Feelings: ${formatList(submission.feelings || [])}`,
           '',
           submission.description,
         ].join('\n'),
@@ -338,6 +342,7 @@ export async function sendInquiryEmails({ submission, adminEmail }: InquiryEmail
           '',
           `Location: ${submission.location}`,
           `Industries: ${formatList(submission.industries)}`,
+          `Feelings: ${formatList(submission.feelings || [])}`,
           `Project Date: ${submission.projectDate}`,
           `Budget: ${formatBudget(submission.estimatedBudget, submission.currency)}`,
         ].join('\n'),

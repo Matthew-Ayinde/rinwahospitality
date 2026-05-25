@@ -219,13 +219,17 @@ export const galleryItems: GalleryItem[] = [
 ];
 
 export const contactIndustries = [
+  "Accommodation",
   "Food & Beverage",
+  "Travel & Tourism",
+  "Recreation & Entertainment",
+  "Event Management",
   "Corporate",
+  "Fashion",
   "Hospitality",
-  "Travel/Tourism",
-  "Fashion/Lifestyle",
-  "Entertainment",
-  "Media",
+  "Beauty",
+  "Lifestyle",
+  "Film & Media",
   "Other",
 ];
 
@@ -235,4 +239,17 @@ export const contactGoals = [
   "Revenue",
   "Guest Experience",
   "Partnerships",
+];
+
+export type ContactFeelingOption = {
+  label: string;
+  emoji: string;
+};
+
+export const contactFeelings: ContactFeelingOption[] = [
+  { label: "Happy", emoji: "😊" },
+  { label: "Ecstatic", emoji: "🎉" },
+  { label: "Calm", emoji: "🌿" },
+  { label: "Inspired", emoji: "✨" },
+  { label: "Radiant", emoji: "💫" },
 ];

@@ -35,7 +35,7 @@ export function HeroCarousel() {
             src: (slide.videoUrl || slide.imageUrl) as string,
             poster: slide.imageUrl as string,
             alt: slide.title as string,
-            eyebrow: "RÌNWÁ Experience",
+            eyebrow: "Come home, ease lives here",
             headline: slide.title as string,
             subtitle: slide.description as string,
           }));
@@ -113,7 +113,7 @@ export function HeroCarousel() {
             <button
               type="button"
               className="rounded-full bg-teal-300 px-4 py-2 text-sm font-medium text-slate-950 transition duration-300 hover:bg-teal-200"
-              onClick={() => window.document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
+              onClick={() => window.document.getElementById("partnerships")?.scrollIntoView({ behavior: "smooth" })}
             >
               Partner With Us
             </button>
@@ -138,8 +138,8 @@ export function HeroCarousel() {
               className="mt-5 font-serif text-[clamp(3.6rem,12vw,8.8rem)] leading-[0.9] tracking-[-0.06em] text-white drop-shadow-[0_12px_30px_rgba(0,0,0,0.35)]"
             >
               RÌNWÁ
-              <span className="block text-[0.42em] font-sans font-normal tracking-[0.12em] text-teal-100/90 sm:text-[0.38em]">
-                Come home to Rinwa, where ease lives
+              <span className="block text-[0.42em] font-sans font-normal tracking-[0.12em] text-teal-100/90 sm:text-[0.25em]">
+                is a luxury diaspora concierge & experiential hospitality house.
               </span>
             </motion.h1>
 
@@ -147,9 +147,11 @@ export function HeroCarousel() {
               initial={shouldReduceMotion ? false : { opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.55, duration: 0.85, ease: "easeInOut" }}
-              className="mt-8 max-w-2xl text-[clamp(1.4rem,3.4vw,2.6rem)] font-light leading-[1.2] tracking-[-0.04em] text-white/92"
+              className="mt-8 max-w-2xl text-[clamp(1rem,2.2vw,1.5rem)] font-light leading-[1.2] tracking-[-0.04em] text-white/92"
             >
-              {activeSlide.headline}
+              {/* {activeSlide.headline} */}
+
+              We have built a reputation of designing trusted environments across the Canada-Nigerian markets that influence audiences to come, engage, spend more, stay longer, share freely, leave, or return intentionally .
             </motion.p>
 
             <motion.p
@@ -158,7 +160,7 @@ export function HeroCarousel() {
               transition={{ delay: 1.05, duration: 0.85, ease: "easeInOut" }}
               className="mt-4 max-w-xl text-lg leading-8 text-white/68"
             >
-              {activeSlide.subtitle}
+              {/* {activeSlide.subtitle} */}
             </motion.p>
 
             <motion.div
@@ -171,10 +173,10 @@ export function HeroCarousel() {
                 onClick={() => window.document.getElementById("experiences")?.scrollIntoView({ behavior: "smooth" })}
                 className="rounded-full bg-teal-300 px-6 py-3 text-sm font-semibold text-slate-950 transition duration-300 hover:bg-teal-200 hover:shadow-[0_0_30px_rgba(125,211,207,0.18)]"
               >
-                Explore Experiences
+                Enter Flow State
               </button>
               <button
-                onClick={() => window.document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
+                onClick={() => window.document.getElementById("partnerships")?.scrollIntoView({ behavior: "smooth" })}
                 className="rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-medium text-white/85 backdrop-blur-sm transition duration-300 hover:border-teal-300/40 hover:bg-white/10 hover:text-white"
               >
                 Partner With Us
@@ -188,15 +190,15 @@ export function HeroCarousel() {
             transition={{ delay: 0.55, duration: 0.9, ease: "easeOut" }}
             className="ml-auto max-w-md rounded-4xl border border-white/10 bg-[#041114]/55 p-6 shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur-2xl"
           >
-            <p className="text-xs uppercase tracking-[0.3em] text-teal-100/70">Scene notes</p>
-            <p className="mt-4 font-serif text-3xl leading-tight text-white">
-              <p>Home Rules. </p>
-              <p className="text-xl mr-20 text-white/70">This home is designed for:</p>
+            <p className="text-xs uppercase tracking-[0.3em] text-teal-100/70">Home rules</p>
+            <p className="mt-4 font-serif text-2xl leading-tight text-white">
+              <p>Welcome to RÌNWÁ. Welcome to self.</p>
+              <p className="text-xl mr-20 text-white/70">Honour these three rules to enter optimal flow states:</p>
             </p>
             <div className="mt-2 space-y-4 border-t border-white/10 pt-6 text-sm text-white/70">
-              <p>Hospitality-led brands</p>
-              <p>Creative founders</p>
-              <p>Travel & tourism ecosystems</p>
+              <p>1. Leave it</p>
+              <p>2. Breathe in</p>
+              <p>3. Come in</p>
             </div>
           </motion.aside>
         </div>

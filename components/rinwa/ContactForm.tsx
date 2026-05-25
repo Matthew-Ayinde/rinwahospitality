@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useMemo, useState } from "react";
-import { contactGoals, contactIndustries } from "./data";
+import { contactFeelings, contactGoals, contactIndustries } from "./data";
 import toast from "react-hot-toast";
 
 const CURRENCIES = [
@@ -22,6 +22,8 @@ export function ContactForm() {
   const [step, setStep] = useState<1 | 2>(1);
   const [industries, setIndustries] = useState<string[]>([contactIndustries[0]]);
   const [goals, setGoals] = useState<string[]>([contactGoals[0]]);
+  const [feelings, setFeelings] = useState<string[]>([contactFeelings[0].label]);
+  const [customFeeling, setCustomFeeling] = useState("");
   const [currency, setCurrency] = useState<string>("NGN");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -40,6 +42,21 @@ export function ContactForm() {
 
   const toggleGoal = (goal: string) => {
     setGoals((current) => (current.includes(goal) ? current.filter((item) => item !== goal) : [...current, goal]));
+  };
+
+  const toggleFeeling = (feeling: string) => {
+    setFeelings((current) => (current.includes(feeling) ? current.filter((item) => item !== feeling) : [...current, feeling]));
+  };
+
+  const addCustomFeeling = () => {
+    const nextFeeling = customFeeling.trim();
+
+    if (!nextFeeling) {
+      return;
+    }
+
+    setFeelings((current) => (current.includes(nextFeeling) ? current : [...current, nextFeeling]));
+    setCustomFeeling("");
   };
 
   const toggleIndustry = (industry: string) => {
@@ -65,11 +82,14 @@ export function ContactForm() {
       !formData.projectDate ||
       !formData.estimatedBudget ||
       !formData.description ||
-      industries.length === 0
+      industries.length === 0 ||
+      feelings.length === 0
     ) {
       toast.error("Please fill all fields");
       return;
     }
+
+    const submittedFeelings = Array.from(new Set([...feelings, customFeeling.trim()].filter(Boolean)));
 
     try {
       setIsSubmitting(true);
@@ -89,6 +109,7 @@ export function ContactForm() {
           industries,
           industry: industries,
           goals,
+            feelings: submittedFeelings,
         }),
       });
 
@@ -119,6 +140,8 @@ export function ContactForm() {
       setStep(1);
       setIndustries([contactIndustries[0]]);
       setGoals([contactGoals[0]]);
+      setFeelings([contactFeelings[0].label]);
+      setCustomFeeling("");
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "An error occurred");
     } finally {
@@ -145,6 +168,7 @@ export function ContactForm() {
               {formData.location && <p>Location: {formData.location}</p>}
               <p>Industries: {industries.join(" • ")}</p>
               <p>Goals: {goals.join(" • ")}</p>
+              <p>Feelings: {Array.from(new Set([...feelings, customFeeling.trim()].filter(Boolean))).join(" • ")}</p>
             </div>
           </div>
         </div>
@@ -315,6 +339,59 @@ export function ContactForm() {
                   </div>
                 </div>
 
+                <div className="mt-8 rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-4 sm:p-5">
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div>
+                      <p className="text-sm text-white/70">How do you want to feel?</p>
+                      <p className="mt-1 text-xs uppercase tracking-[0.24em] text-white/35">
+                        Pick one or more, then add your own words if needed
+                      </p>
+                    </div>
+                    <p className="text-xs uppercase tracking-[0.24em] text-white/35">Mood / vibe</p>
+                  </div>
+
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {contactFeelings.map((option) => (
+                      <ChipButton
+                        key={option.label}
+                        active={feelings.includes(option.label)}
+                        onClick={() => toggleFeeling(option.label)}
+                      >
+                        <span className="mr-2" aria-hidden="true">
+                          {option.emoji}
+                        </span>
+                        {option.label}
+                      </ChipButton>
+                    ))}
+                  </div>
+
+                  <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+                    <label className="flex-1 space-y-2">
+                      <span className="block text-xs uppercase tracking-[0.24em] text-white/45">Add your own</span>
+                      <input
+                        type="text"
+                        value={customFeeling}
+                        onChange={(event) => setCustomFeeling(event.target.value)}
+                        onKeyDown={(event) => {
+                          if (event.key === "Enter") {
+                            event.preventDefault();
+                            addCustomFeeling();
+                          }
+                        }}
+                        placeholder="e.g. seen, celebrated, safe, expansive"
+                        className="w-full min-h-14 rounded-2xl border border-white/10 bg-[#041114]/60 px-4 py-4 text-white placeholder:text-white/28 outline-none transition focus:border-teal-300/50 focus:bg-[#07171a] focus:shadow-[0_0_0_4px_rgba(125,211,207,0.08)]"
+                      />
+                    </label>
+                    <button
+                      type="button"
+                      onClick={addCustomFeeling}
+                      className="self-end rounded-full border border-teal-300/30 bg-teal-300/10 px-5 py-3 text-sm font-semibold text-teal-100 transition duration-300 hover:border-teal-200/50 hover:bg-teal-300/15"
+                    >
+                      Add feeling
+                    </button>
+                  </div>
+                </div>
+
                 <div className="mt-8 flex flex-wrap items-center justify-between gap-3">
                   <button
                     type="button"
@@ -374,7 +451,7 @@ function ChipButton({
   onClick,
 }: {
   active?: boolean;
-  children: string;
+  children: React.ReactNode;
   onClick: () => void;
 }) {
   return (
