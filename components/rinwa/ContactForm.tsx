@@ -38,7 +38,7 @@ export function ContactForm() {
     description: "",
   });
 
-  const stepLabel = useMemo(() => (step === 1 ? "Tell us who you are" : "Share the shape of the project"), [step]);
+  const stepLabel = useMemo(() => (step === 1 ? "Share your vision with us" : "Share your vision with us"), [step]);
 
   const toggleGoal = (goal: string) => {
     setGoals((current) => (current.includes(goal) ? current.filter((item) => item !== goal) : [...current, goal]));
@@ -155,7 +155,7 @@ export function ContactForm() {
         <div className="max-w-xl">
           <p className="text-[0.72rem] uppercase tracking-[0.38em] text-teal-200/75">Contact / inquiry</p>
           <h2 className="mt-4 font-serif text-[clamp(3rem,7vw,5.2rem)] leading-[0.94] tracking-tighter text-white">
-            Share your vision with us.
+            Have a vision? We’re listening.
           </h2>
           <p className="mt-5 text-lg leading-8 text-white/68">
             We partner with brands and institutions to design culture-driven experiences.
@@ -164,7 +164,7 @@ export function ContactForm() {
           <div className="mt-10 rounded-4xl border border-white/10 bg-white/4 p-5">
             <p className="text-xs uppercase tracking-[0.28em] text-teal-100/70">Project pulse</p>
             <div className="mt-4 space-y-2 text-sm text-white/72">
-              <p>Step: {stepLabel}</p>
+              <p>Overview: {stepLabel}</p>
               {formData.location && <p>Location: {formData.location}</p>}
               <p>Industries: {industries.join(" • ")}</p>
               <p>Goals: {goals.join(" • ")}</p>
@@ -342,7 +342,7 @@ export function ContactForm() {
                 <div className="mt-8 rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-4 sm:p-5">
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
-                      <p className="text-sm text-white/70">How do you want to feel?</p>
+                      <p className="text-sm text-white/70">Our audience leaves feeling?</p>
                       <p className="mt-1 text-xs uppercase tracking-[0.24em] text-white/35">
                         Pick one or more, then add your own words if needed
                       </p>
@@ -405,7 +405,7 @@ export function ContactForm() {
                     disabled={isSubmitting}
                     className="rounded-full bg-teal-300 px-6 py-4 text-base font-semibold text-slate-950 transition duration-300 hover:bg-teal-200 hover:shadow-[0_0_35px_rgba(125,211,207,0.18)] disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {isSubmitting ? "Submitting..." : "I’m Here, I’ve Arrived"}
+                    {isSubmitting ? "Submitting..." : "I’m Here"}
                   </button>
                 </div>
               </motion.div>

@@ -39,11 +39,11 @@ const featuredReel = {
   handle: "@ladybaderinwa",
   creator: "ladybaderinwa",
   link: "https://www.instagram.com/reel/DYwlP74skgA/?igsh=bDVlZ292cTF5MzNx",
-  badge: "Featured reel",
+  badge: "Featured stories",
   audio: "Original audio",
   duration: "Watch on Instagram",
   caption:
-    "My heart never left home, even after 14 years abroad. This reconnection trip feels like meeting myself again, so while I’m here building, come see Lagos through my eyes.",
+    "My heart never left home, even after 14 years abroad. This reconnection trip feels like meeting myself again, so while I’m here building...",
 };
 
 function SocialIcon({ platform }: { platform: string }) {
@@ -129,7 +129,7 @@ export function SocialPresence() {
                   </div>
 
                   <div className="space-y-3">
-                    <p className="text-xs uppercase tracking-[0.3em] text-white/46">Instagram reel</p>
+                    {/* <p className="text-xs uppercase tracking-[0.3em] text-white/46">Instagram reel</p> */}
                     <h3 className="max-w-md font-serif text-[clamp(2.35rem,4.5vw,4.35rem)] leading-[0.94] tracking-[-0.04em] text-white">
                       {featuredReel.title}
                     </h3>
@@ -141,7 +141,7 @@ export function SocialPresence() {
 
                 <div className="space-y-4">
                   <div className="flex flex-wrap gap-2 text-[0.68rem] uppercase tracking-[0.28em] text-white/48">
-                    <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1">{featuredReel.handle}</span>
+                    {/* <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1">{featuredReel.handle}</span> */}
                     <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1">{featuredReel.audio}</span>
                   </div>
 
@@ -178,17 +178,7 @@ export function SocialPresence() {
                       </div>
                     </div>
 
-                    <div className="absolute inset-x-0 bottom-0 p-4">
-                      <div className="rounded-[1.35rem] border border-white/10 bg-black/42 px-4 py-4 backdrop-blur-md">
-                        <p className="text-[0.64rem] uppercase tracking-[0.28em] text-teal-100/72">Tap to watch</p>
-                        <p className="mt-2 font-serif text-xl leading-tight text-white">
-                          Come see Lagos through my eyes.
-                        </p>
-                        <p className="mt-2 text-sm leading-6 text-white/68">
-                          Motion, caption, and atmosphere designed to open naturally on Instagram.
-                        </p>
-                      </div>
-                    </div>
+              
                   </div>
                 </div>
               </div>

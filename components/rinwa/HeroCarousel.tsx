@@ -128,7 +128,7 @@ export function HeroCarousel() {
               transition={{ delay: 0.2, duration: 0.8, ease: "easeInOut" }}
               className="text-[0.72rem] uppercase tracking-[0.38em] text-teal-100/75"
             >
-              {activeSlide.eyebrow}
+              {/* {activeSlide.eyebrow} */}
             </motion.p>
 
             <motion.h1
@@ -139,7 +139,7 @@ export function HeroCarousel() {
             >
               RÌNWÁ
               <span className="block text-[0.42em] font-sans font-normal tracking-[0.12em] text-teal-100/90 sm:text-[0.25em]">
-                is a luxury diaspora concierge & experiential hospitality house.
+                A luxury diaspora concierge & experiential hospitality house.
               </span>
             </motion.h1>
 
@@ -190,14 +190,14 @@ export function HeroCarousel() {
             transition={{ delay: 0.55, duration: 0.9, ease: "easeOut" }}
             className="ml-auto max-w-md rounded-4xl border border-white/10 bg-[#041114]/55 p-6 shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur-2xl"
           >
-            <p className="text-xs uppercase tracking-[0.3em] text-teal-100/70">Home rules</p>
+            <p className="text-xs uppercase tracking-[0.3em] text-teal-100/70">House rules</p>
             <p className="mt-4 font-serif text-2xl leading-tight text-white">
-              <p>Welcome to RÌNWÁ. Welcome to self.</p>
+              <p>Welcome to RÌNWÁ. Welcome to Self.</p>
               <p className="text-xl mr-20 text-white/70">Honour these three rules to enter optimal flow states:</p>
             </p>
             <div className="mt-2 space-y-4 border-t border-white/10 pt-6 text-sm text-white/70">
               <p>1. Leave it</p>
-              <p>2. Breathe in</p>
+              <p>2. Breathe out</p>
               <p>3. Come in</p>
             </div>
           </motion.aside>

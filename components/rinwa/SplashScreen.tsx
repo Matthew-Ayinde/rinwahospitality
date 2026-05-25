@@ -122,8 +122,8 @@ export function SplashScreen() {
               </h1>
 
               {/* Subtitle */}
-              <p className="font-sans text-[clamp(0.7rem,3.5vw,1rem)] md:text-[clamp(0.875rem,2.5vw,1.4rem)] font-light tracking-[0.08em] text-foreground/92">
-                Hospitality and Experiences
+              <p className="font-sans uppercase text-[clamp(0.7rem,3.5vw,1rem)] md:text-[clamp(0.875rem,2.5vw,1.4rem)] font-light tracking-[0.08em] text-foreground/92">
+                Take off, come home, ease lives here
               </p>
             </motion.div>
 

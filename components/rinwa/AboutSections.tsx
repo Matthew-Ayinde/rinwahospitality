@@ -18,7 +18,7 @@ export function AboutSections() {
           Built on lived experience.
         </h2>
         <p className="mx-auto mt-5 text-base leading-8 text-white/58">
-          At the core of her work is a simple idea: experiences should improve
+          At the core of our work is a simple idea: experiences should improve
           the quality of human life.
         </p>
       </div>
