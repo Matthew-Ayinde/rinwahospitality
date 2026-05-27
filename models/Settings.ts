@@ -5,6 +5,8 @@ export interface ISettings extends Document {
   tagline: string;
   siteUrl: string;
   analyticsId?: string;
+  joinTeamDescription: string;
+  joinTeamGoogleFormUrl: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -25,6 +27,14 @@ const SettingsSchema = new Schema<ISettings>(
     },
     analyticsId: {
       type: String,
+    },
+    joinTeamDescription: {
+      type: String,
+      default: 'As RÌNWÁ expands globally, we\'re building a team of thoughtful creatives, strategists, and cultural disruptors to help shape the future of culturally-driven hospitality and experiences.',
+    },
+    joinTeamGoogleFormUrl: {
+      type: String,
+      default: 'https://forms.gle/example',
     },
   },
   { timestamps: true }

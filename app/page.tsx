@@ -7,6 +7,7 @@ import { HeroCarousel } from "@/components/rinwa/HeroCarousel";
 import { MediaGallery } from "@/components/rinwa/MediaGallery";
 import { PastEventsGallery } from "@/components/rinwa/PastEventsGallery";
 import TestimonialsSection from "@/components/rinwa/TestimonialsSection";
+import { JoinTeamSection } from "@/components/rinwa/JoinTeamSection";
 import { PartnershipDivider } from "@/components/rinwa/PartnershipDivider";
 import { SocialPresence } from "@/components/rinwa/SocialPresence";
 import { SiteFooter } from "@/components/rinwa/SiteFooter";
@@ -73,6 +74,7 @@ export default function Page() {
       <FeaturedEventCarousel />
       <PastEventsGallery />
       <TestimonialsSection />
+      <JoinTeamSection />
       {/* <MediaGallery /> */}
       <ContactForm />
       <SocialPresence />

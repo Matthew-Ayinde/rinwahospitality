@@ -5,6 +5,7 @@ import { BrandPartner } from '@/models/BrandPartner';
 import { Event } from '@/models/Event';
 import { MediaItem } from '@/models/MediaItem';
 import { Settings } from '@/models/Settings';
+import { JobPosting } from '@/models/JobPosting';
 import type { HeroSlide as HeroSlideData, BrandItem, WeekdayEvent, PastEvent, GalleryItem } from '@/components/rinwa/data';
 import { heroSlides, brandPartners, weekdayEvents, pastEvents, galleryItems } from '@/components/rinwa/data';
 
@@ -22,6 +23,7 @@ async function main() {
       Event.deleteMany({}),
       MediaItem.deleteMany({}),
       Settings.deleteMany({}),
+      JobPosting.deleteMany({}),
     ]);
 
     // Create admin user
@@ -108,12 +110,92 @@ async function main() {
     await MediaItem.insertMany(mediaData);
     console.log(`✓ ${mediaData.length} media items created`);
 
+    // Seed Job Postings
+    console.log('Seeding job postings...');
+    const jobPostings = [
+      {
+        title: 'Content Creator & Visual Storyteller',
+        company: 'RÌNWÁ Hospitality & Experiences Ltd.',
+        location: 'Lagos, Nigeria',
+        type: 'Contract / Part-Time / Retainer',
+        overview:
+          'RÌNWÁ is a diaspora hospitality and experience design company operating across the Canada–Nigeria market. We create culturally intelligent experiences, storytelling, and environments that connect people to home, culture, community, and ease. We\'re looking for a Content Creator & Visual Storyteller to help capture and shape the visual world of the brand across hospitality, tourism, wellness, and cultural experiences.',
+        responsibilities: [
+          'Create short-form content for Instagram, TikTok, and LinkedIn',
+          'Capture experiences, events, behind-the-scenes moments, and founder-led storytelling',
+          'Edit reels and visual content aligned with the RÌNWÁ aesthetic',
+          'Support campaign shoots and content production',
+          'Translate Lagos, culture, and hospitality into compelling digital storytelling',
+          'Maintain strong visual consistency across platforms',
+        ],
+        requirements: [
+          '2–5+ years creating digital or brand content',
+          'Strong eye for storytelling, aesthetics, and internet culture',
+          'Skilled in shooting and editing mobile-first content',
+          'Understands luxury, hospitality, culture, and experiential brands',
+          'Highly proactive, collaborative, and creative',
+          'Based in Lagos and available for on-site shoots/events',
+        ],
+        order: 0,
+      },
+      {
+        title: 'Copywriter & Brand Storytelling Lead',
+        company: 'RÌNWÁ Hospitality & Experiences Ltd.',
+        location: 'Remote / Lagos',
+        type: 'Full-time',
+        overview:
+          'We\'re looking for a strategic copywriter who can shape the voice of RÌNWÁ across digital platforms, campaigns, partnerships, and founder storytelling. This role is ideal for someone who understands modern brand building, emotional storytelling, and culturally intelligent communication.',
+        responsibilities: [
+          'Write copy for social media, campaigns, website, decks, and brand materials',
+          'Develop storytelling concepts and content directions',
+          'Support founder-led thought leadership and brand positioning',
+          'Maintain a consistent brand voice across all touchpoints',
+          'Translate experiences and cultural insights into compelling narratives',
+        ],
+        requirements: [
+          'Strong portfolio in branding, editorial, or digital storytelling',
+          'Deep understanding of culture, hospitality, and audience psychology',
+          'Strong writing instincts across luxury, lifestyle, and community-led brands',
+          'Able to balance emotional storytelling with strategic communication',
+        ],
+        order: 1,
+      },
+      {
+        title: 'Graphic Designer & Brand Designer',
+        company: 'RÌNWÁ Hospitality & Experiences Ltd.',
+        location: 'Remote / Lagos',
+        type: 'Full-time',
+        overview:
+          'RÌNWÁ is seeking a designer who can build visually refined, culturally intelligent, and emotionally resonant brand assets across digital, experiential, and hospitality touchpoints.',
+        responsibilities: [
+          'Design social assets, presentations, campaign visuals, and branded materials',
+          'Support visual identity development and creative direction',
+          'Create cohesive designs across digital and physical experiences',
+          'Collaborate with content and strategy teams on campaigns and launches',
+          'Help evolve the visual world of the brand',
+        ],
+        requirements: [
+          'Strong portfolio in branding, hospitality, lifestyle, or culture-led design',
+          'Strong typography and layout skills',
+          'Experience designing for social and experiential campaigns',
+          'Understands elevated, minimal, and emotionally-driven aesthetics',
+          'Skilled in Adobe Creative Suite, Figma, or equivalent tools',
+        ],
+        order: 2,
+      },
+    ];
+    await JobPosting.insertMany(jobPostings);
+    console.log(`✓ ${jobPostings.length} job postings created`);
+
     // Create Settings
     console.log('Creating settings...');
     await Settings.create({
       partnershipEmail: process.env.ADMIN_EMAIL || 'rinwahospitality@gmail.com',
       tagline: 'Come here, you\'ve arrived home',
       siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+      joinTeamDescription:
+        'As RÌNWÁ expands globally, we\'re building a team of thoughtful creatives, strategists, and cultural disruptors to help shape the future of culturally-driven hospitality and experiences.',
+      joinTeamGoogleFormUrl: 'https://forms.gle/example',
     });
     console.log('✓ Settings created');
 
