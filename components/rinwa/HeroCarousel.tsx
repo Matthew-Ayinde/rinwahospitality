@@ -101,7 +101,9 @@ export function HeroCarousel() {
 
       <div className="mx-auto flex h-full min-h-screen w-full max-w-7xl flex-col justify-between gap-14 px-5 py-6 sm:px-8 lg:px-12">
         <header className="flex items-center justify-between rounded-full border border-white/10 bg-white/5 px-5 py-3 backdrop-blur-xl">
-          <p className="text-sm tracking-[0.28em] text-white/80">RÌNWÁ RHE</p>
+          <div className="flex items-center">
+            <Image src="/images/logo-home.png" alt="RÌNWÁ logo" width={60} height={18} className="object-contain" />
+          </div>
           <div className="hidden gap-2 sm:flex">
             <button
               type="button"

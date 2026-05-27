@@ -1,5 +1,6 @@
 import { v2 as cloudinary } from 'cloudinary';
 import { NextRequest, NextResponse } from 'next/server';
+import { CLOUDINARY_ROOT_FOLDER } from '@/lib/cloudinary';
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -23,7 +24,7 @@ export async function POST(request: NextRequest) {
     const result = await new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
-          folder: 'rinwa-admin',
+          folder: CLOUDINARY_ROOT_FOLDER,
           resource_type: (resourceType === 'auto' ? 'auto' : resourceType) as 'auto' | 'image' | 'video' | 'raw',
         },
         (error, result) => {

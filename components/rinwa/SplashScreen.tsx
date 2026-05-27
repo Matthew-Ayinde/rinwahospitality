@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import Image from "next/image";
+
 
 export function SplashScreen() {
   const [showSplash, setShowSplash] = useState(false);
@@ -109,64 +111,22 @@ export function SplashScreen() {
           />
 
           {/* Content - positioned above doors */}
-          <div className="relative z-10 flex flex-col items-center justify-center gap-6 px-8 text-center">
+          <div className="relative z-10 flex items-center justify-center px-8 text-center">
             <motion.div
               variants={textVariants}
               initial="initial"
               animate={isAnimatingOut ? "exit" : "animate"}
-              className="flex flex-col items-center gap-4"
+              className="relative flex h-[min(72vw,24rem)] w-[min(72vw,24rem)] items-center justify-center md:h-[min(58vw,30rem)] md:w-[min(58vw,30rem)]"
             >
-              {/* Main brand text */}
-              <h1 className="font-serif text-[clamp(3rem,10vw,5.6rem)] md:text-[clamp(5.6rem,8vw,12.4rem)] font-black leading-[0.95] tracking-[-0.08em] text-foreground drop-shadow-[0_12px_30px_rgba(0,0,0,0.35)]">
-                RÌNWÁ
-              </h1>
-
-              {/* Subtitle */}
-              <p className="font-sans uppercase text-[clamp(0.7rem,3.5vw,1rem)] md:text-[clamp(0.875rem,2.5vw,1.4rem)] font-light tracking-[0.08em] text-foreground/92">
-                Take off, come home, ease lives here
-              </p>
-            </motion.div>
-
-            {/* Loading indicator / hint */}
-            <motion.div
-              initial={shouldReduceMotion ? false : { opacity: 0 }}
-              animate={{ opacity: 0.5 }}
-              transition={{
-                delay: shouldReduceMotion ? 0 : 2.5,
-                duration: 1,
-              }}
-              className="mt-8 flex items-center gap-2"
-            >
-              <motion.div
-                animate={{ scaleX: [1, 1.1, 1] }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="h-0.5 w-1 bg-[#041114]/50"
-              />
-              <motion.div
-                animate={{ scaleX: [1, 1.15, 1] }}
-                transition={{
-                  duration: 2,
-                  delay: 0.2,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="h-0.5 w-1 bg-[#041114]/50"
-              />
-              <motion.div
-                animate={{ scaleX: [1, 1.1, 1] }}
-                transition={{
-                  duration: 2,
-                  delay: 0.4,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="h-0.5 w-1 bg-[#041114]/50"
-              />
-            </motion.div>
+                <Image
+                  src="/images/logo.png"
+                  alt="RÌNWÁ logo"
+                  fill
+                  priority
+                  sizes="(max-width: 768px) 72vw, 30rem"
+                  className="object-contain"
+                />
+              </motion.div>
           </div>
         </motion.div>
       )}

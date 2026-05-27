@@ -102,19 +102,34 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url);
-    const limit = parseInt(searchParams.get('limit') || '50');
-    const skip = parseInt(searchParams.get('skip') || '0');
+    const limit = Math.max(1, parseInt(searchParams.get('limit') || '20', 10) || 20);
+    const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10) || 1);
+    const skip = searchParams.has('skip')
+      ? Math.max(0, parseInt(searchParams.get('skip') || '0', 10) || 0)
+      : (page - 1) * limit;
 
     await connectDB();
+    const total = await ContactSubmission.countDocuments();
+    const totalPages = Math.max(1, Math.ceil(total / limit));
+    const currentPage = Math.min(page, totalPages);
+    const currentSkip = searchParams.has('skip') ? skip : (currentPage - 1) * limit;
+
     const submissions = await ContactSubmission.find()
       .sort({ createdAt: -1 })
       .limit(limit)
-      .skip(skip);
-
-    const total = await ContactSubmission.countDocuments();
+      .skip(currentSkip);
 
     return NextResponse.json(
-      { submissions, total, limit, skip },
+      {
+        submissions,
+        total,
+        limit,
+        page: currentPage,
+        totalPages,
+        hasNextPage: currentPage < totalPages,
+        hasPreviousPage: currentPage > 1,
+        skip: currentSkip,
+      },
       { status: 200 }
     );
   } catch (error) {

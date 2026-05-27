@@ -1,5 +1,6 @@
 import { v2 as cloudinary } from 'cloudinary';
 import { NextResponse } from 'next/server';
+import { CLOUDINARY_ROOT_FOLDER } from '@/lib/cloudinary';
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -7,7 +8,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const FOLDER = 'rinwa-admin';
+const FOLDER = CLOUDINARY_ROOT_FOLDER;
 
 export async function GET() {
   const timestamp = Math.round(Date.now() / 1000);

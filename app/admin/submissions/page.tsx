@@ -2,12 +2,14 @@
 
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { Eye, Trash2, Mail } from 'lucide-react';
+import { Eye, Trash2, Mail, ChevronLeft, ChevronRight } from 'lucide-react';
 import AdminButton from '@/components/admin/AdminButton';
 import AdminModal from '@/components/admin/AdminModal';
 import AdminTable from '@/components/admin/AdminTable';
 import LoadingSpinner from '@/components/admin/LoadingSpinner';
 import ConfirmationDialog from '@/components/admin/ConfirmationDialog';
+
+const PAGE_SIZE = 20;
 
 export default function SubmissionsPage() {
   const [submissions, setSubmissions] = useState<any[]>([]);
@@ -15,18 +17,24 @@ export default function SubmissionsPage() {
   const [selectedSubmission, setSelectedSubmission] = useState<any | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalSubmissions, setTotalSubmissions] = useState(0);
 
   useEffect(() => {
-    fetchSubmissions();
-  }, []);
+    fetchSubmissions(currentPage);
+  }, [currentPage]);
 
-  async function fetchSubmissions() {
+  async function fetchSubmissions(page = 1) {
     try {
       setIsLoading(true);
-      const res = await fetch('/api/submissions');
+      const res = await fetch(`/api/submissions?page=${page}&limit=${PAGE_SIZE}`);
       if (!res.ok) throw new Error('Failed to fetch');
       const data = await res.json();
       setSubmissions(data.submissions || []);
+      setCurrentPage(data.page || page);
+      setTotalPages(data.totalPages || 1);
+      setTotalSubmissions(data.total || 0);
     } catch (error) {
       toast.error('Failed to fetch submissions');
     } finally {
@@ -44,7 +52,7 @@ export default function SubmissionsPage() {
 
       toast.success('Submission deleted');
       setDeleteConfirm(null);
-      await fetchSubmissions();
+      await fetchSubmissions(currentPage);
     } catch (error) {
       toast.error('Failed to delete submission');
     } finally {
@@ -113,6 +121,38 @@ export default function SubmissionsPage() {
       ) : (
         <div className="bg-white/5 border border-white/10 rounded-[1.8rem] p-6 backdrop-blur-sm overflow-hidden">
           <AdminTable columns={columns} data={submissions} />
+
+          <div className="mt-6 flex flex-col gap-4 border-t border-white/10 pt-5 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm text-white/50">
+              {totalSubmissions === 0
+                ? 'No submissions to display'
+                : `Showing ${(currentPage - 1) * PAGE_SIZE + 1}-${Math.min(currentPage * PAGE_SIZE, totalSubmissions)} of ${totalSubmissions}`}
+            </p>
+
+            <div className="flex items-center gap-3">
+              <AdminButton
+                variant="secondary"
+                onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+                disabled={isLoading || currentPage <= 1}
+                className="px-4! py-2! flex items-center gap-2"
+              >
+                <ChevronLeft size={16} />
+                Previous
+              </AdminButton>
+              <span className="text-sm text-white/60">
+                Page {currentPage} of {Math.max(1, totalPages)}
+              </span>
+              <AdminButton
+                variant="secondary"
+                onClick={() => setCurrentPage((page) => Math.min(totalPages, page + 1))}
+                disabled={isLoading || currentPage >= totalPages}
+                className="px-4! py-2! flex items-center gap-2"
+              >
+                Next
+                <ChevronRight size={16} />
+              </AdminButton>
+            </div>
+          </div>
         </div>
       )}
 

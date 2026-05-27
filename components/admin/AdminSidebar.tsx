@@ -9,11 +9,13 @@ import {
   Trophy,
   Archive,
   MonitorPlay,
+  Briefcase,
   Handshake,
   Inbox,
   MessageSquareQuote,
   Settings2,
   LogOut,
+  
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -23,8 +25,7 @@ const navItems = [
   { href: '/admin/past-events', label: 'Past Events', icon: Archive },
   { href: '/admin/hero-slides', label: 'Hero Slides', icon: MonitorPlay },
   { href: '/admin/brand-partners', label: 'Brand Partners', icon: Handshake },
-  // { href: '/admin/events', label: 'Events', icon: Play },
-  // { href: '/admin/media', label: 'Media Gallery', icon: Image },
+  { href: '/admin/job-postings', label: 'Job Postings', icon: Briefcase },
   { href: '/admin/submissions', label: 'Submissions', icon: Inbox },
   { href: '/admin/testimonials', label: 'Testimonials', icon: MessageSquareQuote },
   { href: '/admin/settings', label: 'Settings', icon: Settings2 },

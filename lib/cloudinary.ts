@@ -1,5 +1,7 @@
 import { v2 as cloudinary } from 'cloudinary';
 
+export const CLOUDINARY_ROOT_FOLDER = 'rinwa';
+
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -11,10 +13,12 @@ export async function uploadImage(
   folder: string,
   fileName: string
 ): Promise<string> {
+  const targetFolder = folder ? `${CLOUDINARY_ROOT_FOLDER}/${folder}` : CLOUDINARY_ROOT_FOLDER;
+
   return new Promise((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
       {
-        folder: `rinwa/${folder}`,
+        folder: targetFolder,
         resource_type: 'auto',
         public_id: fileName,
       },
