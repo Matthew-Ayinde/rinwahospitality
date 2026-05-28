@@ -120,6 +120,13 @@ export function HeroCarousel() {
               Partner With Us
             </button>
           </div>
+          <button
+            type="button"
+            className="rounded-full bg-teal-300 px-3.5 py-3 text-xs font-medium text-slate-950 transition duration-300 hover:bg-teal-200 sm:hidden"
+            onClick={() => window.document.getElementById("partnerships")?.scrollIntoView({ behavior: "smooth" })}
+          >
+            Partner With Us
+          </button>
         </header>
 
         <div className="grid items-end gap-10 pb-8 lg:grid-cols-[1.2fr_0.8fr] lg:gap-8 lg:pb-12">
