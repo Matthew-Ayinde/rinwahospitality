@@ -167,11 +167,11 @@ export default function JobPostingsPage() {
   }
 
   return (
-    <div className="p-8 max-w-7xl mx-auto">
-      <div className="mb-8 flex justify-between items-center">
+    <div className="p-4 sm:p-6 md:p-8 max-w-7xl mx-auto">
+      <div className="mb-6 md:mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="font-serif text-4xl text-white/90">Job Postings</h1>
-          <p className="text-white/50 mt-2">Manage career opportunities</p>
+          <h1 className="font-serif text-2xl sm:text-4xl text-white/90">Job Postings</h1>
+          <p className="text-white/50 mt-1 md:mt-2 text-sm md:text-base">Manage career opportunities</p>
         </div>
         <AdminButton
           onClick={() => {
@@ -199,16 +199,20 @@ export default function JobPostingsPage() {
           {items.map((item) => (
             <div
               key={item._id}
-              className="bg-white/5 border border-white/10 rounded-[1.2rem] p-6 flex justify-between items-start"
+              className="bg-white/5 border border-white/10 rounded-[1.2rem] p-4 md:p-6 flex justify-between items-start gap-3"
             >
-              <div className="flex-1">
-                <h3 className="text-white/90 font-semibold text-lg">{item.title}</h3>
-                <p className="text-white/60 text-sm mt-1">
-                  {item.company} • {item.location} • {item.type}
+              <div className="flex-1 min-w-0">
+                <h3 className="text-white/90 font-semibold text-base md:text-lg">{item.title}</h3>
+                <p className="text-white/60 text-xs md:text-sm mt-1 flex flex-wrap gap-x-1">
+                  <span>{item.company}</span>
+                  <span className="text-white/30">•</span>
+                  <span>{item.location}</span>
+                  <span className="text-white/30">•</span>
+                  <span>{item.type}</span>
                 </p>
                 <p className="text-white/50 text-sm mt-2 line-clamp-2">{item.overview}</p>
               </div>
-              <div className="flex gap-2 ml-4">
+              <div className="flex gap-1 md:gap-2 flex-shrink-0">
                 <button
                   onClick={() => openEdit(item)}
                   className="p-2 hover:bg-teal-300/20 text-teal-300 rounded-lg transition"

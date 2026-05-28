@@ -325,27 +325,27 @@ export default function FeaturedEventsPage() {
   }
 
   return (
-    <div className="p-6 bg-white/5 min-h-screen">
+    <div className="p-4 sm:p-6 bg-white/5 min-h-screen">
       <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-center mb-8 border-b border-white/10 pb-6">
-          <div className="max-w-2xl">
+        <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center mb-8 border-b border-white/10 pb-6">
+          <div>
             <p className="text-[0.72rem] uppercase tracking-[0.38em] text-teal-200/75">
               Carousel curation
             </p>
-            <h1 className="mt-4 font-serif text-4xl text-white/92 sm:text-5xl">
+            <h1 className="mt-4 font-serif text-3xl sm:text-4xl lg:text-5xl text-white/92">
               Featured Events ({events.length})
             </h1>
             <p className="mt-3 max-w-xl text-sm leading-7 text-white/55">
               Create the homepage carousel lineup, attach a single hero image to each event, and reorder entries with drag-and-drop or the move controls below.
             </p>
           </div>
-          <AdminButton onClick={openCreateModal} className="flex items-center gap-2">
+          <AdminButton onClick={openCreateModal} className="flex items-center gap-2 self-start sm:self-auto shrink-0">
             <Plus size={18} /> Add Featured Event
           </AdminButton>
         </div>
 
         {events.length === 0 ? (
-          <div className="bg-white/5 border border-white/10 border-dashed rounded-xl shadow p-12 text-center">
+          <div className="bg-white/5 border border-white/10 border-dashed rounded-xl shadow p-8 sm:p-12 text-center">
             <p className="text-white/55 mb-4">No featured events yet. Add the first carousel spotlight.</p>
             <AdminButton onClick={openCreateModal} className="flex items-center gap-2 mx-auto">
               <Plus size={18} /> Create First Featured Event
@@ -353,50 +353,25 @@ export default function FeaturedEventsPage() {
           </div>
         ) : (
           <div className="border border-white/10 rounded-xl bg-white/5 overflow-hidden">
-            <div className="border-b border-white/10 px-6 py-4 text-xs leading-6 text-white/55">
+            <div className="border-b border-white/10 px-4 sm:px-6 py-3 sm:py-4 text-xs leading-6 text-white/55">
               Tip: drag rows on desktop, or use the move buttons for touch and keyboard reordering.
             </div>
-            <table className="w-full">
-              <thead className="bg-white/5 border-b border-white/10">
-                <tr>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-white/70 uppercase tracking-[0.28em] w-8"></th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-white/70 uppercase tracking-[0.28em]">Order</th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-white/70 uppercase tracking-[0.28em]">Title</th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-white/70 uppercase tracking-[0.28em]">Date</th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-white/70 uppercase tracking-[0.28em]">Media</th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-white/70 uppercase tracking-[0.28em]">Status</th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-white/70 uppercase tracking-[0.28em]">Move</th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-white/70 uppercase tracking-[0.28em]">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/10">
-                {events.map((event, index) => (
-                  <tr
-                    key={event._id}
-                    draggable
-                    onDragStart={() => handleDragStart(index)}
-                    onDragOver={(e) => e.preventDefault()}
-                    onDrop={() => handleDrop(index)}
-                    onDragEnd={() => setDraggedIndex(null)}
-                    className="border-b border-white/10 hover:bg-white/3 transition-colors"
-                  >
-                    <td className="px-6 py-4 cursor-grab active:cursor-grabbing">
-                      <GripVertical size={16} className="text-white/40" />
-                    </td>
-                    <td className="px-6 py-4 text-sm text-white/85 font-semibold">{index + 1}</td>
-                    <td className="px-6 py-4">
-                      <div>
-                        <div className="text-sm font-medium text-white/90">{event.title}</div>
-                        <div className="text-xs text-white/50">{event.subtitle}</div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-sm text-white/70">{event.date || '-'}</td>
-                    <td className="px-6 py-4 text-sm">
-                      <span className="inline-block bg-white/10 border border-white/20 px-2 py-1 rounded text-white/70 text-xs">
-                        {event.media.length}
+
+            {/* Mobile card list */}
+            <div className="block sm:hidden divide-y divide-white/10">
+              {events.map((event, index) => (
+                <div key={event._id} className="p-4 space-y-3">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <span className="shrink-0 flex h-6 w-6 items-center justify-center rounded-full bg-white/10 text-xs font-semibold text-white/70">
+                        {index + 1}
                       </span>
-                    </td>
-                    <td className="px-6 py-4">
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium text-white/90 truncate">{event.title}</p>
+                        <p className="text-xs text-white/50 truncate">{event.subtitle}</p>
+                      </div>
+                    </div>
+                    <div className="flex shrink-0 items-center gap-3">
                       <button
                         onClick={() => handleToggleEvent(event._id, event.isActive)}
                         className="text-white/60 hover:text-white/90 transition"
@@ -407,47 +382,139 @@ export default function FeaturedEventsPage() {
                           <EyeOff size={16} className="text-white/40" />
                         )}
                       </button>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={() => handleMoveEvent(index, -1)}
-                          disabled={index === 0}
-                          aria-label={`Move ${event.title} up`}
-                          className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-white/65 transition hover:border-teal-300/40 hover:text-teal-200 disabled:cursor-not-allowed disabled:opacity-30"
-                        >
-                          <ArrowUp size={15} />
-                        </button>
-                        <button
-                          onClick={() => handleMoveEvent(index, 1)}
-                          disabled={index === events.length - 1}
-                          aria-label={`Move ${event.title} down`}
-                          className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-white/65 transition hover:border-teal-300/40 hover:text-teal-200 disabled:cursor-not-allowed disabled:opacity-30"
-                        >
-                          <ArrowDown size={15} />
-                        </button>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={() => openEditModal(event)}
-                          className="text-teal-300/70 hover:text-teal-300 transition"
-                        >
-                          <Edit2 size={16} />
-                        </button>
-                        <button
-                          onClick={() => setDeleteConfirm(event._id)}
-                          className="text-red-400/70 hover:text-red-400 transition"
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                      </div>
-                    </td>
+                      <button onClick={() => openEditModal(event)} className="text-teal-300/70 hover:text-teal-300 transition">
+                        <Edit2 size={16} />
+                      </button>
+                      <button onClick={() => setDeleteConfirm(event._id)} className="text-red-400/70 hover:text-red-400 transition">
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3 text-xs text-white/50">
+                      <span>{event.date || '—'}</span>
+                      <span className="inline-block bg-white/10 border border-white/20 px-2 py-0.5 rounded text-white/70">
+                        {event.media.length} img
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <button
+                        onClick={() => handleMoveEvent(index, -1)}
+                        disabled={index === 0}
+                        aria-label={`Move ${event.title} up`}
+                        className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/10 text-white/65 transition hover:border-teal-300/40 hover:text-teal-200 disabled:cursor-not-allowed disabled:opacity-30"
+                      >
+                        <ArrowUp size={14} />
+                      </button>
+                      <button
+                        onClick={() => handleMoveEvent(index, 1)}
+                        disabled={index === events.length - 1}
+                        aria-label={`Move ${event.title} down`}
+                        className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/10 text-white/65 transition hover:border-teal-300/40 hover:text-teal-200 disabled:cursor-not-allowed disabled:opacity-30"
+                      >
+                        <ArrowDown size={14} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Desktop table */}
+            <div className="hidden sm:block overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-white/5 border-b border-white/10">
+                  <tr>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-white/70 uppercase tracking-[0.28em] w-8"></th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-white/70 uppercase tracking-[0.28em]">Order</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-white/70 uppercase tracking-[0.28em]">Title</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-white/70 uppercase tracking-[0.28em]">Date</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-white/70 uppercase tracking-[0.28em]">Media</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-white/70 uppercase tracking-[0.28em]">Status</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-white/70 uppercase tracking-[0.28em]">Move</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-white/70 uppercase tracking-[0.28em]">Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-white/10">
+                  {events.map((event, index) => (
+                    <tr
+                      key={event._id}
+                      draggable
+                      onDragStart={() => handleDragStart(index)}
+                      onDragOver={(e) => e.preventDefault()}
+                      onDrop={() => handleDrop(index)}
+                      onDragEnd={() => setDraggedIndex(null)}
+                      className="border-b border-white/10 hover:bg-white/3 transition-colors"
+                    >
+                      <td className="px-6 py-4 cursor-grab active:cursor-grabbing">
+                        <GripVertical size={16} className="text-white/40" />
+                      </td>
+                      <td className="px-6 py-4 text-sm text-white/85 font-semibold">{index + 1}</td>
+                      <td className="px-6 py-4">
+                        <div>
+                          <div className="text-sm font-medium text-white/90">{event.title}</div>
+                          <div className="text-xs text-white/50">{event.subtitle}</div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 text-sm text-white/70">{event.date || '-'}</td>
+                      <td className="px-6 py-4 text-sm">
+                        <span className="inline-block bg-white/10 border border-white/20 px-2 py-1 rounded text-white/70 text-xs">
+                          {event.media.length}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <button
+                          onClick={() => handleToggleEvent(event._id, event.isActive)}
+                          className="text-white/60 hover:text-white/90 transition"
+                        >
+                          {event.isActive ? (
+                            <Eye size={16} className="text-teal-300" />
+                          ) : (
+                            <EyeOff size={16} className="text-white/40" />
+                          )}
+                        </button>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => handleMoveEvent(index, -1)}
+                            disabled={index === 0}
+                            aria-label={`Move ${event.title} up`}
+                            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-white/65 transition hover:border-teal-300/40 hover:text-teal-200 disabled:cursor-not-allowed disabled:opacity-30"
+                          >
+                            <ArrowUp size={15} />
+                          </button>
+                          <button
+                            onClick={() => handleMoveEvent(index, 1)}
+                            disabled={index === events.length - 1}
+                            aria-label={`Move ${event.title} down`}
+                            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-white/65 transition hover:border-teal-300/40 hover:text-teal-200 disabled:cursor-not-allowed disabled:opacity-30"
+                          >
+                            <ArrowDown size={15} />
+                          </button>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => openEditModal(event)}
+                            className="text-teal-300/70 hover:text-teal-300 transition"
+                          >
+                            <Edit2 size={16} />
+                          </button>
+                          <button
+                            onClick={() => setDeleteConfirm(event._id)}
+                            className="text-red-400/70 hover:text-red-400 transition"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
       </div>
@@ -483,7 +550,7 @@ export default function FeaturedEventsPage() {
             placeholder="Event Location"
           />
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <AdminInput
               label="Date"
               type="text"

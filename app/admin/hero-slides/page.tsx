@@ -220,11 +220,11 @@ export default function HeroSlidesPage() {
   ];
 
   return (
-    <div className="p-8 max-w-7xl mx-auto">
-      <div className="mb-8 flex justify-between items-center">
+    <div className="p-4 sm:p-8 max-w-7xl mx-auto">
+      <div className="mb-6 sm:mb-8 flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center">
         <div>
-          <h1 className="font-serif text-4xl text-white/90">Hero Slides</h1>
-          <p className="text-white/50 mt-2">Manage carousel slides on the homepage</p>
+          <h1 className="font-serif text-2xl sm:text-4xl text-white/90">Hero Slides</h1>
+          <p className="text-white/50 mt-1 sm:mt-2 text-sm sm:text-base">Manage carousel slides on the homepage</p>
         </div>
         <AdminButton
           onClick={() => {
@@ -243,9 +243,61 @@ export default function HeroSlidesPage() {
       {isLoading ? (
         <LoadingSpinner />
       ) : (
-        <div className="bg-white/5 border border-white/10 rounded-[1.8rem] p-6 backdrop-blur-sm overflow-hidden">
-          <AdminTable columns={columns} data={slides} />
-        </div>
+        <>
+          {/* Mobile card list */}
+          <div className="sm:hidden space-y-3">
+            {slides.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-white/50">No slides yet</p>
+              </div>
+            ) : (
+              slides.map((slide) => (
+                <div
+                  key={slide._id}
+                  className="bg-white/5 border border-white/10 rounded-2xl p-4 flex items-center gap-4"
+                >
+                  <div className="shrink-0">
+                    {slide.videoUrl ? (
+                      <div className="relative w-16 h-12 rounded-lg overflow-hidden bg-black/40 flex items-center justify-center">
+                        {slide.imageUrl && (
+                          <img src={slide.imageUrl} alt="Slide" className="absolute inset-0 w-full h-full object-cover opacity-50" />
+                        )}
+                        <Video size={16} className="relative text-teal-300" />
+                      </div>
+                    ) : slide.imageUrl ? (
+                      <img src={slide.imageUrl} alt="Slide" className="w-16 h-12 rounded-lg object-cover" />
+                    ) : (
+                      <div className="w-16 h-12 rounded-lg bg-white/10 flex items-center justify-center text-white/30 text-xs">—</div>
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-white/90 text-sm font-medium truncate">{slide.title}</p>
+                    <p className="text-white/40 text-xs mt-0.5">Order: {slide.order}</p>
+                  </div>
+                  <div className="flex gap-2 shrink-0">
+                    <button
+                      onClick={() => openEditModal(slide)}
+                      className="p-2 hover:bg-teal-300/20 text-teal-300 rounded-lg transition"
+                    >
+                      <Edit2 size={16} />
+                    </button>
+                    <button
+                      onClick={() => setDeleteConfirm(slide._id)}
+                      className="p-2 hover:bg-red-600/20 text-red-400 rounded-lg transition"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+
+          {/* Desktop table */}
+          <div className="hidden sm:block bg-white/5 border border-white/10 rounded-[1.8rem] p-6 backdrop-blur-sm overflow-hidden">
+            <AdminTable columns={columns} data={slides} />
+          </div>
+        </>
       )}
 
       <AdminModal
@@ -346,7 +398,7 @@ export default function HeroSlidesPage() {
             required
           />
 
-          <div className="flex gap-4">
+          <div className="flex flex-col-reverse sm:flex-row gap-3 sm:gap-4">
             <AdminButton type="button" variant="secondary" onClick={closeModal} disabled={isSubmitting}>
               Cancel
             </AdminButton>

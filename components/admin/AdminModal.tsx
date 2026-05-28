@@ -32,8 +32,8 @@ export default function AdminModal({
         className={`bg-white/5 border border-white/10 rounded-[2.25rem] ${sizeClasses[size]} w-full backdrop-blur-sm`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-8 py-6 border-b border-white/10">
-          <h2 className="font-serif text-xl text-white/90">{title}</h2>
+        <div className="flex items-center justify-between px-5 py-5 sm:px-8 sm:py-6 border-b border-white/10">
+          <h2 className="font-serif text-lg sm:text-xl text-white/90">{title}</h2>
           <button
             onClick={onClose}
             className="p-2 hover:bg-white/10 rounded-lg transition text-white/70 hover:text-white"
@@ -43,7 +43,7 @@ export default function AdminModal({
         </div>
 
         {/* Content */}
-        <div className="px-8 py-6 max-h-[calc(100vh-200px)] overflow-y-auto">
+        <div className="px-5 py-5 sm:px-8 sm:py-6 max-h-[calc(100dvh-160px)] overflow-y-auto">
           {children}
         </div>
       </div>

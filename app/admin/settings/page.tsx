@@ -77,9 +77,9 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="p-8 max-w-7xl mx-auto">
-      <div className="mb-8">
-        <h1 className="font-serif text-4xl text-white/90">Settings</h1>
+    <div className="p-4 sm:p-6 md:p-8 max-w-7xl mx-auto">
+      <div className="mb-6 md:mb-8">
+        <h1 className="font-serif text-2xl sm:text-4xl text-white/90">Settings</h1>
         {/* <p className="text-white/50 mt-2">Manage global site settings</p> */}
       </div>
 

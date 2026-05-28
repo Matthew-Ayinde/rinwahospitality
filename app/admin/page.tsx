@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import NextImage from 'next/image';
 import { Calendar, Users, MessageSquare, Image, Loader } from 'lucide-react';
 
 interface DashboardStats {
@@ -100,9 +101,20 @@ export default function AdminDashboard() {
 
   return (
     <div className="p-8 max-w-7xl mx-auto">
-      <div className="mb-12">
-        <h1 className="font-serif text-4xl text-white/90 mb-2">Welcome, {session?.user?.name}</h1>
-        <p className="text-white/50">Manage your RÌNWÁ content and events</p>
+      <div className="relative mb-12 overflow-hidden rounded-4xl border border-white/8 bg-white/3 px-8 py-10">
+        {/* Watermark */}
+        <div aria-hidden="true" className="pointer-events-none select-none absolute right-[-2%] top-1/2 -translate-y-1/2 opacity-[0.055]">
+          <NextImage
+            src="/images/logo-home.png"
+            alt=""
+            width={220}
+            height={220}
+            className="object-contain rotate-6"
+          />
+        </div>
+        <p className="relative text-[0.68rem] uppercase tracking-[0.32em] text-teal-300/60 mb-3">Admin Console</p>
+        <h1 className="relative font-serif text-4xl text-white/90 mb-2">Welcome, {session?.user?.name}</h1>
+        <p className="relative text-white/50">Manage your RÌNWÁ content and events</p>
       </div>
 
       {/* Stats Grid */}

@@ -65,7 +65,7 @@ export function OurStorySection() {
             </div>
 
             {/* Milestone stats */}
-            <div className="mt-10 grid grid-cols-3 gap-4">
+            <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-4">
               {milestones.map((m, i) => (
                 <motion.div
                   key={m.label}

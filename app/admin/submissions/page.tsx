@@ -106,10 +106,10 @@ export default function SubmissionsPage() {
   ];
 
   return (
-    <div className="p-8 max-w-7xl mx-auto">
-      <div className="mb-8">
-        <h1 className="font-serif text-4xl text-white/90">Form Submissions</h1>
-        <p className="text-white/50 mt-2">View and manage contact form submissions</p>
+    <div className="p-4 sm:p-6 md:p-8 max-w-7xl mx-auto">
+      <div className="mb-6 md:mb-8">
+        <h1 className="font-serif text-2xl sm:text-4xl text-white/90">Form Submissions</h1>
+        <p className="text-white/50 mt-1 md:mt-2 text-sm md:text-base">View and manage contact form submissions</p>
       </div>
 
       {isLoading ? (
@@ -119,17 +119,54 @@ export default function SubmissionsPage() {
           <p className="text-white/50">No submissions yet</p>
         </div>
       ) : (
-        <div className="bg-white/5 border border-white/10 rounded-[1.8rem] p-6 backdrop-blur-sm overflow-hidden">
-          <AdminTable columns={columns} data={submissions} />
+        <div className="bg-white/5 border border-white/10 rounded-[1.8rem] p-4 md:p-6 backdrop-blur-sm">
+          {/* Mobile card list */}
+          <div className="md:hidden space-y-3">
+            {submissions.map((row) => {
+              const symbols: Record<string, string> = { NGN: '₦', USD: '$', CAD: 'CA$', GBP: '£', EUR: '€' };
+              const sym = symbols[row.currency] ?? '₦';
+              return (
+                <div key={row._id} className="bg-white/5 border border-white/10 rounded-2xl p-4">
+                  <div className="flex justify-between items-start gap-3">
+                    <div className="flex-1 min-w-0">
+                      <p className="text-white/90 font-medium truncate">{row.fullName}</p>
+                      <p className="text-teal-300/80 text-xs mt-0.5 truncate">{row.email}</p>
+                      <p className="text-white/60 text-xs mt-1">{row.company}</p>
+                      <p className="text-white/40 text-xs mt-1">{`${sym}${row.estimatedBudget?.toLocaleString()}`}</p>
+                    </div>
+                    <div className="flex gap-1 flex-shrink-0">
+                      <button
+                        onClick={() => setSelectedSubmission(row)}
+                        className="p-2 hover:bg-teal-300/20 text-teal-300 rounded-lg transition"
+                      >
+                        <Eye size={16} />
+                      </button>
+                      <button
+                        onClick={() => setDeleteConfirm(row._id)}
+                        className="p-2 hover:bg-red-600/20 text-red-400 rounded-lg transition"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
 
-          <div className="mt-6 flex flex-col gap-4 border-t border-white/10 pt-5 sm:flex-row sm:items-center sm:justify-between">
+          {/* Desktop table */}
+          <div className="hidden md:block">
+            <AdminTable columns={columns} data={submissions} />
+          </div>
+
+          <div className="mt-6 flex flex-col gap-3 border-t border-white/10 pt-5 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-sm text-white/50">
               {totalSubmissions === 0
                 ? 'No submissions to display'
                 : `Showing ${(currentPage - 1) * PAGE_SIZE + 1}-${Math.min(currentPage * PAGE_SIZE, totalSubmissions)} of ${totalSubmissions}`}
             </p>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               <AdminButton
                 variant="secondary"
                 onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
@@ -137,10 +174,10 @@ export default function SubmissionsPage() {
                 className="px-4! py-2! flex items-center gap-2"
               >
                 <ChevronLeft size={16} />
-                Previous
+                <span className="hidden sm:inline">Previous</span>
               </AdminButton>
-              <span className="text-sm text-white/60">
-                Page {currentPage} of {Math.max(1, totalPages)}
+              <span className="text-sm text-white/60 px-1">
+                {currentPage} / {Math.max(1, totalPages)}
               </span>
               <AdminButton
                 variant="secondary"
@@ -148,7 +185,7 @@ export default function SubmissionsPage() {
                 disabled={isLoading || currentPage >= totalPages}
                 className="px-4! py-2! flex items-center gap-2"
               >
-                Next
+                <span className="hidden sm:inline">Next</span>
                 <ChevronRight size={16} />
               </AdminButton>
             </div>

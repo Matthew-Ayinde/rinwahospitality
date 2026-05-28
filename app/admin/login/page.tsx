@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
@@ -41,10 +42,19 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-[#07171a] px-4 py-12">
       <div className="w-full max-w-md">
         <div className="bg-white/5 border border-white/10 rounded-[2.5rem] p-8 backdrop-blur-sm">
-          <h1 className="font-serif text-[2.5rem] text-white/90 mb-2">RÌNWÁ</h1>
-          <p className="text-white/50 text-sm uppercase tracking-[0.26em] mb-8">
-            Admin Console
-          </p>
+          <div className="flex items-center gap-4 mb-8">
+            <Image
+              src="/images/logo-home.png"
+              alt="RÌNWÁ"
+              width={52}
+              height={52}
+              className="object-contain opacity-90"
+            />
+            <div>
+              <h1 className="font-serif text-3xl text-white/90 leading-none">RÌNWÁ</h1>
+              <p className="text-white/50 text-[0.65rem] uppercase tracking-[0.26em] mt-1.5">Admin Console</p>
+            </div>
+          </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>

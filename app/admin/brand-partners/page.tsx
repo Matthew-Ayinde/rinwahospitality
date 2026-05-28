@@ -125,11 +125,11 @@ export default function BrandPartnersPage() {
   }
 
   return (
-    <div className="p-8 max-w-7xl mx-auto">
-      <div className="mb-8 flex justify-between items-center">
+    <div className="p-4 sm:p-6 md:p-8 max-w-7xl mx-auto">
+      <div className="mb-6 md:mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="font-serif text-4xl text-white/90">Brand Partners</h1>
-          <p className="text-white/50 mt-2">Manage partner names and regions</p>
+          <h1 className="font-serif text-2xl sm:text-4xl text-white/90">Brand Partners</h1>
+          <p className="text-white/50 mt-1 md:mt-2 text-sm md:text-base">Manage partner names and regions</p>
         </div>
         <AdminButton onClick={() => { reset(); setEditingId(null); setIsModalOpen(true); }} variant="primary">
           <Plus size={18} className="inline mr-2" />
