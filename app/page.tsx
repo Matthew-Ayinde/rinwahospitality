@@ -1,7 +1,9 @@
 import { BrandMarquee } from "@/components/rinwa/BrandMarquee";
 import AboutSections from "@/components/rinwa/AboutSections";
 import { ContactForm } from "@/components/rinwa/ContactForm";
-import { ExperienceSection } from "@/components/rinwa/ExperienceSection";
+import { OurStorySection } from "@/components/rinwa/OurStorySection";
+import { ServicesSection } from "@/components/rinwa/ServicesSection";
+import { CulturalBridgeCTA } from "@/components/rinwa/CulturalBridgeCTA";
 import { FeaturedEventCarousel } from "@/components/rinwa/FeaturedEventCarousel";
 import { HeroCarousel } from "@/components/rinwa/HeroCarousel";
 import { MediaGallery } from "@/components/rinwa/MediaGallery";
@@ -70,10 +72,12 @@ export default function Page() {
       <HeroCarousel />
       <BrandMarquee />
       <AboutSections />
-      <ExperienceSection />
+      <OurStorySection />
+      <ServicesSection />
       <FeaturedEventCarousel />
       <PastEventsGallery />
       <TestimonialsSection />
+      <CulturalBridgeCTA />
       <JoinTeamSection />
       {/* <MediaGallery /> */}
       <ContactForm />

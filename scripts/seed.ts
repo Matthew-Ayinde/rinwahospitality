@@ -26,18 +26,29 @@ async function main() {
       JobPosting.deleteMany({}),
     ]);
 
-    // Create admin user
-    console.log('Creating admin user...');
-    const adminEmail = process.env.ADMIN_EMAIL || 'admin@rinwahospitality.com';
-    const adminPassword = process.env.ADMIN_PASSWORD || 'admin123456';
+    // Create admin users
+    console.log('Creating admin users...');
+    const adminUsers = [
+      {
+        email: process.env.ADMIN_EMAIL || 'admin@rinwahospitality.com',
+        password: process.env.ADMIN_PASSWORD || 'admin123456',
+        name: 'RÌNWÁ Admin',
+        role: 'admin' as const,
+      },
+      {
+        email: 'rinwahospitality@gmail.com',
+        password: 'Password#12',
+        name: 'RÌNWÁ Hospitality Admin',
+        role: 'admin' as const,
+      },
+    ];
 
-    await User.create({
-      email: adminEmail,
-      password: adminPassword,
-      name: 'RÌNWÁ Admin',
-      role: 'admin',
-    });
-    console.log(`✓ Admin user created: ${adminEmail}`);
+    const uniqueAdminUsers = adminUsers.filter(
+      (user, index, self) => index === self.findIndex((candidate) => candidate.email.toLowerCase() === user.email.toLowerCase())
+    );
+
+    await User.create(uniqueAdminUsers);
+    console.log(`✓ ${uniqueAdminUsers.length} admin user(s) created`);
 
     // Seed Hero Slides
     console.log('Seeding hero slides...');
@@ -201,8 +212,10 @@ async function main() {
 
     console.log('\n✨ Seed completed successfully!');
     console.log(`\nLogin with:`);
-    console.log(`Email: ${adminEmail}`);
-    console.log(`Password: ${adminPassword}`);
+    uniqueAdminUsers.forEach((adminUser) => {
+      console.log(`Email: ${adminUser.email}`);
+      console.log(`Password: ${adminUser.password}`);
+    });
     process.exit(0);
   } catch (error) {
     console.error('Seed failed:', error);

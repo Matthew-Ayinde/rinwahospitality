@@ -239,6 +239,8 @@ export function HeroCarousel() {
           </div>
         </div>
       </div>
+
+      
     </section>
   );
 }
