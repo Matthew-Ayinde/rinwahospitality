@@ -15,10 +15,7 @@ import ConfirmationDialog from '@/components/admin/ConfirmationDialog';
 
 const BrandPartnerSchema = z.object({
   name: z.string().min(1, 'Name is required'),
-  logoUrl: z.string().url('Invalid logo URL'),
   region: z.enum(['Lagos', 'Canada', 'Hospitality', 'Other']),
-  link: z.string().url('Invalid URL').optional().or(z.literal('')),
-  order: z.number().min(0).optional(),
 });
 
 type BrandPartnerFormData = z.infer<typeof BrandPartnerSchema>;
@@ -36,10 +33,8 @@ export default function BrandPartnersPage() {
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
-    setValue,
   } = useForm<BrandPartnerFormData>({
     resolver: zodResolver(BrandPartnerSchema),
-    defaultValues: { order: 0 },
   });
 
   useEffect(() => {
@@ -53,10 +48,7 @@ export default function BrandPartnersPage() {
         setTimeout(() => {
           reset({
             name: partner.name,
-            logoUrl: partner.logoUrl,
             region: partner.region,
-            link: partner.link || '',
-            order: partner.order || 0,
           });
         }, 0);
       }
@@ -137,7 +129,7 @@ export default function BrandPartnersPage() {
       <div className="mb-8 flex justify-between items-center">
         <div>
           <h1 className="font-serif text-4xl text-white/90">Brand Partners</h1>
-          <p className="text-white/50 mt-2">Manage partner logos and information</p>
+          <p className="text-white/50 mt-2">Manage partner names and regions</p>
         </div>
         <AdminButton onClick={() => { reset(); setEditingId(null); setIsModalOpen(true); }} variant="primary">
           <Plus size={18} className="inline mr-2" />
@@ -154,11 +146,6 @@ export default function BrandPartnersPage() {
               key={partner._id}
               className="bg-white/5 border border-white/10 rounded-[1.8rem] p-6 backdrop-blur-sm hover:border-white/20 transition"
             >
-              <img
-                src={partner.logoUrl}
-                alt={partner.name}
-                className="w-full h-24 object-contain mb-4 rounded-lg"
-              />
               <h3 className="font-medium text-white/90 mb-1">{partner.name}</h3>
               <p className="text-xs text-white/50 mb-4">{partner.region}</p>
 
@@ -195,13 +182,6 @@ export default function BrandPartnersPage() {
             error={errors.name?.message}
             required
           />
-          <AdminInput
-            label="Logo URL"
-            type="url"
-            {...register('logoUrl')}
-            error={errors.logoUrl?.message}
-            required
-          />
           <AdminSelect
             label="Region"
             options={[
@@ -213,17 +193,6 @@ export default function BrandPartnersPage() {
             {...register('region')}
             error={errors.region?.message}
             required
-          />
-          <AdminInput
-            label="Partner Link (optional)"
-            type="url"
-            {...register('link')}
-            error={errors.link?.message}
-          />
-          <AdminInput
-            label="Order"
-            type="number"
-            {...register('order', { valueAsNumber: true })}
           />
 
           <div className="flex gap-4">

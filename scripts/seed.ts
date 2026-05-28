@@ -65,7 +65,7 @@ async function main() {
 
     // Seed Brand Partners
     console.log('Seeding brand partners...');
-    const partnersData = (brandPartners as BrandItem[]).map((partner, index) => {
+    const partnersData = (brandPartners as BrandItem[]).map((partner) => {
       const regionMap: Record<string, 'Lagos' | 'Canada' | 'Hospitality' | 'Other'> = {
         'Lagos': 'Lagos',
         'Canada': 'Canada',
@@ -74,9 +74,7 @@ async function main() {
       };
       return {
         name: partner.label,
-        logoUrl: `https://via.placeholder.com/200?text=${encodeURIComponent(partner.label)}`,
         region: regionMap[partner.region] || 'Other',
-        order: index,
         isActive: true,
       };
     });

@@ -60,7 +60,7 @@ export function JoinTeamSection() {
       <div className="max-w-3xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <h2 className="font-serif text-4xl md:text-5xl text-[#8B4545] mb-4">
+          <h2 className="font-serif text-4xl md:text-5xl mb-4">
             Join Our Team
           </h2>
           <p className="text-foreground/70 text-lg leading-relaxed">

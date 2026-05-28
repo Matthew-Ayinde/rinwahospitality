@@ -45,8 +45,8 @@ export function OurStorySection() {
                 local landscape. Leveraging her deep expertise in experience design, she
                 immediately began collaborating with elite local establishments. Most
                 notably, she partnered with premier Lagos hotspot{" "}
-                <span className="text-white/88 font-medium">The Terrace</span>{" "}
-                — the rooftop of The House — to orchestrate and soft‑launch their new
+                <span className="text-white/88 font-medium">The Terrace</span>
+                , the rooftop of The House, to orchestrate and soft‑launch their new
                 mid‑week stream: a curated evening offering thoughtfully designed for the
                 after‑work hours of busy, high‑profile Lagosians.
               </p>

@@ -1,6 +1,5 @@
 import { connectDB } from '@/lib/mongodb';
 import { BrandPartner } from '@/models/BrandPartner';
-import { deleteCloudinaryAssets } from '@/lib/cloudinary';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/auth';
 import { NextRequest, NextResponse } from 'next/server';
@@ -9,10 +8,7 @@ import { Types } from 'mongoose';
 
 const UpdateBrandPartnerSchema = z.object({
   name: z.string().min(1, 'Name is required').optional(),
-  logoUrl: z.string().url('Invalid logo URL').optional(),
   region: z.enum(['Lagos', 'Canada', 'Hospitality', 'Other']).optional(),
-  link: z.string().url('Invalid URL').optional().or(z.literal('')),
-  order: z.number().min(0, 'Order must be positive').optional(),
 });
 
 export async function PUT(
@@ -95,8 +91,6 @@ export async function DELETE(
         { status: 404 }
       );
     }
-
-    await deleteCloudinaryAssets([partner.logoUrl]);
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {

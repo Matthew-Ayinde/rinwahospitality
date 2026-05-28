@@ -130,7 +130,7 @@ export function HeroCarousel() {
               transition={{ delay: 0.2, duration: 0.8, ease: "easeInOut" }}
               className="text-[0.72rem] uppercase tracking-[0.38em] text-teal-100/75"
             >
-              {/* {activeSlide.eyebrow} */}
+              Ready to begin your reconnection journey?
             </motion.p>
 
             <motion.h1

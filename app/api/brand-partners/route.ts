@@ -7,10 +7,7 @@ import { z } from 'zod';
 
 const BrandPartnerSchema = z.object({
   name: z.string().min(1, 'Name is required'),
-  logoUrl: z.string().url('Invalid logo URL'),
   region: z.enum(['Lagos', 'Canada', 'Hospitality', 'Other']),
-  link: z.string().url('Invalid URL').optional().or(z.literal('')),
-  order: z.number().min(0, 'Order must be positive').optional(),
 });
 
 export async function GET(request: NextRequest) {
@@ -20,7 +17,7 @@ export async function GET(request: NextRequest) {
 
     await connectDB();
     const query = region ? { region, isActive: true } : { isActive: true };
-    const partners = await BrandPartner.find(query).sort({ order: 1 });
+    const partners = await BrandPartner.find(query).sort({ createdAt: 1 });
 
     return NextResponse.json(partners, { status: 200 });
   } catch (error) {

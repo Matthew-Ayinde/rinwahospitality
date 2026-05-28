@@ -46,7 +46,7 @@ export default function AboutSections() {
                 high‑value strategic opportunities.
               </p>
               <p>
-                We do more than connect community and institutional stakeholders — we
+                We do more than connect community and institutional stakeholders, we
                 seamlessly weave your brand into the very fabric of Lagos culture.
               </p>
               <p>
