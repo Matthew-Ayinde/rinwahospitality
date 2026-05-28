@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 
 const whoWeServe = [
@@ -13,7 +14,16 @@ export default function AboutSections() {
   const shouldReduceMotion = useReducedMotion();
 
   return (
-    <section id="about" className="px-5 py-20 sm:px-8 lg:px-12 lg:py-28">
+    <section id="about" className="relative overflow-hidden px-5 py-20 sm:px-8 lg:px-12 lg:py-28">
+      <div aria-hidden="true" className="pointer-events-none select-none absolute right-[-6%] top-1/2 -translate-y-1/2 opacity-[0.045]">
+        <Image
+          src="/images/logo-home.png"
+          alt=""
+          width={560}
+          height={560}
+          className="rotate-6 object-contain"
+        />
+      </div>
       <div className="mx-auto max-w-7xl">
 
         {/* Etymology header */}
