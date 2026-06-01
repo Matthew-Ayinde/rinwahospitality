@@ -103,7 +103,7 @@ export default function LoginPage() {
           </div>
 
           <p className="text-xs text-white/40 mt-6 text-center">
-            <Link href="/" className="underline hover:text-white/50 transition">
+            <Link href="/" className="hover:underline cursor-pointer hover:text-white/50 transition">
               Go to Website
             </Link>
           </p>
