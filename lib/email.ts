@@ -55,6 +55,9 @@ function buildTransporter() {
       user,
       pass,
     },
+    tls: {
+      rejectUnauthorized: false,
+    },
   });
 }
 
