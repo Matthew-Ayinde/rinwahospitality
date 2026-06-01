@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { Eye, Trash2, ChevronLeft, ChevronRight, Mail } from 'lucide-react';
+import { Eye, Trash2, ChevronLeft, ChevronRight, Mail, Download } from 'lucide-react';
 import AdminButton from '@/components/admin/AdminButton';
 import AdminModal from '@/components/admin/AdminModal';
 import AdminTable from '@/components/admin/AdminTable';
@@ -71,6 +71,59 @@ export default function QuestionnairePage() {
     }
   }
 
+  async function exportCsv() {
+    try {
+      const res = await fetch(`/api/questionnaire?page=1&limit=10000`);
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      const rows: any[] = data.submissions || [];
+      if (rows.length === 0) { toast.error('No submissions to export'); return; }
+
+      const arr = (v: any) => Array.isArray(v) ? v.join(' | ') : (v || '');
+      const cell = (v: any) => {
+        const s = arr(v);
+        return `"${String(s).replace(/"/g, '""')}"`;
+      };
+
+      const headers = [
+        'Submitted At','Full Name','Email','Phone','Organization',
+        'Event Name','Event Purpose','Objectives','Event Date','City & Venue','Format','Attendee Count','Target Audience',
+        'Responsibilities','Managing Scope','Existing Vendors','Vendor Details','Internal Team','Team Details',
+        'Venue Secured','Venue Preferences','Required Spaces','Production Needs','Special Production',
+        'Registration Method','Ticketing Support','VIP Guests','VIP Details','Accessibility Required','Accessibility Details','Guest Touchpoints','Speaker Count','Travel Coordination','Speaker Management',
+        'Staffing Required','Volunteers','Staffing Recruitment','Catering Provided','Service Style','Dietary Requirements','Attendee Communications','Marketing Management','Event Materials',
+        'Transportation','Hotel Blocks','Airport Transfers','Sponsors Involved','Sponsor Deliverables','Exhibitor Activations','Event Insurance','Permits Required','Security Required','Contingency Plans',
+        'Budget Range','Budget Constraints','Decision Makers','Procurement Process','Planning Start','Major Milestones','Post-Event Reporting','Success Definition',
+      ];
+
+      const csvRows = rows.map(r => [
+        cell(new Date(r.createdAt).toLocaleDateString('en-GB')),
+        cell(r.fullName), cell(r.email), cell(r.phone), cell(r.company),
+        cell(r.eventName), cell(r.eventPurpose), cell(r.objectives), cell(r.eventDate), cell(r.cityVenue), cell(r.eventFormat), cell(r.attendeeCount), cell(r.targetAudience),
+        cell(r.responsibilities), cell(r.managingScope), cell(r.existingVendors), cell(r.existingVendorDetails), cell(r.internalTeam), cell(r.internalTeamDetails),
+        cell(r.venueSecured), cell(r.venuePreferences), cell(r.requiredSpaces), cell(r.productionNeeds), cell(r.specialProduction),
+        cell(r.registrationMethod), cell(r.ticketingSupport), cell(r.vipGuests), cell(r.vipDetails), cell(r.accessibilityRequired), cell(r.accessibilityDetails), cell(r.guestTouchpoints), cell(r.speakerCount), cell(r.travelCoordination), cell(r.speakerManagement),
+        cell(r.staffingRequired), cell(r.volunteersNeeded), cell(r.staffingRecruitment), cell(r.cateringProvided), cell(r.serviceStyle), cell(r.dietaryRequirements), cell(r.attendeeCommunications), cell(r.marketingManagement), cell(r.eventMaterials),
+        cell(r.transportationRequired), cell(r.hotelBlocks), cell(r.airportTransfers), cell(r.sponsorsInvolved), cell(r.sponsorDeliverables), cell(r.exhibitorActivations), cell(r.eventInsurance), cell(r.permitsRequired), cell(r.securityRequired), cell(r.contingencyPlans),
+        cell(r.budgetRange), cell(r.budgetConstraints), cell(r.decisionMakers), cell(r.procurementProcess), cell(r.planningStart), cell(r.majorMilestones), cell(r.postEventReporting), cell(r.successDefinition),
+      ].join(','));
+
+      const csv = [headers.map(h => `"${h}"`).join(','), ...csvRows].join('\r\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `rinwa-questionnaires-${new Date().toISOString().slice(0, 10)}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      toast.success(`Exported ${rows.length} submission${rows.length !== 1 ? 's' : ''}`);
+    } catch {
+      toast.error('Export failed');
+    }
+  }
+
   async function handleDelete() {
     if (!deleteId) return;
     try {
@@ -117,11 +170,22 @@ export default function QuestionnairePage() {
 
   return (
     <div className="p-4 sm:p-6 md:p-8 max-w-7xl mx-auto">
-      <div className="mb-6 md:mb-8">
-        <h1 className="font-serif text-2xl sm:text-4xl text-white/90">Event Questionnaires</h1>
-        <p className="text-white/50 mt-1 md:mt-2 text-sm md:text-base">
-          Event Logistics & Operations Discovery responses
-        </p>
+      <div className="mb-6 md:mb-8 flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <h1 className="font-serif text-2xl sm:text-4xl text-white/90">Event Questionnaires</h1>
+          <p className="text-white/50 mt-1 md:mt-2 text-sm md:text-base">
+            Event Logistics & Operations Discovery responses
+          </p>
+        </div>
+        {total > 0 && (
+          <button
+            onClick={exportCsv}
+            className="flex items-center gap-2 rounded-full border border-teal-300/30 bg-teal-300/10 px-5 py-2.5 text-sm font-medium text-teal-200 transition hover:border-teal-300/50 hover:bg-teal-300/18"
+          >
+            <Download size={15} />
+            Export CSV
+          </button>
+        )}
       </div>
 
       {isLoading ? (

@@ -23,15 +23,15 @@ import { useState } from 'react';
 
 const navItems = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/admin/featured-events', label: 'Featured Events', icon: Trophy },
-  { href: '/admin/past-events', label: 'Past Events', icon: Archive },
-  { href: '/admin/hero-slides', label: 'Hero Slides', icon: MonitorPlay },
-  { href: '/admin/brand-partners', label: 'Brand Partners', icon: Handshake },
-  { href: '/admin/job-postings', label: 'Job Postings', icon: Briefcase },
-  { href: '/admin/submissions', label: 'Submissions', icon: Inbox },
+  // { href: '/admin/featured-events', label: 'Featured Events', icon: Trophy },
+  // { href: '/admin/past-events', label: 'Past Events', icon: Archive },
+  // { href: '/admin/hero-slides', label: 'Hero Slides', icon: MonitorPlay },
+  // { href: '/admin/brand-partners', label: 'Brand Partners', icon: Handshake },
+  // { href: '/admin/job-postings', label: 'Job Postings', icon: Briefcase },
+  // { href: '/admin/submissions', label: 'Submissions', icon: Inbox },
   { href: '/admin/questionnaire', label: 'Questionnaire', icon: ClipboardList },
-  { href: '/admin/testimonials', label: 'Testimonials', icon: MessageSquareQuote },
-  { href: '/admin/settings', label: 'Settings', icon: Settings2 },
+  // { href: '/admin/testimonials', label: 'Testimonials', icon: MessageSquareQuote },
+  // { href: '/admin/settings', label: 'Settings', icon: Settings2 },
 ];
 
 export default function AdminSidebar() {

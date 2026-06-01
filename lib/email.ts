@@ -32,6 +32,11 @@ function escapeHtml(value: string) {
     .replaceAll("'", '&#39;');
 }
 
+function logoSrc(): string {
+  const base = process.env.NEXT_PUBLIC_SITE_URL || 'https://rinwahospitality.com';
+  return `${base}/images/logo-home.png`;
+}
+
 function buildTransporter() {
   const host = process.env.SMTP_HOST || 'smtp.gmail.com';
   const port = Number(process.env.SMTP_PORT || 465);
@@ -93,8 +98,8 @@ function buildAdminEmailHtml(submission: InquiryEmailPayload['submission']) {
           <table width="100%" cellpadding="0" cellspacing="0">
             <tr>
               <td>
-                <div style="font-family:Georgia,'Times New Roman',serif;font-size:22px;letter-spacing:0.12em;color:#f5f0e8;">RÌNWÁ</div>
-                <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.32em;color:#8fa8a5;margin-top:3px;">Hospitality</div>
+                <img src="https://res.cloudinary.com/matthew-ayinde/image/upload/v1780311622/rinwa-logo_cekwvh.png" alt="RÌNWÁ" width="44" height="44" style="display:block;margin-bottom:7px;" />
+                
               </td>
               <td align="right">
                 <span style="display:inline-block;background:#7dd3cf;color:#041114;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.24em;padding:5px 12px;border-radius:100px;">New Inquiry</span>
@@ -204,6 +209,7 @@ function buildUserEmailHtml(submission: InquiryEmailPayload['submission']) {
 
         <!-- Header -->
         <tr><td style="text-align:center;padding-bottom:32px;">
+          <img src="https://res.cloudinary.com/matthew-ayinde/image/upload/v1780311622/rinwa-logo_cekwvh.png" alt="RÌNWÁ" width="54" height="54" style="display:block;margin:0 auto 10px;" />
           <div style="font-family:Georgia,'Times New Roman',serif;font-size:26px;letter-spacing:0.14em;color:#f5f0e8;">RÌNWÁ</div>
           <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.36em;color:#8fa8a5;margin-top:4px;">Hospitality</div>
         </td></tr>
@@ -410,7 +416,8 @@ function buildAdminQuestionnaireEmailHtml(s: Record<string, any>) {
           <table width="100%" cellpadding="0" cellspacing="0">
             <tr>
               <td>
-                <div style="font-family:Georgia,'Times New Roman',serif;font-size:22px;letter-spacing:0.12em;color:#f5f0e8;">RÌNWÁ</div>
+                <img src="https://res.cloudinary.com/matthew-ayinde/image/upload/v1780311622/rinwa-logo_cekwvh.png" alt="RÌNWÁ" width="44" height="44" style="display:block;margin-bottom:7px;" />
+                <div style="font-family:Georgia,'Times New Roman',serif;font-size:20px;letter-spacing:0.12em;color:#f5f0e8;">RÌNWÁ</div>
                 <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.32em;color:#8fa8a5;margin-top:3px;">Event Logistics Discovery</div>
               </td>
               <td align="right">
@@ -537,6 +544,7 @@ function buildUserQuestionnaireEmailHtml(s: Record<string, any>) {
     <tr><td align="center">
       <table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;">
         <tr><td style="text-align:center;padding-bottom:28px;">
+          <img src="https://res.cloudinary.com/matthew-ayinde/image/upload/v1780311622/rinwa-logo_cekwvh.png" alt="RÌNWÁ" width="54" height="54" style="display:block;margin:0 auto 10px;" />
           <div style="font-family:Georgia,'Times New Roman',serif;font-size:26px;letter-spacing:0.14em;color:#f5f0e8;">RÌNWÁ</div>
           <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.38em;color:#8fa8a5;margin-top:4px;">The Global Standard for African Hospitality</div>
         </td></tr>
