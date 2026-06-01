@@ -139,7 +139,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-white/5 border border-white/10 rounded-[2.25rem] p-8 backdrop-blur-sm">
+      {/* <div className="bg-white/5 border border-white/10 rounded-[2.25rem] p-8 backdrop-blur-sm">
         <h2 className="font-serif text-2xl text-white/90 mb-6">Quick Actions</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {[
@@ -157,7 +157,7 @@ export default function AdminDashboard() {
             </a>
           ))}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

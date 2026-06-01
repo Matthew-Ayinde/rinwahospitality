@@ -102,7 +102,11 @@ export default function LoginPage() {
             </Link>
           </div>
 
-          <p className="text-xs text-white/40 mt-6 text-center">Contact support for account issues</p>
+          <p className="text-xs text-white/40 mt-6 text-center">
+            <Link href="/" className="underline hover:text-white/50 transition">
+              Go to Website
+            </Link>
+          </p>
         </div>
       </div>
     </div>

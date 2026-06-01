@@ -237,7 +237,7 @@ function WelcomeScreen({ onBegin }: { onBegin: () => void }) {
           </p>
           <p>
             Your responses will help us understand your goals, logistics, preferences, and the level
-            of support required — allowing us to design the experience that aligns with your needs.
+            of support required, allowing us to design the experience that aligns with your needs.
           </p>
           <p className="text-white/35 text-sm italic">We look forward to bringing your vision to life.</p>
         </div>
