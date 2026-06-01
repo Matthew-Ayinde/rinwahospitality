@@ -20,7 +20,7 @@ const organizationJsonLd = {
   "@type": "Organization",
   name: "RÌNWÁ Hospitality & Experiences",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
-  logo: `${process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"}/icon.svg`,
+  logo: `${process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"}/favicon.ico`,
   description:
     "A culture-first hospitality and experiences brand curating intentional moments for hospitality-led brands, creative founders, and tourism ecosystems.",
   sameAs: [
