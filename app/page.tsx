@@ -13,6 +13,7 @@ import { JoinTeamSection } from "@/components/rinwa/JoinTeamSection";
 import { PartnershipDivider } from "@/components/rinwa/PartnershipDivider";
 import { SocialPresence } from "@/components/rinwa/SocialPresence";
 import { SiteFooter } from "@/components/rinwa/SiteFooter";
+import Questions from "@/components/rinwa/Questions";
 
 const organizationJsonLd = {
   "@context": "https://schema.org",
@@ -69,7 +70,8 @@ export default function Page() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(eventJsonLd) }}
       />
 
-      <HeroCarousel />
+      <Questions />
+      {/* <HeroCarousel />
       <BrandMarquee />
       <AboutSections />
       <OurStorySection />
@@ -78,12 +80,12 @@ export default function Page() {
       <PastEventsGallery />
       <TestimonialsSection />
       <CulturalBridgeCTA />
-      <JoinTeamSection />
+      <JoinTeamSection /> */}
       {/* <MediaGallery /> */}
-      <ContactForm />
+      {/* <ContactForm />
       <SocialPresence />
       <PartnershipDivider />
-      <SiteFooter />
+      <SiteFooter /> */}
     </main>
   );
 }

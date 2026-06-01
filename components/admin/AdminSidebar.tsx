@@ -14,6 +14,7 @@ import {
   Briefcase,
   Handshake,
   Inbox,
+  ClipboardList,
   MessageSquareQuote,
   Settings2,
   LogOut,
@@ -28,6 +29,7 @@ const navItems = [
   { href: '/admin/brand-partners', label: 'Brand Partners', icon: Handshake },
   { href: '/admin/job-postings', label: 'Job Postings', icon: Briefcase },
   { href: '/admin/submissions', label: 'Submissions', icon: Inbox },
+  { href: '/admin/questionnaire', label: 'Questionnaire', icon: ClipboardList },
   { href: '/admin/testimonials', label: 'Testimonials', icon: MessageSquareQuote },
   { href: '/admin/settings', label: 'Settings', icon: Settings2 },
 ];

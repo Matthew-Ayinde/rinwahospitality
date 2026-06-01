@@ -365,6 +365,318 @@ export async function sendInquiryEmails({ submission, adminEmail }: InquiryEmail
   };
 }
 
+// ─── Questionnaire Emails ──────────────────────────────────────────────────────
+
+type QuestionnairePayload = {
+  submission: Record<string, any>;
+  adminEmail: string;
+};
+
+function qs(v: any): string {
+  if (!v || (Array.isArray(v) && v.length === 0)) return '—';
+  if (Array.isArray(v)) return v.join(' · ');
+  return String(v);
+}
+
+function qRow(label: string, value: any) {
+  const val = qs(value);
+  if (val === '—') return '';
+  return `
+    <tr>
+      <td style="padding:10px 16px;width:38%;vertical-align:top;font-size:11px;text-transform:uppercase;letter-spacing:0.16em;color:#8fa8a5;border-bottom:1px solid rgba(255,255,255,0.05);">${label}</td>
+      <td style="padding:10px 16px;vertical-align:top;font-size:13px;color:#e8f0ef;line-height:1.6;border-bottom:1px solid rgba(255,255,255,0.05);">${escapeHtml(val).replace(/\n/g, '<br>')}</td>
+    </tr>`;
+}
+
+function qSection(title: string, rows: string) {
+  const filtered = rows.trim();
+  if (!filtered) return '';
+  return `
+    <tr><td colspan="2" style="padding:20px 16px 6px;">
+      <p style="margin:0;font-size:10px;text-transform:uppercase;letter-spacing:0.28em;color:#7dd3cf;">${title}</p>
+    </td></tr>
+    ${filtered}`;
+}
+
+function buildAdminQuestionnaireEmailHtml(s: Record<string, any>) {
+  return `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>New Questionnaire</title></head>
+<body style="margin:0;padding:0;background:#041114;font-family:Arial,Helvetica,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#041114;padding:40px 16px;">
+    <tr><td align="center">
+      <table width="100%" cellpadding="0" cellspacing="0" style="max-width:640px;">
+        <tr><td style="padding-bottom:24px;">
+          <table width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+              <td>
+                <div style="font-family:Georgia,'Times New Roman',serif;font-size:22px;letter-spacing:0.12em;color:#f5f0e8;">RÌNWÁ</div>
+                <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.32em;color:#8fa8a5;margin-top:3px;">Event Logistics Discovery</div>
+              </td>
+              <td align="right">
+                <span style="display:inline-block;background:#7dd3cf;color:#041114;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.2em;padding:5px 12px;border-radius:100px;">New Questionnaire</span>
+              </td>
+            </tr>
+          </table>
+        </td></tr>
+        <tr><td style="background:#07171a;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden;">
+          <table width="100%" cellpadding="0" cellspacing="0">
+            <tr><td style="padding:28px 32px 20px;">
+              <p style="margin:0 0 8px;font-size:11px;text-transform:uppercase;letter-spacing:0.28em;color:#7dd3cf;">Questionnaire received</p>
+              <h1 style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:24px;line-height:1.2;color:#f5f0e8;font-weight:normal;">
+                ${escapeHtml(s.fullName)}<br>
+                <span style="color:#8fa8a5;font-size:17px;">from ${escapeHtml(s.company)}</span>
+              </h1>
+              ${s.eventName ? `<p style="margin:12px 0 0;font-size:13px;color:#7dd3cf;font-style:italic;">${escapeHtml(s.eventName)}</p>` : ''}
+            </td></tr>
+            <tr><td style="padding:0 32px;"><hr style="border:none;border-top:1px solid rgba(255,255,255,0.07);margin:0;"></td></tr>
+            <tr><td style="padding:4px 16px 8px;">
+              <table width="100%" cellpadding="0" cellspacing="0">
+                ${qSection('Contact Details', [
+                  qRow('Full Name', s.fullName),
+                  qRow('Email', s.email),
+                  qRow('Phone', s.phone),
+                  qRow('Organization', s.company),
+                ].join(''))}
+                ${qSection('Event Overview', [
+                  qRow('Event Name & Purpose', s.eventName || s.eventPurpose),
+                  qRow('Objectives & Success Metrics', s.objectives),
+                  qRow('Event Date(s)', s.eventDate),
+                  qRow('City & Venue', s.cityVenue),
+                  qRow('Format', s.eventFormat),
+                  qRow('Attendee Count', s.attendeeCount),
+                  qRow('Target Audience', s.targetAudience),
+                ].join(''))}
+                ${qSection('Scope of Support', [
+                  qRow('Responsibilities', s.responsibilities),
+                  qRow('Managing Scope', s.managingScope),
+                  qRow('Existing Vendors', s.existingVendors),
+                  qRow('Vendor Details', s.existingVendorDetails),
+                  qRow('Internal Team', s.internalTeam),
+                  qRow('Team Details', s.internalTeamDetails),
+                ].join(''))}
+                ${qSection('Venue & Production', [
+                  qRow('Venue Secured', s.venueSecured),
+                  qRow('Venue Preferences', s.venuePreferences),
+                  qRow('Required Spaces', s.requiredSpaces),
+                  qRow('Production Needs', s.productionNeeds),
+                  qRow('Special Production', s.specialProduction),
+                ].join(''))}
+                ${qSection('Guest Experience & Speakers', [
+                  qRow('Registration Method', s.registrationMethod),
+                  qRow('Ticketing Support', s.ticketingSupport),
+                  qRow('VIPs / Special Guests', s.vipGuests),
+                  qRow('VIP Details', s.vipDetails),
+                  qRow('Accessibility Required', s.accessibilityRequired),
+                  qRow('Accessibility Details', s.accessibilityDetails),
+                  qRow('Guest Touchpoints', s.guestTouchpoints),
+                  qRow('Speaker Count', s.speakerCount),
+                  qRow('Travel Coordination', s.travelCoordination),
+                  qRow('Speaker Management', s.speakerManagement),
+                ].join(''))}
+                ${qSection('Operations', [
+                  qRow('Staffing Required', s.staffingRequired),
+                  qRow('Volunteers', s.volunteersNeeded),
+                  qRow('Staffing Recruitment', s.staffingRecruitment),
+                  qRow('Catering Provided', s.cateringProvided),
+                  qRow('Service Style', s.serviceStyle),
+                  qRow('Dietary Requirements', s.dietaryRequirements),
+                  qRow('Attendee Communications', s.attendeeCommunications),
+                  qRow('Marketing Management', s.marketingManagement),
+                  qRow('Event Materials', s.eventMaterials),
+                ].join(''))}
+                ${qSection('Logistics & Risk', [
+                  qRow('Transportation', s.transportationRequired),
+                  qRow('Hotel Blocks', s.hotelBlocks),
+                  qRow('Airport Transfers', s.airportTransfers),
+                  qRow('Sponsors Involved', s.sponsorsInvolved),
+                  qRow('Sponsor Deliverables', s.sponsorDeliverables),
+                  qRow('Exhibitor Activations', s.exhibitorActivations),
+                  qRow('Event Insurance', s.eventInsurance),
+                  qRow('Permits Required', s.permitsRequired),
+                  qRow('Security Required', s.securityRequired),
+                  qRow('Contingency Plans', s.contingencyPlans),
+                ].join(''))}
+                ${qSection('Budget & Timeline', [
+                  qRow('Budget Range', s.budgetRange),
+                  qRow('Budget Constraints', s.budgetConstraints),
+                  qRow('Decision Makers', s.decisionMakers),
+                  qRow('Procurement Process', s.procurementProcess),
+                  qRow('Planning Start', s.planningStart),
+                  qRow('Major Milestones', s.majorMilestones),
+                  qRow('Post-Event Reporting', s.postEventReporting),
+                  qRow('Success Definition', s.successDefinition),
+                ].join(''))}
+              </table>
+            </td></tr>
+            <tr><td style="padding:24px 32px 28px;text-align:center;">
+              <a href="mailto:${escapeHtml(s.email)}?subject=Re: Your RÌNWÁ Event Questionnaire"
+                 style="display:inline-block;background:#7dd3cf;color:#041114;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.18em;text-decoration:none;padding:13px 28px;border-radius:100px;">
+                Reply to ${escapeHtml((s.fullName || '').split(' ')[0] || 'Client')}
+              </a>
+            </td></tr>
+          </table>
+        </td></tr>
+        <tr><td style="padding:20px 0 0;text-align:center;">
+          <p style="margin:0;font-size:11px;color:#3d5a58;letter-spacing:0.1em;">RÌNWÁ Hospitality · Internal notification · Do not forward</p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`;
+}
+
+function buildUserQuestionnaireEmailHtml(s: Record<string, any>) {
+  const firstName = escapeHtml((s.fullName || '').split(' ')[0] || 'there');
+  return `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>You've Rinwa'd</title></head>
+<body style="margin:0;padding:0;background:#041114;font-family:Arial,Helvetica,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#041114;padding:40px 16px;">
+    <tr><td align="center">
+      <table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;">
+        <tr><td style="text-align:center;padding-bottom:28px;">
+          <div style="font-family:Georgia,'Times New Roman',serif;font-size:26px;letter-spacing:0.14em;color:#f5f0e8;">RÌNWÁ</div>
+          <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.38em;color:#8fa8a5;margin-top:4px;">The Global Standard for African Hospitality</div>
+        </td></tr>
+        <tr><td style="background:#07171a;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden;">
+          <table width="100%" cellpadding="0" cellspacing="0">
+            <tr><td style="height:2px;background:#7dd3cf;"></td></tr>
+            <tr><td style="padding:36px 32px 28px;">
+              <p style="margin:0 0 10px;font-size:11px;text-transform:uppercase;letter-spacing:0.30em;color:#7dd3cf;">Questionnaire received</p>
+              <h1 style="margin:0 0 18px;font-family:Georgia,'Times New Roman',serif;font-size:28px;line-height:1.1;color:#f5f0e8;font-weight:normal;">
+                Welcome home, ${firstName}.<br>
+                <span style="color:#8fa8a5;font-size:20px;">You've Rinwa'd.</span>
+              </h1>
+              <p style="margin:0;font-size:15px;line-height:1.78;color:#a0bcba;">
+                Thank you for taking the time to share your vision with us. We've received your responses and our team will review everything carefully. Expect to hear from us within <strong style="color:#f5f0e8;">48 hours</strong> with tailored recommendations.
+              </p>
+            </td></tr>
+            <tr><td style="padding:0 32px;"><hr style="border:none;border-top:1px solid rgba(255,255,255,0.07);margin:0;"></td></tr>
+            ${s.eventName ? `
+            <tr><td style="padding:22px 32px;">
+              <p style="margin:0 0 6px;font-size:10px;text-transform:uppercase;letter-spacing:0.28em;color:#7dd3cf;">Your event</p>
+              <p style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:18px;color:#f5f0e8;">${escapeHtml(s.eventName)}</p>
+              ${s.eventDate ? `<p style="margin:4px 0 0;font-size:13px;color:#8fa8a5;">${escapeHtml(s.eventDate)}</p>` : ''}
+            </td></tr>
+            <tr><td style="padding:0 32px;"><hr style="border:none;border-top:1px solid rgba(255,255,255,0.07);margin:0;"></td></tr>
+            ` : ''}
+            <tr><td style="padding:24px 32px;">
+              <p style="margin:0 0 18px;font-size:10px;text-transform:uppercase;letter-spacing:0.26em;color:#7dd3cf;">What happens next</p>
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr><td style="padding:0 0 16px;">
+                  <table cellpadding="0" cellspacing="0"><tr>
+                    <td style="width:28px;vertical-align:top;padding-top:2px;">
+                      <div style="width:24px;height:24px;border-radius:50%;background:#0d2a2e;border:1px solid #7dd3cf;text-align:center;line-height:22px;font-size:11px;font-weight:700;color:#7dd3cf;">1</div>
+                    </td>
+                    <td style="padding-left:12px;vertical-align:top;">
+                      <p style="margin:0 0 2px;font-size:13px;font-weight:700;color:#f5f0e8;">Your questionnaire is reviewed</p>
+                      <p style="margin:0;font-size:13px;color:#8fa8a5;line-height:1.6;">Our team reads every response — no shortcuts.</p>
+                    </td>
+                  </tr></table>
+                </td></tr>
+                <tr><td style="padding:0 0 16px;">
+                  <table cellpadding="0" cellspacing="0"><tr>
+                    <td style="width:28px;vertical-align:top;padding-top:2px;">
+                      <div style="width:24px;height:24px;border-radius:50%;background:#0d2a2e;border:1px solid #7dd3cf;text-align:center;line-height:22px;font-size:11px;font-weight:700;color:#7dd3cf;">2</div>
+                    </td>
+                    <td style="padding-left:12px;vertical-align:top;">
+                      <p style="margin:0 0 2px;font-size:13px;font-weight:700;color:#f5f0e8;">We reach out within 48 hours</p>
+                      <p style="margin:0;font-size:13px;color:#8fa8a5;line-height:1.6;">A personal response at ${escapeHtml(s.email)}.</p>
+                    </td>
+                  </tr></table>
+                </td></tr>
+                <tr><td>
+                  <table cellpadding="0" cellspacing="0"><tr>
+                    <td style="width:28px;vertical-align:top;padding-top:2px;">
+                      <div style="width:24px;height:24px;border-radius:50%;background:#0d2a2e;border:1px solid #7dd3cf;text-align:center;line-height:22px;font-size:11px;font-weight:700;color:#7dd3cf;">3</div>
+                    </td>
+                    <td style="padding-left:12px;vertical-align:top;">
+                      <p style="margin:0 0 2px;font-size:13px;font-weight:700;color:#f5f0e8;">We bring your vision to life</p>
+                      <p style="margin:0;font-size:13px;color:#8fa8a5;line-height:1.6;">A tailored proposal aligned to your vision and budget.</p>
+                    </td>
+                  </tr></table>
+                </td></tr>
+              </table>
+            </td></tr>
+            <tr><td style="padding:0 32px;"><hr style="border:none;border-top:1px solid rgba(255,255,255,0.07);margin:0;"></td></tr>
+            <tr><td style="padding:28px 32px 36px;text-align:center;">
+              <p style="margin:0 0 6px;font-size:13px;color:#8fa8a5;">Until then,</p>
+              <p style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:20px;color:#f5f0e8;letter-spacing:0.06em;">The RÌNWÁ Team</p>
+              <p style="margin:12px 0 0;font-size:11px;text-transform:uppercase;letter-spacing:0.32em;color:#3d5a58;">Enter Into Your Ease</p>
+            </td></tr>
+          </table>
+        </td></tr>
+        <tr><td style="padding:20px 0 0;text-align:center;">
+          <p style="margin:0;font-size:11px;color:#3d5a58;">You received this because you completed the RÌNWÁ event questionnaire.</p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`;
+}
+
+export async function sendQuestionnaireEmails({
+  submission,
+  adminEmail,
+}: QuestionnairePayload): Promise<EmailResult> {
+  const transporter = buildTransporter();
+  const warnings: string[] = [];
+
+  if (!transporter) {
+    warnings.push('SMTP credentials are not configured');
+    return { sent: false, warnings };
+  }
+
+  const from = process.env.SMTP_FROM || process.env.SMTP_USER;
+  if (!from) {
+    warnings.push('SMTP_FROM is missing');
+    return { sent: false, warnings };
+  }
+
+  const eventLabel = submission.eventName ? ` — ${submission.eventName}` : '';
+
+  const sendAdmin = async () => {
+    try {
+      await transporter.sendMail({
+        from,
+        to: adminEmail,
+        replyTo: submission.email,
+        subject: `[Questionnaire] ${submission.fullName} · ${submission.company}${eventLabel}`,
+        text: `New questionnaire from ${submission.fullName} (${submission.email}) at ${submission.company}.`,
+        html: buildAdminQuestionnaireEmailHtml(submission),
+      });
+      return true;
+    } catch (err) {
+      console.error('Admin questionnaire email failed:', err);
+      warnings.push('Failed to send admin notification');
+      return false;
+    }
+  };
+
+  const sendUser = async () => {
+    try {
+      await transporter.sendMail({
+        from,
+        to: submission.email,
+        subject: "You've Rinwa'd — Your questionnaire has been received",
+        text: `Hi ${submission.fullName}, we've received your questionnaire and will be in touch within 48 hours.`,
+        html: buildUserQuestionnaireEmailHtml(submission),
+      });
+      return true;
+    } catch (err) {
+      console.error('User questionnaire email failed:', err);
+      warnings.push('Failed to send confirmation email to submitter');
+      return false;
+    }
+  };
+
+  const [adminSent, userSent] = await Promise.all([sendAdmin(), sendUser()]);
+  return { sent: adminSent && userSent, warnings };
+}
+
 type GenericEmailPayload = {
   to: string;
   subject: string;
