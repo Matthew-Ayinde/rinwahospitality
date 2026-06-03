@@ -6,7 +6,7 @@ export default function Head() {
       <link
         rel="preload"
         as="image"
-        href="https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=1600&q=80"
+        href="https://res.cloudinary.com/matthew-ayinde/image/upload/v1780477515/rinwa-green_iu1he9.png"
       />
     </>
   );

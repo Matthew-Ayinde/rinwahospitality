@@ -57,7 +57,7 @@ export const metadata: Metadata = {
       "A culture-first hospitality and experiences brand curating intentional moments for hospitality-led brands, creative founders, and tourism ecosystems.",
     images: [
       {
-        url: "https://res.cloudinary.com/matthew-ayinde/image/upload/v1780311622/rinwa-logo_cekwvh.png",
+        url: "https://res.cloudinary.com/matthew-ayinde/image/upload/v1780477515/rinwa-green_iu1he9.png",
         width: 1600,
         height: 900,
         alt: "RÌNWÁ Hospitality & Experiences editorial hero image",
@@ -70,7 +70,7 @@ export const metadata: Metadata = {
     description:
       "Culture-first hospitality, brand experiences, and storytelling-led gatherings.",
     images: [
-      "https://res.cloudinary.com/matthew-ayinde/image/upload/v1780311622/rinwa-logo_cekwvh.png",
+      "https://res.cloudinary.com/matthew-ayinde/image/upload/v1780477515/rinwa-green_iu1he9.png",
     ],
   },
   icons: {
