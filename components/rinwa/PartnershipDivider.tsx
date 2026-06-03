@@ -11,7 +11,7 @@ export function PartnershipDivider() {
           <h2 className="mt-6 font-serif text-[clamp(2.6rem,8vw,6.6rem)] leading-[0.9] tracking-[-0.06em] text-white">
             LET'S BUILD TOGETHER
           </h2>
-          <p className="mt-6 text-lg text-white/72">rinwahospitality@gmail.com</p>
+          <p className="mt-6 text-lg text-white/72">info@rinwahospitality.com</p>
         </div>
       </div>
     </section>
