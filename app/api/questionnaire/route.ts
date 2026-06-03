@@ -82,7 +82,7 @@ export async function POST(request: NextRequest) {
 
     const settings = await Settings.findOne().select('partnershipEmail');
     const adminEmail =
-      process.env.ADMIN_EMAIL || settings?.partnershipEmail || 'rinwahospitality@gmail.com';
+      process.env.ADMIN_EMAIL || settings?.partnershipEmail || 'info@rinwahospitality.com';
 
     const emailResult = await sendQuestionnaireEmails({ submission: validated, adminEmail });
 
