@@ -70,8 +70,8 @@ export default function Page() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(eventJsonLd) }}
       />
 
-      <Questions />
-      {/* <HeroCarousel />
+      {/* <Questions /> */}
+      <HeroCarousel />
       <BrandMarquee />
       <AboutSections />
       <OurStorySection />
@@ -80,12 +80,12 @@ export default function Page() {
       <PastEventsGallery />
       <TestimonialsSection />
       <CulturalBridgeCTA />
-      <JoinTeamSection /> */}
+      <JoinTeamSection />
       {/* <MediaGallery /> */}
-      {/* <ContactForm />
+       <ContactForm />
       <SocialPresence />
       <PartnershipDivider />
-      <SiteFooter /> */}
+      <SiteFooter />
     </main>
   );
 }
