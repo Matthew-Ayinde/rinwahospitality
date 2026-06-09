@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
     });
 
     const settings = await Settings.findOne().select('partnershipEmail');
-    const adminEmail = process.env.ADMIN_EMAIL || settings?.partnershipEmail || 'rinwahospitality@gmail.com';
+    const adminEmail = process.env.ADMIN_EMAIL || settings?.partnershipEmail || 'info@rinwahospitality.com';
     const emailResult = await sendInquiryEmails({
       submission: {
         ...validated,

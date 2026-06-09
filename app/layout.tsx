@@ -3,6 +3,7 @@ import { Cormorant_Garamond, Geist, Geist_Mono } from "next/font/google";
 import { SplashScreen } from "@/components/rinwa/SplashScreen";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next"
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -97,6 +98,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <SplashScreen />
         {children}
+        <Toaster position="top-center" toastOptions={{ duration: 4000 }} />
       </body>
     </html>
   );

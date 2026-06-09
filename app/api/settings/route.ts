@@ -19,7 +19,7 @@ export async function GET() {
 
     if (!settings) {
       settings = await Settings.create({
-        partnershipEmail: process.env.ADMIN_EMAIL || 'rinwahospitality@gmail.com',
+        partnershipEmail: process.env.ADMIN_EMAIL || 'info@rinwahospitality.com',
         tagline: 'Come here, you\'ve arrived home',
         siteUrl: 'https://rinwa.com',
       });

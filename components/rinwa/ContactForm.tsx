@@ -70,24 +70,24 @@ export function ContactForm() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const validateStep1 = (): boolean => {
+    if (!formData.fullName) { toast.error("Please enter your Full Name"); return false; }
+    if (!formData.email) { toast.error("Please enter your Email address"); return false; }
+    if (!formData.phone) { toast.error("Please enter your Phone number"); return false; }
+    if (!formData.company) { toast.error("Please enter your Company / Brand name"); return false; }
+    if (!formData.projectDate) { toast.error("Please enter your Project Timeline"); return false; }
+    if (!formData.location) { toast.error("Please enter your Location / City"); return false; }
+    if (!formData.estimatedBudget) { toast.error("Please enter your Estimated Budget"); return false; }
+    if (industries.length === 0) { toast.error("Please select at least one Industry"); return false; }
+    return true;
+  };
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (
-      !formData.fullName ||
-      !formData.email ||
-      !formData.phone ||
-      !formData.company ||
-      !formData.location ||
-      !formData.projectDate ||
-      !formData.estimatedBudget ||
-      !formData.description ||
-      industries.length === 0 ||
-      feelings.length === 0
-    ) {
-      toast.error("Please fill all fields");
-      return;
-    }
+    if (!validateStep1()) return;
+    if (!formData.description) { toast.error("Please enter a project Description"); return; }
+    if (feelings.length === 0) { toast.error("Please select at least one Feeling for your audience"); return; }
 
     const submittedFeelings = Array.from(new Set([...feelings, customFeeling.trim()].filter(Boolean)));
 

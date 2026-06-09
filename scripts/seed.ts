@@ -36,8 +36,8 @@ async function main() {
         role: 'admin' as const,
       },
       {
-        email: 'rinwahospitality@gmail.com',
-        password: 'Password#12',
+        email: process.env.ADMIN_EMAIL || 'info@rinwahospitality.com',
+        password: process.env.ADMIN_PASSWORD || 'Admin@123',
         name: 'RÌNWÁ Hospitality Admin',
         role: 'admin' as const,
       },
@@ -199,7 +199,7 @@ async function main() {
     // Create Settings
     console.log('Creating settings...');
     await Settings.create({
-      partnershipEmail: process.env.ADMIN_EMAIL || 'rinwahospitality@gmail.com',
+      partnershipEmail: process.env.ADMIN_EMAIL || 'info@rinwahospitality.com',
       tagline: 'Come here, you\'ve arrived home',
       siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
       joinTeamDescription:

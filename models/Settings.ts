@@ -15,7 +15,7 @@ const SettingsSchema = new Schema<ISettings>(
   {
     partnershipEmail: {
       type: String,
-      default: 'rinwahospitality@gmail.com',
+      default: 'info@rinwahospitality.com',
     },
     tagline: {
       type: String,

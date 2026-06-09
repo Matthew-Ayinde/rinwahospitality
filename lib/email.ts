@@ -38,12 +38,12 @@ function logoSrc(): string {
 }
 
 function buildTransporter() {
-  const host = process.env.SMTP_HOST || 'smtp.gmail.com';
+  const host = process.env.SMTP_HOST;
   const port = Number(process.env.SMTP_PORT || 465);
   const user = process.env.SMTP_USER;
   const pass = process.env.SMTP_PASS;
 
-  if (!user || !pass) {
+  if (!host || !user || !pass) {
     return null;
   }
 

@@ -1,0 +1,28 @@
+# NextAuth Configuration
+NEXTAUTH_URL=https://rinwahospitality.vercel.app
+NEXTAUTH_SECRET=4xVvG7Q3q8WmK2xYoL9nP1sD6uTzA0eHcJrB5yNwIuM=
+
+# MongoDB Configuration
+MONGODB_URI=mongodb+srv://rinwa-admin:%23Matthew03ayinde@cluster0.w3sshbp.mongodb.net/rinwa-staging?appName=rinwa
+
+# Cloudinary Configuration
+CLOUDINARY_CLOUD_NAME=matthew-ayinde
+CLOUDINARY_API_KEY=314357652693948
+CLOUDINARY_API_SECRET=zSeV_M1bWO82nZv-cwP2fvmVBxI
+
+# Admin Credentials (for initial seed)
+ADMIN_EMAIL=info@rinwahospitality.com
+ADMIN_PASSWORD=Admin@123
+
+# Public Site URL (for SEO, social sharing)
+NEXT_PUBLIC_SITE_URL=https://rinwahospitality.vercel.app
+NEXT_PUBLIC_SITE_NAME=RÌNWÁ Hospitality
+
+# SMTP Email Configuration (Qservers — custom domain)
+# Host: your mail server (typically mail.yourdomain.com for Qservers)
+# Port 465 = SSL/TLS (recommended) | Port 587 = STARTTLS
+SMTP_HOST=mail.rinwahospitality.com
+SMTP_PORT=465
+SMTP_USER=info@rinwahospitality.com
+SMTP_PASS="#Rinwa-1234!!"
+SMTP_FROM="RÌNWÁ Hospitality <info@rinwahospitality.com>"
