@@ -1,6 +1,5 @@
 import { connectDB } from '@/lib/mongodb';
 import { QuestionnaireSubmission } from '@/models/QuestionnaireSubmission';
-import { Settings } from '@/models/Settings';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/auth';
 import { NextRequest, NextResponse } from 'next/server';
@@ -80,11 +79,10 @@ export async function POST(request: NextRequest) {
     await connectDB();
     const submission = await QuestionnaireSubmission.create(validated);
 
-    const settings = await Settings.findOne().select('partnershipEmail');
-    const adminEmail =
-      process.env.ADMIN_EMAIL || settings?.partnershipEmail || 'info@rinwahospitality.com';
-
-    const emailResult = await sendQuestionnaireEmails({ submission: validated, adminEmail });
+    const emailResult = await sendQuestionnaireEmails({
+      submission: validated,
+      adminEmails: ['info@rinwahospitality.com', 'rinwahospitality@gmail.com'],
+    });
 
     if (!emailResult.sent) {
       console.warn('Questionnaire saved but emails failed:', emailResult.warnings);

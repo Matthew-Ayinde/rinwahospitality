@@ -13,6 +13,16 @@ const CURRENCIES = [
   { code: "EUR", symbol: "€", label: "EUR" },
 ] as const;
 
+const formatBudgetValue = (value: string) => {
+  const digitsOnly = value.replace(/\D/g, "");
+
+  if (!digitsOnly) {
+    return "";
+  }
+
+  return new Intl.NumberFormat("en-US").format(Number(digitsOnly));
+};
+
 /**
  * Refined inquiry form.
  * The fields are grouped into two intentional steps so the experience feels human and calm.
@@ -67,6 +77,12 @@ export function ContactForm() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
+
+    if (name === "estimatedBudget") {
+      setFormData((prev) => ({ ...prev, estimatedBudget: formatBudgetValue(value) }));
+      return;
+    }
+
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -103,7 +119,7 @@ export function ContactForm() {
           company: formData.company,
           location: formData.location,
           projectDate: formData.projectDate,
-          estimatedBudget: parseInt(formData.estimatedBudget),
+          estimatedBudget: parseInt(formData.estimatedBudget.replace(/,/g, ""), 10),
           currency,
           description: formData.description,
           industries,
@@ -124,7 +140,7 @@ export function ContactForm() {
         const warning = Array.isArray(data.emailWarnings) && data.emailWarnings.length > 0 ? data.emailWarnings[0] : "We received your inquiry, but email delivery failed on our side.";
         toast.error(warning);
       } else {
-        toast.success("Thank you! We'll be in touch within 48 hours.");
+        toast.success("Your inquiry has been submitted!");
       }
       setFormData({
         fullName: "",
@@ -272,7 +288,8 @@ export function ContactForm() {
                         {CURRENCIES.find((c) => c.code === currency)?.symbol}
                       </span>
                       <input
-                        type="number"
+                        type="text"
+                        inputMode="numeric"
                         name="estimatedBudget"
                         value={formData.estimatedBudget}
                         onChange={handleInputChange}

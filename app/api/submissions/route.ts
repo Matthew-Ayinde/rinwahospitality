@@ -1,6 +1,5 @@
 import { connectDB } from '@/lib/mongodb';
 import { ContactSubmission } from '@/models/ContactSubmission';
-import { Settings } from '@/models/Settings';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/auth';
 import { NextRequest, NextResponse } from 'next/server';
@@ -51,15 +50,13 @@ export async function POST(request: NextRequest) {
       feelings: validated.feelings ?? [],
     });
 
-    const settings = await Settings.findOne().select('partnershipEmail');
-    const adminEmail = process.env.ADMIN_EMAIL || settings?.partnershipEmail || 'info@rinwahospitality.com';
     const emailResult = await sendInquiryEmails({
       submission: {
         ...validated,
         industries,
         feelings: validated.feelings ?? [],
       },
-      adminEmail,
+      adminEmails: ['info@rinwahospitality.com', 'ayindematthew2003@gmail.com'],
     });
 
     if (!emailResult.sent) {
