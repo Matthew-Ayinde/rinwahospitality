@@ -73,12 +73,12 @@ export default function AdminDashboard() {
   }
 
   const cards = [
-    {
-      title: 'Total Events',
-      value: stats.totalEvents,
-      icon: Calendar,
-      color: 'from-teal-500/20 to-transparent',
-    },
+    // {
+    //   title: 'Total Events',
+    //   value: stats.totalEvents,
+    //   icon: Calendar,
+    //   color: 'from-teal-500/20 to-transparent',
+    // },
     {
       title: 'Form Submissions',
       value: stats.totalSubmissions,
