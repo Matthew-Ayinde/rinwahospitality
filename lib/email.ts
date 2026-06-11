@@ -77,10 +77,20 @@ function buildAdminEmailHtml(submission: InquiryEmailPayload['submission']) {
         <tr><td style="padding-bottom:28px;">
           <table width="100%" cellpadding="0" cellspacing="0">
             <tr>
-              <td>
-                <img src="https://res.cloudinary.com/matthew-ayinde/image/upload/v1780311622/rinwa-logo_cekwvh.png" alt="RÌNWÁ" width="44" height="44" style="display:block;margin-bottom:7px;" />
+              <td style="vertical-align:middle;">
+                <table cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td style="vertical-align:middle;padding-right:18px;">
+                      <img src="https://res.cloudinary.com/matthew-ayinde/image/upload/v1780311622/rinwa-logo_cekwvh.png" alt="RÌNWÁ" width="72" height="72" style="display:block;" />
+                    </td>
+                    <td style="vertical-align:middle;border-left:1px solid rgba(125,211,207,0.25);padding-left:18px;">
+                      <div style="font-family:Georgia,'Times New Roman',serif;font-size:26px;letter-spacing:0.14em;color:#f5f0e8;line-height:1;">RÌNWÁ</div>
+                      <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.34em;color:#8fa8a5;margin-top:5px;">Hospitality</div>
+                    </td>
+                  </tr>
+                </table>
               </td>
-              <td align="right">
+              <td align="right" style="vertical-align:middle;">
                 <span style="display:inline-block;background:#7dd3cf;color:#041114;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.24em;padding:5px 12px;border-radius:100px;">New Inquiry</span>
               </td>
             </tr>
@@ -187,10 +197,18 @@ function buildUserEmailHtml(submission: InquiryEmailPayload['submission']) {
       <table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;">
 
         <!-- Header -->
-        <tr><td style="text-align:center;padding-bottom:32px;">
-          <img src="https://res.cloudinary.com/matthew-ayinde/image/upload/v1780311622/rinwa-logo_cekwvh.png" alt="RÌNWÁ" width="54" height="54" style="display:block;margin:0 auto 10px;" />
-          <div style="font-family:Georgia,'Times New Roman',serif;font-size:26px;letter-spacing:0.14em;color:#f5f0e8;">RÌNWÁ</div>
-          <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.36em;color:#8fa8a5;margin-top:4px;">Hospitality</div>
+        <tr><td style="text-align:center;padding-bottom:36px;">
+          <table align="center" cellpadding="0" cellspacing="0">
+            <tr>
+              <td style="vertical-align:middle;padding-right:20px;">
+                <img src="https://res.cloudinary.com/matthew-ayinde/image/upload/v1780311622/rinwa-logo_cekwvh.png" alt="RÌNWÁ" width="80" height="80" style="display:block;" />
+              </td>
+              <td style="vertical-align:middle;border-left:1px solid rgba(125,211,207,0.25);padding-left:20px;text-align:left;">
+                <div style="font-family:Georgia,'Times New Roman',serif;font-size:30px;letter-spacing:0.14em;color:#f5f0e8;line-height:1;">RÌNWÁ</div>
+                <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.38em;color:#8fa8a5;margin-top:6px;">Hospitality</div>
+              </td>
+            </tr>
+          </table>
         </td></tr>
 
         <!-- Main card -->
@@ -378,15 +396,23 @@ function buildAdminQuestionnaireEmailHtml(s: Record<string, any>) {
   <table width="100%" cellpadding="0" cellspacing="0" style="background:#041114;padding:40px 16px;">
     <tr><td align="center">
       <table width="100%" cellpadding="0" cellspacing="0" style="max-width:640px;">
-        <tr><td style="padding-bottom:24px;">
+        <tr><td style="padding-bottom:28px;">
           <table width="100%" cellpadding="0" cellspacing="0">
             <tr>
-              <td>
-                <img src="https://res.cloudinary.com/matthew-ayinde/image/upload/v1780311622/rinwa-logo_cekwvh.png" alt="RÌNWÁ" width="44" height="44" style="display:block;margin-bottom:7px;" />
-                <div style="font-family:Georgia,'Times New Roman',serif;font-size:20px;letter-spacing:0.12em;color:#f5f0e8;">RÌNWÁ</div>
-                <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.32em;color:#8fa8a5;margin-top:3px;">Event Logistics Discovery</div>
+              <td style="vertical-align:middle;">
+                <table cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td style="vertical-align:middle;padding-right:18px;">
+                      <img src="https://res.cloudinary.com/matthew-ayinde/image/upload/v1780311622/rinwa-logo_cekwvh.png" alt="RÌNWÁ" width="72" height="72" style="display:block;" />
+                    </td>
+                    <td style="vertical-align:middle;border-left:1px solid rgba(125,211,207,0.25);padding-left:18px;">
+                      <div style="font-family:Georgia,'Times New Roman',serif;font-size:26px;letter-spacing:0.12em;color:#f5f0e8;line-height:1;">RÌNWÁ</div>
+                      <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.32em;color:#8fa8a5;margin-top:5px;">Event Logistics Discovery</div>
+                    </td>
+                  </tr>
+                </table>
               </td>
-              <td align="right">
+              <td align="right" style="vertical-align:middle;">
                 <span style="display:inline-block;background:#7dd3cf;color:#041114;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.2em;padding:5px 12px;border-radius:100px;">New Questionnaire</span>
               </td>
             </tr>
@@ -509,10 +535,18 @@ function buildUserQuestionnaireEmailHtml(s: Record<string, any>) {
   <table width="100%" cellpadding="0" cellspacing="0" style="background:#041114;padding:40px 16px;">
     <tr><td align="center">
       <table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;">
-        <tr><td style="text-align:center;padding-bottom:28px;">
-          <img src="https://res.cloudinary.com/matthew-ayinde/image/upload/v1780311622/rinwa-logo_cekwvh.png" alt="RÌNWÁ" width="54" height="54" style="display:block;margin:0 auto 10px;" />
-          <div style="font-family:Georgia,'Times New Roman',serif;font-size:26px;letter-spacing:0.14em;color:#f5f0e8;">RÌNWÁ</div>
-          <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.38em;color:#8fa8a5;margin-top:4px;">The Global Standard for African Hospitality</div>
+        <tr><td style="text-align:center;padding-bottom:36px;">
+          <table align="center" cellpadding="0" cellspacing="0">
+            <tr>
+              <td style="vertical-align:middle;padding-right:20px;">
+                <img src="https://res.cloudinary.com/matthew-ayinde/image/upload/v1780311622/rinwa-logo_cekwvh.png" alt="RÌNWÁ" width="80" height="80" style="display:block;" />
+              </td>
+              <td style="vertical-align:middle;border-left:1px solid rgba(125,211,207,0.25);padding-left:20px;text-align:left;">
+                <div style="font-family:Georgia,'Times New Roman',serif;font-size:30px;letter-spacing:0.14em;color:#f5f0e8;line-height:1;">RÌNWÁ</div>
+                <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.38em;color:#8fa8a5;margin-top:6px;">The Global Standard for African Hospitality</div>
+              </td>
+            </tr>
+          </table>
         </td></tr>
         <tr><td style="background:#07171a;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden;">
           <table width="100%" cellpadding="0" cellspacing="0">

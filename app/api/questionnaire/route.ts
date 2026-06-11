@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
 
     const emailResult = await sendQuestionnaireEmails({
       submission: validated,
-      adminEmails: ['info@rinwahospitality.com', 'rinwahospitality@gmail.com'],
+      adminEmails: ['info@rinwahospitality.com', 'ayindematthew2003@gmail.com'],
     });
 
     if (!emailResult.sent) {
