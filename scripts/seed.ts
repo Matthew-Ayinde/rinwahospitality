@@ -61,8 +61,6 @@ async function main() {
     const heroSlidesData = (heroSlides as HeroSlideData[]).map((slide, index) => ({
       imageUrl: slide.type === 'video' ? slide.poster : slide.src,
       videoUrl: slide.type === 'video' ? slide.src : undefined,
-      title: slide.headline,
-      description: slide.alt,
       order: index,
       isActive: true,
     }));

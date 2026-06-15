@@ -8,7 +8,6 @@ import toast from 'react-hot-toast';
 import { Plus, Edit2, Trash2, Video, Image as ImageIcon } from 'lucide-react';
 import AdminButton from '@/components/admin/AdminButton';
 import AdminInput from '@/components/admin/AdminInput';
-import AdminTextarea from '@/components/admin/AdminTextarea';
 import AdminModal from '@/components/admin/AdminModal';
 import AdminTable from '@/components/admin/AdminTable';
 import LoadingSpinner from '@/components/admin/LoadingSpinner';
@@ -41,8 +40,6 @@ export default function HeroSlidesPage() {
 
   const imageUrlValue = watch('imageUrl');
   const videoUrlValue = watch('videoUrl');
-  const titleValue = watch('title');
-  const descriptionValue = watch('description');
 
   useEffect(() => {
     fetchSlides();
@@ -58,8 +55,6 @@ export default function HeroSlidesPage() {
           reset({
             imageUrl: type === 'image' ? (slide.imageUrl || '') : '',
             videoUrl: type === 'video' ? (slide.videoUrl || '') : '',
-            title: slide.title,
-            description: slide.description || '',
             order: slide.order || 0,
           });
         }, 0);
@@ -195,7 +190,6 @@ export default function HeroSlidesPage() {
         );
       },
     },
-    { key: 'title', label: 'Title', sortable: true },
     { key: 'order', label: 'Order' },
     {
       key: 'actions',
@@ -229,7 +223,7 @@ export default function HeroSlidesPage() {
         <AdminButton
           onClick={() => {
             setMediaType('image');
-            reset({ imageUrl: '', videoUrl: '', title: '', description: '', order: 0 });
+            reset({ imageUrl: '', videoUrl: '', order: 0 });
             setEditingId(null);
             setIsModalOpen(true);
           }}
@@ -271,7 +265,6 @@ export default function HeroSlidesPage() {
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-white/90 text-sm font-medium truncate">{slide.title}</p>
                     <p className="text-white/40 text-xs mt-0.5">Order: {slide.order}</p>
                   </div>
                   <div className="flex gap-2 shrink-0">
@@ -307,7 +300,7 @@ export default function HeroSlidesPage() {
       >
         <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="space-y-6">
           <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/70">
-            Add exactly one media asset, then complete the title and order.
+            Add exactly one media asset, then set the display order.
           </div>
 
           {formFeedback && (
@@ -376,20 +369,6 @@ export default function HeroSlidesPage() {
               />
             )}
           </div>
-          <AdminInput
-            label="Title"
-              value={titleValue || ''}
-              {...register('title')}
-            error={errors.title?.message}
-            required
-          />
-          <AdminTextarea
-            label="Description"
-            rows={3}
-              value={descriptionValue || ''}
-              {...register('description')}
-            error={errors.description?.message}
-          />
           <AdminInput
             label="Order"
             type="number"

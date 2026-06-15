@@ -4,7 +4,6 @@ import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { heroSlides as fallbackSlides } from "./data";
-import { sub } from "framer-motion/client";
 
 export function HeroCarousel() {
   const shouldReduceMotion = useReducedMotion();
@@ -34,10 +33,7 @@ export function HeroCarousel() {
             type: (slide.videoUrl ? "video" : "image") as "image" | "video",
             src: (slide.videoUrl || slide.imageUrl) as string,
             poster: slide.imageUrl as string,
-            alt: slide.title as string,
-            eyebrow: "Come home, ease lives here",
-            headline: slide.title as string,
-            subtitle: slide.description as string,
+            alt: "RÌNWÁ hero slide",
           }));
           setSlides(mappedSlides);
           setIndex(0);
@@ -104,14 +100,7 @@ export function HeroCarousel() {
           <div className="flex items-center">
             <Image src="/images/logo-home.png" alt="RÌNWÁ logo" width={60} height={18} className="object-contain" />
           </div>
-          <div className="hidden gap-2 sm:flex">
-            <button
-              type="button"
-              className="rounded-full border border-white/10 px-4 py-2 text-sm text-white/80 transition duration-300 hover:border-teal-300/40 hover:text-white"
-              onClick={() => window.document.getElementById("experiences")?.scrollIntoView({ behavior: "smooth" })}
-            >
-              Explore
-            </button>
+          <div className="hidden gap-2 sm:flex">    
             <button
               type="button"
               className="rounded-full bg-teal-300 px-4 py-2 text-sm font-medium text-slate-950 transition duration-300 hover:bg-teal-200"
@@ -158,19 +147,8 @@ export function HeroCarousel() {
               transition={{ delay: 0.55, duration: 0.85, ease: "easeInOut" }}
               className="mt-8 max-w-2xl text-[clamp(1rem,2.2vw,1.5rem)] font-light leading-[1.2] tracking-[-0.04em] text-white/92"
             >
-              {/* {activeSlide.headline} */}
-
               With a decade of industry experience, we have built a proven track record of designing trusted environments across the Canada-Nigeria corridor. We engineer premium physical and digital touchpoints that influence global audiences to come, engage, stay longer, share freely, and return intentionally.
                      </motion.p>
-
-            <motion.p
-              initial={shouldReduceMotion ? false : { opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.05, duration: 0.85, ease: "easeInOut" }}
-              className="mt-4 max-w-xl text-lg leading-8 text-white/68"
-            >
-              {/* {activeSlide.subtitle} */}
-            </motion.p>
 
             <motion.div
               initial={shouldReduceMotion ? false : { opacity: 0, y: 18 }}

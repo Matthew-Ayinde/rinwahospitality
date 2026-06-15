@@ -3,9 +3,6 @@ export type HeroSlide = {
   src: string;
   poster: string;
   alt: string;
-  eyebrow: string;
-  headline: string;
-  subtitle?: string;
 };
 
 export type BrandItem = {
@@ -52,24 +49,18 @@ export const heroSlides: HeroSlide[] = [
     src: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
     poster: "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=1600&q=80",
     alt: "A cinematic hospitality scene with warm ambient motion.",
-    eyebrow: "Lived-in luxury",
-    headline: "A room that holds the mood before the first conversation.",
   },
   {
     type: "image",
     src: "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=1800&q=80",
     poster: "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=1800&q=80",
     alt: "Guests arriving at a refined social gathering.",
-    eyebrow: "Hospitality-led ritual",
-    headline: "Come here, you’ve arrived home.",
   },
   {
     type: "image",
     src: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=1800&q=80",
     poster: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=1800&q=80",
     alt: "Editorial table setting and atmospheric details.",
-    eyebrow: "Culture in motion",
-    headline: "A space for connection, culture, and curated moments.",
   },
 ];
 

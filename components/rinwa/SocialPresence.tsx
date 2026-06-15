@@ -405,7 +405,7 @@ export function SocialPresence() {
                 <div className={`absolute inset-0 bg-linear-to-br ${platform.gradient} opacity-90 transition duration-500 group-hover:opacity-100`} />
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(125,211,207,0.16),transparent_35%)]" />
 
-                <div className="relative flex h-full min-h-64 flex-col justify-between p-5">
+                <div className="relative flex h-full flex-col justify-between p-5">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex items-center gap-3">
                       <div className="grid h-11 w-11 place-items-center rounded-full border border-white/10 bg-black/20">
@@ -415,14 +415,15 @@ export function SocialPresence() {
                         <p className="text-sm text-white/65">{platform.handle}</p>
                       </div>
                     </div>
+                     <Link href={platform.link} target="_blank" rel="noreferrer" className="rounded-full cursor-pointer bg-teal-300 px-4 py-2 text-sm font-semibold text-slate-950 transition duration-300 hover:bg-teal-200">
+                        View profile
+                      </Link>
                   </div>
 
                   <div className="mt-8 space-y-5">
                     <p className="max-w-xs text-sm leading-7 text-white/72">{platform.preview}</p>
                     <div className="flex flex-wrap gap-2">
-                      <Link href={platform.link} target="_blank" rel="noreferrer" className="rounded-full cursor-pointer bg-teal-300 px-4 py-2 text-sm font-semibold text-slate-950 transition duration-300 hover:bg-teal-200">
-                        View profile
-                      </Link>
+                     
                     </div>
                   </div>
                 </div>

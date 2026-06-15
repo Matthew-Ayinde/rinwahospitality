@@ -41,8 +41,6 @@ export const heroSlideSchema = z
   .object({
     imageUrl: optionalUrlSchema,
     videoUrl: optionalUrlSchema,
-    title: z.string().trim().min(1, 'Title is required'),
-    description: z.string().optional(),
     order: z.coerce.number().int().min(0, 'Order must be zero or greater'),
   })
   .superRefine((data, ctx) => requireExactlyOneMedia(data, ctx, 'create'));
@@ -51,8 +49,6 @@ export const updateHeroSlideSchema = z
   .object({
     imageUrl: optionalUrlSchema,
     videoUrl: optionalUrlSchema,
-    title: z.string().trim().min(1, 'Title is required').optional(),
-    description: z.string().optional(),
     order: z.coerce.number().int().min(0, 'Order must be zero or greater').optional(),
   })
   .superRefine((data, ctx) => requireExactlyOneMedia(data, ctx, 'update'));

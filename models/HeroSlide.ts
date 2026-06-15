@@ -3,8 +3,6 @@ import mongoose, { Schema, Document } from 'mongoose';
 export interface IHeroSlide extends Document {
   imageUrl?: string;
   videoUrl?: string;
-  title: string;
-  description?: string;
   order: number;
   isActive: boolean;
   createdAt: Date;
@@ -20,13 +18,6 @@ const HeroSlideSchema = new Schema<IHeroSlide>(
     videoUrl: {
       type: String,
       default: '',
-    },
-    title: {
-      type: String,
-      required: true,
-    },
-    description: {
-      type: String,
     },
     order: {
       type: Number,
