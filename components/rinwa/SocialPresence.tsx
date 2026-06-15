@@ -1,8 +1,9 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import Link from "next/link";
-import { ArrowUpRight, Play } from "lucide-react";
+import { ArrowUpRight, Play, X, CheckCircle, Loader2 } from "lucide-react";
 
 const platforms = [
   {
@@ -43,7 +44,7 @@ const featuredReel = {
   audio: "Original audio",
   duration: "Watch on Instagram",
   caption:
-    "My heart never left home, even after 14 years abroad. This reconnection trip feels like meeting myself again, so while I’m here building...",
+    "My heart never left home, even after 14 years abroad. This reconnection trip feels like meeting myself again, so while I'm here building...",
 };
 
 function SocialIcon({ platform }: { platform: string }) {
@@ -86,8 +87,215 @@ function SocialIcon({ platform }: { platform: string }) {
   }
 }
 
+function CommunityModal({ onClose }: { onClose: () => void }) {
+  const shouldReduceMotion = useReducedMotion();
+  const [firstName, setFirstName] = useState("");
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error" | "duplicate">("idle");
+  const [errorMsg, setErrorMsg] = useState("");
+  const emailRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    emailRef.current?.focus();
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = prev; };
+  }, []);
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") onClose();
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!email.trim()) return;
+    setStatus("loading");
+    try {
+      const res = await fetch("/api/community", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim(), firstName: firstName.trim() || undefined }),
+      });
+      if (res.status === 409) {
+        setStatus("duplicate");
+        return;
+      }
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setErrorMsg(data.error || "Something went wrong. Please try again.");
+        setStatus("error");
+        return;
+      }
+      setStatus("success");
+    } catch {
+      setErrorMsg("Network error. Please check your connection and try again.");
+      setStatus("error");
+    }
+  }
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Join the RÌNWÁ community"
+    >
+      {/* Backdrop */}
+      <motion.div
+        initial={shouldReduceMotion ? false : { opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.25 }}
+        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+        onClick={onClose}
+      />
+
+      {/* Modal card */}
+      <motion.div
+        initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.96, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.96, y: 16 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+        className="relative w-full max-w-md overflow-hidden rounded-[2rem] border border-white/10 bg-[#07171a] shadow-[0_32px_120px_rgba(0,0,0,0.5)]"
+      >
+        {/* Teal accent bar */}
+        <div className="h-[3px] bg-linear-to-r from-teal-300 via-teal-400/70 to-transparent" />
+
+        {/* Ambient glows */}
+        <div className="pointer-events-none absolute -top-16 -left-16 h-48 w-48 rounded-full bg-teal-300/10 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-16 -right-16 h-48 w-48 rounded-full bg-[#7dd3cf]/8 blur-3xl" />
+
+        {/* Close */}
+        <button
+          onClick={onClose}
+          className="absolute right-5 top-5 grid h-8 w-8 place-items-center rounded-full border border-white/10 bg-white/5 text-white/50 transition hover:bg-white/10 hover:text-white"
+          aria-label="Close"
+        >
+          <X size={15} />
+        </button>
+
+        <div className="relative p-8">
+          <AnimatePresence mode="wait">
+            {status === "success" ? (
+              <motion.div
+                key="success"
+                initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.35 }}
+                className="py-4 text-center"
+              >
+                <div className="mx-auto mb-5 grid h-16 w-16 place-items-center rounded-full border border-teal-300/30 bg-teal-300/10">
+                  <CheckCircle className="h-7 w-7 text-teal-300" />
+                </div>
+                <p className="text-[0.68rem] uppercase tracking-[0.32em] text-teal-200/70">You&apos;re in</p>
+                <h2 className="mt-3 font-serif text-3xl leading-tight tracking-tight text-white">
+                  You&apos;ve arrived.
+                </h2>
+                <p className="mt-3 text-sm leading-7 text-white/60">
+                  Welcome to the RÌNWÁ community. Check your inbox for a warm welcome from us.
+                </p>
+                <button
+                  onClick={onClose}
+                  className="mt-6 inline-flex items-center gap-2 rounded-full bg-teal-300 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-teal-200"
+                >
+                  Done
+                </button>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="form"
+                initial={shouldReduceMotion ? false : { opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <p className="text-[0.68rem] uppercase tracking-[0.32em] text-teal-200/70">Community invitation</p>
+                <h2 className="mt-3 font-serif text-[clamp(1.75rem,4vw,2.4rem)] leading-tight tracking-tight text-white">
+                  Join the community.
+                </h2>
+              
+
+                <form onSubmit={handleSubmit} className="mt-7 space-y-3" noValidate>
+                  <div>
+                    <label htmlFor="cm-firstname" className="mb-1.5 block text-[0.65rem] uppercase tracking-[0.22em] text-white/40">
+                      First name <span className="text-white/25">(optional)</span>
+                    </label>
+                    <input
+                      id="cm-firstname"
+                      type="text"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      placeholder="Your first name"
+                      autoComplete="given-name"
+                      disabled={status === "loading"}
+                      className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/25 outline-none transition focus:border-teal-300/40 focus:bg-white/8 focus:ring-1 focus:ring-teal-300/20 disabled:opacity-50"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="cm-email" className="mb-1.5 block text-[0.65rem] uppercase tracking-[0.22em] text-white/40">
+                      Email address
+                    </label>
+                    <input
+                      id="cm-email"
+                      ref={emailRef}
+                      type="email"
+                      value={email}
+                      onChange={(e) => { setEmail(e.target.value); if (status === "error" || status === "duplicate") setStatus("idle"); }}
+                      placeholder="you@example.com"
+                      autoComplete="email"
+                      required
+                      disabled={status === "loading"}
+                      className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/25 outline-none transition focus:border-teal-300/40 focus:bg-white/8 focus:ring-1 focus:ring-teal-300/20 disabled:opacity-50"
+                    />
+                  </div>
+
+                  {(status === "error" || status === "duplicate") && (
+                    <motion.p
+                      initial={{ opacity: 0, y: -4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="text-xs text-red-400/90"
+                    >
+                      {status === "duplicate"
+                        ? "This email is already part of the community."
+                        : errorMsg}
+                    </motion.p>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={status === "loading" || !email.trim()}
+                    className="mt-1 flex w-full items-center justify-center gap-2 rounded-xl bg-teal-300 py-3.5 text-sm font-semibold text-slate-950 transition hover:bg-teal-200 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {status === "loading" ? (
+                      <>
+                        <Loader2 size={15} className="animate-spin" />
+                        Joining…
+                      </>
+                    ) : (
+                      "Join the Community"
+                    )}
+                  </button>
+                </form>
+
+                
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
 export function SocialPresence() {
   const shouldReduceMotion = useReducedMotion();
+  const [modalOpen, setModalOpen] = useState(false);
 
   return (
     <section aria-labelledby="social-presence" className="px-5 py-24 sm:px-8 lg:px-12 lg:py-28">
@@ -129,7 +337,6 @@ export function SocialPresence() {
                   </div>
 
                   <div className="space-y-3">
-                    {/* <p className="text-xs uppercase tracking-[0.3em] text-white/46">Instagram reel</p> */}
                     <h3 className="max-w-md font-serif text-[clamp(2.35rem,4.5vw,4.35rem)] leading-[0.94] tracking-[-0.04em] text-white">
                       {featuredReel.title}
                     </h3>
@@ -141,7 +348,6 @@ export function SocialPresence() {
 
                 <div className="space-y-4">
                   <div className="flex flex-wrap gap-2 text-[0.68rem] uppercase tracking-[0.28em] text-white/48">
-                    {/* <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1">{featuredReel.handle}</span> */}
                     <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1">{featuredReel.audio}</span>
                   </div>
 
@@ -178,7 +384,7 @@ export function SocialPresence() {
                       </div>
                     </div>
 
-              
+
                   </div>
                 </div>
               </div>
@@ -229,17 +435,22 @@ export function SocialPresence() {
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-xs uppercase tracking-[0.32em] text-teal-100/70">Community invitation</p>
-              <p className="mt-2 text-lg text-white/82">Join the community for behind-the-scenes stories, event drops, and curated invites.</p>
+              <p className="mt-2 text-lg text-white/82">Join the community for behind-the-scenes stories, exclusive invites, and curated moments.</p>
             </div>
-            
-             <a href="#partnerships"
-              className="inline-flex rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950 transition duration-300 hover:bg-teal-200"
+
+            <button
+              onClick={() => setModalOpen(true)}
+              className="inline-flex shrink-0 rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950 transition duration-300 hover:bg-teal-200"
             >
-              Join the Community
-            </a>
+              Sign me up
+            </button>
           </div>
         </div>
       </div>
+
+      <AnimatePresence>
+        {modalOpen && <CommunityModal onClose={() => setModalOpen(false)} />}
+      </AnimatePresence>
     </section>
   );
 }

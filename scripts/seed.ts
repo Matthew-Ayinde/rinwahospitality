@@ -36,9 +36,15 @@ async function main() {
         role: 'admin' as const,
       },
       {
-        email: process.env.ADMIN_EMAIL || 'info@rinwahospitality.com',
-        password: process.env.ADMIN_PASSWORD || 'Admin@123',
+        email: 'info@rinwahospitality.com',
+        password: 'Admin@123',
         name: 'RÌNWÁ Hospitality Admin',
+        role: 'admin' as const,
+      },
+      {
+        email: 'it.matthewayinde@gmail.com',
+        password: 'Password#12',
+        name: 'Matthew Ayinde',
         role: 'admin' as const,
       },
     ];

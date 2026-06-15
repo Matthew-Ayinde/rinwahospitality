@@ -130,14 +130,14 @@ export function HeroCarousel() {
         </header>
 
         <div className="grid items-end gap-10 pb-8 lg:grid-cols-[1.2fr_0.8fr] lg:gap-8 lg:pb-12">
-          <div className="max-w-4xl">
+          <div className="max-w-7xl">
             <motion.p
               initial={shouldReduceMotion ? false : { opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.8, ease: "easeInOut" }}
               className="text-[0.72rem] uppercase tracking-[0.38em] text-teal-100/75"
             >
-              Ready to begin your reconnection journey?
+              Global Standards. Regional Roots. Zero Guesswork.
             </motion.p>
 
             <motion.h1
@@ -148,8 +148,8 @@ export function HeroCarousel() {
             >
               RÌNWÁ
               <span className="block text-[0.42em] font-sans font-normal tracking-[0.12em] text-teal-100/90 sm:text-[0.25em]">
-                A luxury diaspora concierge & experiential hospitality house.
-              </span>
+               Your cross-continental authority in ecosystem matchmaking & intelligent experiential design
+                  </span>
             </motion.h1>
 
             <motion.p
@@ -160,8 +160,8 @@ export function HeroCarousel() {
             >
               {/* {activeSlide.headline} */}
 
-              We have built a reputation of designing trusted environments across the Canada-Nigerian markets that influence audiences to come, engage, spend more, stay longer, share freely, leave, or return intentionally .
-            </motion.p>
+              With a decade of industry experience, we have built a proven track record of designing trusted environments across the Canada-Nigeria corridor. We engineer premium physical and digital touchpoints that influence global audiences to come, engage, stay longer, share freely, and return intentionally.
+                     </motion.p>
 
             <motion.p
               initial={shouldReduceMotion ? false : { opacity: 0, y: 18 }}
@@ -179,20 +179,20 @@ export function HeroCarousel() {
               className="mt-10 flex flex-wrap gap-3"
             >
               <button
-                onClick={() => window.document.getElementById("experiences")?.scrollIntoView({ behavior: "smooth" })}
+                onClick={() => window.document.getElementById("past-events")?.scrollIntoView({ behavior: "smooth" })}
                 className="rounded-full bg-teal-300 px-6 py-3 text-sm font-semibold text-slate-950 transition duration-300 hover:bg-teal-200 hover:shadow-[0_0_30px_rgba(125,211,207,0.18)]"
               >
-                Enter Flow State
+                Our Portfolio
               </button>
               <button
-                onClick={() => window.document.getElementById("partnerships")?.scrollIntoView({ behavior: "smooth" })}
+                onClick={() => window.document.getElementById("services")?.scrollIntoView({ behavior: "smooth" })}
                 className="rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-medium text-white/85 backdrop-blur-sm transition duration-300 hover:border-teal-300/40 hover:bg-white/10 hover:text-white"
               >
-                Partner With Us
+                Our Services
               </button>
             </motion.div>
           </div>
-
+{/* 
           <motion.aside
             initial={shouldReduceMotion ? false : { opacity: 0, y: 22 }}
             animate={{ opacity: 1, y: 0 }}
@@ -209,7 +209,7 @@ export function HeroCarousel() {
               <p>2. Breathe out</p>
               <p>3. Come in</p>
             </div>
-          </motion.aside>
+          </motion.aside> */}
         </div>
 
         <div className="flex items-center justify-between gap-4 pb-2">

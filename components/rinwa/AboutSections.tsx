@@ -2,12 +2,27 @@
 
 import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
+import { MapPin } from "lucide-react";
 
-const whoWeServe = [
-  "Step into new cultural markets with absolute authenticity.",
-  "Cultivate deep, trusted, and lasting local relationships.",
-  "Design high-impact, multi-sensory experiences that people emotionally resonate with.",
-  "Navigate community networks, nonprofits, and government stakeholders with total ease.",
+const pillars = [
+  {
+    title: "The Cross-Continental Bridge",
+    subtitle:
+      "For the ambitious founders, global brands and institutions, navigating the corridor between North America and Africa",
+    body: "We partner with you to provide the precise cultural intelligence, market insights, and local compliance needed for a foreign brand to transition into the Nigerian or Canadian business ecosystem. We ensure your brand or business integrates seamlessly without losing its premium identity or commercial impact.",
+  },
+  {
+    title: "Strategic Presence",
+    subtitle:
+      "For those who dredge the exhausting trial-and-error of networking",
+    body: "We show up as your trusted, high-credibility face on the ground. When executive teams are physically absent, overwhelmed, or managing operations from across the globe, RÌNWÁ steps in as the premier local delegate, ensuring your brand's interests are represented and executed with uncompromised organizational excellence.",
+  },
+  {
+    title: "Human-Centered Architecture",
+    subtitle:
+      "For those who value excellence and refuse to settle for traditional, uninspired experiences",
+    body: null,
+  },
 ];
 
 export default function AboutSections() {
@@ -36,9 +51,28 @@ export default function AboutSections() {
               — means &ldquo;to come, to arrive&rdquo;
             </span>
           </div>
-          <h2 className="mt-5 font-serif text-[clamp(2.6rem,6vw,4.8rem)] leading-[0.92] tracking-[-0.05em] text-white">
-            Your cultural bridge<br className="hidden sm:block" /> across the diaspora.
-          </h2>
+          <div className="mt-5 flex items-end justify-between gap-x-8 gap-y-4">
+            <h2 className="font-serif text-[clamp(2.6rem,6vw,4.8rem)] leading-[0.92] tracking-[-0.05em] text-white">
+              Your cultural bridge<br className="hidden sm:block" /> across the diaspora.
+            </h2>
+            <div className="mb-1 hidden sm:flex items-center gap-5">
+              {["Ottawa", "Toronto", "Lagos"].map((city, i) => (
+                <div key={city} className="flex items-center gap-5">
+                  {i > 0 && <span className="h-4 w-px bg-white/10" />}
+                  <div className="flex items-center gap-1.5 group">
+                    <MapPin
+                      size={13}
+                      className="text-teal-400/80 drop-shadow-[0_0_6px_rgba(94,234,212,0.6)]"
+                      strokeWidth={2.2}
+                    />
+                    <span className="text-[0.72rem] uppercase tracking-[0.22em] text-white/55">
+                      {city}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Two‑column body */}
@@ -69,19 +103,13 @@ export default function AboutSections() {
               </p>
             </div>
 
-            <div className="mt-8 flex flex-wrap items-center gap-3">
+            <div className="mt-8">
               <a
                 href="#contact"
                 className="inline-block rounded-full bg-teal-400 px-6 py-3 text-sm font-semibold text-black transition-opacity hover:opacity-90"
               >
                 Let&apos;s Connect
               </a>
-              <div className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/4 px-5 py-3">
-                <span className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-teal-300" />
-                <span className="text-[0.67rem] uppercase tracking-[0.28em] text-white/50">
-                  Ottawa · Toronto · Lagos
-                </span>
-              </div>
             </div>
           </div>
 
@@ -92,28 +120,59 @@ export default function AboutSections() {
             viewport={{ once: true, amount: 0.25 }}
             transition={{ duration: 0.75, ease: "easeOut" }}
           >
-            <div className="rounded-[2.25rem] border border-white/10 bg-[#041114]/50 p-8 shadow-[0_20px_60px_rgba(0,0,0,0.38)]">
+            <div className="rounded-[2.25rem] border border-white/10 bg-[#041114]/50 p-8 shadow-[0_20px_60px_rgba(0,0,0,0.38)] max-h-135 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
               <p className="text-[0.72rem] uppercase tracking-[0.38em] text-teal-200/75">
                 Who We Are
               </p>
               <p className="mt-4 font-serif text-[clamp(1.25rem,2.4vw,1.65rem)] leading-[1.22] tracking-[-0.02em] text-white">
-                Visionary founders, global brands, and institutions to:
+                Visionary founders, global brands, and institutions.
               </p>
 
-              <div className="mt-6 space-y-3">
-                {whoWeServe.map((item, i) => (
+              <p className="mt-7 text-[0.72rem] uppercase tracking-[0.38em] text-teal-200/75">
+                Our Pillars
+              </p>
+
+              <div className="mt-4 space-y-0 divide-y divide-white/8">
+                {pillars.map((pillar, i) => (
                   <motion.div
                     key={i}
                     initial={shouldReduceMotion ? false : { opacity: 0, x: 14 }}
                     whileInView={shouldReduceMotion ? undefined : { opacity: 1, x: 0 }}
-                    viewport={{ once: true, amount: 0.5 }}
-                    transition={{ duration: 0.5, ease: "easeOut", delay: i * 0.09 }}
-                    className="flex items-start gap-4 rounded-[1.35rem] border border-white/8 bg-white/3 px-4 py-3.5"
+                    viewport={{ once: true, amount: 0.3 }}
+                    transition={{ duration: 0.5, ease: "easeOut", delay: i * 0.11 }}
+                    className="py-5 first:pt-3"
                   >
-                    <span className="mt-[3px] flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full border border-teal-300/30 bg-teal-300/10">
-                      <span className="h-1.5 w-1.5 rounded-full bg-teal-300" />
-                    </span>
-                    <p className="text-sm leading-6 text-white/68">{item}</p>
+                    <div className="flex items-start gap-3">
+                      <span className="mt-1.25 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-teal-300/30 bg-teal-300/10">
+                        <span className="text-[0.6rem] font-semibold text-teal-300">{i + 1}</span>
+                      </span>
+                      <div>
+                        <p className="text-sm font-semibold leading-snug text-white">
+                          {pillar.title}
+                        </p>
+                        <p className="mt-1 text-[0.72rem] italic leading-relaxed text-teal-200/60">
+                          {pillar.subtitle}
+                        </p>
+                        <p className="mt-2 text-xs leading-[1.75] text-white/55">
+                          {i === 2 ? (
+                            <>
+                              Leveraging years of proven premium execution building{" "}
+                              <a
+                                href="https://thebadestevents.com/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="underline underline-offset-2 text-teal-300/80 hover:text-teal-300 transition-colors"
+                              >
+                                The Badést Events
+                              </a>
+                              , we specialize in strategic experience design for intimate events to large-scale productions. We don&apos;t just plan, manage or host high-profile events; we use consumer psychology and sensory curation to engineer environments that move people to show up, stay engaged, and create lasting cultural equity that outlive the final curtain call.
+                            </>
+                          ) : (
+                            pillar.body
+                          )}
+                        </p>
+                      </div>
+                    </div>
                   </motion.div>
                 ))}
               </div>

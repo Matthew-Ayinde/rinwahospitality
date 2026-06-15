@@ -677,6 +677,276 @@ export async function sendQuestionnaireEmails({
   return { sent: !adminFailed && !userResult.error, warnings };
 }
 
+// ─── Community Emails ──────────────────────────────────────────────────────────
+
+type CommunityEmailPayload = {
+  email: string;
+  firstName?: string;
+  adminEmails: string[];
+};
+
+function buildCommunityWelcomeHtml(email: string, firstName?: string) {
+  const name = firstName ? escapeHtml(firstName) : 'friend';
+  return `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Welcome to the RÌNWÁ Community</title></head>
+<body style="margin:0;padding:0;background:#041114;font-family:Arial,Helvetica,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#041114;padding:40px 16px;">
+    <tr><td align="center">
+      <table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;">
+
+        <!-- Header -->
+        <tr><td style="text-align:center;padding-bottom:36px;">
+          <table align="center" cellpadding="0" cellspacing="0">
+            <tr>
+              <td style="vertical-align:middle;padding-right:20px;">
+                <img src="https://res.cloudinary.com/matthew-ayinde/image/upload/v1780311622/rinwa-logo_cekwvh.png" alt="RÌNWÁ" width="80" height="80" style="display:block;" />
+              </td>
+              <td style="vertical-align:middle;border-left:1px solid rgba(125,211,207,0.25);padding-left:20px;text-align:left;">
+                <div style="font-family:Georgia,'Times New Roman',serif;font-size:30px;letter-spacing:0.14em;color:#f5f0e8;line-height:1;">RÌNWÁ</div>
+                <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.38em;color:#8fa8a5;margin-top:6px;">Hospitality</div>
+              </td>
+            </tr>
+          </table>
+        </td></tr>
+
+        <!-- Main card -->
+        <tr><td style="background:#07171a;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden;">
+          <table width="100%" cellpadding="0" cellspacing="0">
+
+            <!-- Top accent bar -->
+            <tr><td style="height:3px;background:linear-gradient(90deg,#7dd3cf,#4db6b0 50%,transparent);"></td></tr>
+
+            <!-- Greeting -->
+            <tr><td style="padding:36px 32px 28px;">
+              <p style="margin:0 0 10px;font-size:11px;text-transform:uppercase;letter-spacing:0.30em;color:#7dd3cf;">Community confirmed</p>
+              <h1 style="margin:0 0 16px;font-family:Georgia,'Times New Roman',serif;font-size:28px;line-height:1.15;color:#f5f0e8;font-weight:normal;">
+                Welcome home, ${name}.<br>
+                <span style="color:#8fa8a5;font-size:20px;">You've joined the community.</span>
+              </h1>
+              <p style="margin:0;font-size:15px;line-height:1.75;color:#a0bcba;">
+                You're now part of the RÌNWÁ inner circle — a community of people who appreciate culture, hospitality, and the art of arrival.
+              </p>
+            </td></tr>
+
+            <!-- Divider -->
+            <tr><td style="padding:0 32px;"><hr style="border:none;border-top:1px solid rgba(255,255,255,0.07);margin:0;"></td></tr>
+
+            <!-- What to expect -->
+            <tr><td style="padding:28px 32px;">
+              <p style="margin:0 0 20px;font-size:11px;text-transform:uppercase;letter-spacing:0.26em;color:#7dd3cf;">What to expect</p>
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr><td style="padding:0 0 18px;">
+                  <table cellpadding="0" cellspacing="0"><tr>
+                    <td style="width:32px;vertical-align:top;padding-top:2px;">
+                      <div style="width:26px;height:26px;border-radius:50%;background:#0d2a2e;border:1px solid #7dd3cf;text-align:center;line-height:24px;font-size:11px;font-weight:700;color:#7dd3cf;">1</div>
+                    </td>
+                    <td style="padding-left:14px;vertical-align:top;">
+                      <p style="margin:0 0 3px;font-size:13px;font-weight:700;color:#f5f0e8;">Behind-the-scenes stories</p>
+                      <p style="margin:0;font-size:13px;color:#8fa8a5;line-height:1.6;">Exclusive glimpses into events, spaces, and moments before they go public.</p>
+                    </td>
+                  </tr></table>
+                </td></tr>
+                <tr><td style="padding:0 0 18px;">
+                  <table cellpadding="0" cellspacing="0"><tr>
+                    <td style="width:32px;vertical-align:top;padding-top:2px;">
+                      <div style="width:26px;height:26px;border-radius:50%;background:#0d2a2e;border:1px solid #7dd3cf;text-align:center;line-height:24px;font-size:11px;font-weight:700;color:#7dd3cf;">2</div>
+                    </td>
+                    <td style="padding-left:14px;vertical-align:top;">
+                      <p style="margin:0 0 3px;font-size:13px;font-weight:700;color:#f5f0e8;">Exclusive invites &amp; curated moments</p>
+                      <p style="margin:0;font-size:13px;color:#8fa8a5;line-height:1.6;">First access to RÌNWÁ events, pop-ups, and experiences across Lagos and beyond.</p>
+                    </td>
+                  </tr></table>
+                </td></tr>
+                <tr><td>
+                  <table cellpadding="0" cellspacing="0"><tr>
+                    <td style="width:32px;vertical-align:top;padding-top:2px;">
+                      <div style="width:26px;height:26px;border-radius:50%;background:#0d2a2e;border:1px solid #7dd3cf;text-align:center;line-height:24px;font-size:11px;font-weight:700;color:#7dd3cf;">3</div>
+                    </td>
+                    <td style="padding-left:14px;vertical-align:top;">
+                      <p style="margin:0 0 3px;font-size:13px;font-weight:700;color:#f5f0e8;">Curated moments &amp; narratives</p>
+                      <p style="margin:0;font-size:13px;color:#8fa8a5;line-height:1.6;">Stories of culture, diaspora, and belonging — told the RÌNWÁ way.</p>
+                    </td>
+                  </tr></table>
+                </td></tr>
+              </table>
+            </td></tr>
+
+            <!-- Divider -->
+            <tr><td style="padding:0 32px;"><hr style="border:none;border-top:1px solid rgba(255,255,255,0.07);margin:0;"></td></tr>
+
+            <!-- Sign-off -->
+            <tr><td style="padding:28px 32px 36px;text-align:center;">
+              <p style="margin:0 0 6px;font-size:14px;color:#8fa8a5;">With warmth,</p>
+              <p style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:20px;color:#f5f0e8;letter-spacing:0.08em;">The RÌNWÁ Team</p>
+              <p style="margin:10px 0 0;font-size:12px;color:#3d5a58;font-style:italic;">Come here, you've arrived home.</p>
+            </td></tr>
+
+          </table>
+        </td></tr>
+
+        <!-- Footer -->
+        <tr><td style="padding:24px 0 0;text-align:center;">
+          <p style="margin:0 0 6px;font-size:11px;color:#3d5a58;">You received this because you joined the RÌNWÁ community at ${escapeHtml(email)}.</p>
+          <p style="margin:0;font-size:11px;color:#2a3f3e;">RÌNWÁ Hospitality &nbsp;·&nbsp; Lagos, Nigeria</p>
+        </td></tr>
+
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`;
+}
+
+function buildCommunityAdminHtml(email: string, firstName?: string) {
+  const joinedAt = new Date().toLocaleString('en-GB', {
+    day: 'numeric', month: 'long', year: 'numeric',
+    hour: '2-digit', minute: '2-digit', timeZoneName: 'short',
+  });
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>New Community Member</title></head>
+<body style="margin:0;padding:0;background:#041114;font-family:Arial,Helvetica,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#041114;padding:40px 16px;">
+    <tr><td align="center">
+      <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;">
+
+        <!-- Header -->
+        <tr><td style="padding-bottom:28px;">
+          <table width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+              <td style="vertical-align:middle;">
+                <table cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td style="vertical-align:middle;padding-right:18px;">
+                      <img src="https://res.cloudinary.com/matthew-ayinde/image/upload/v1780311622/rinwa-logo_cekwvh.png" alt="RÌNWÁ" width="72" height="72" style="display:block;" />
+                    </td>
+                    <td style="vertical-align:middle;border-left:1px solid rgba(125,211,207,0.25);padding-left:18px;">
+                      <div style="font-family:Georgia,'Times New Roman',serif;font-size:26px;letter-spacing:0.14em;color:#f5f0e8;line-height:1;">RÌNWÁ</div>
+                      <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.34em;color:#8fa8a5;margin-top:5px;">Hospitality</div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+              <td align="right" style="vertical-align:middle;">
+                <span style="display:inline-block;background:#7dd3cf;color:#041114;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.24em;padding:5px 12px;border-radius:100px;">New Member</span>
+              </td>
+            </tr>
+          </table>
+        </td></tr>
+
+        <!-- Card -->
+        <tr><td style="background:#07171a;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden;">
+          <table width="100%" cellpadding="0" cellspacing="0">
+
+            <tr><td style="padding:28px 32px 20px;">
+              <p style="margin:0 0 8px;font-size:11px;text-transform:uppercase;letter-spacing:0.28em;color:#7dd3cf;">Community member joined</p>
+              <h1 style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:24px;line-height:1.2;color:#f5f0e8;font-weight:normal;">
+                ${firstName ? escapeHtml(firstName) : 'New subscriber'}<br>
+                <span style="color:#8fa8a5;font-size:16px;">${escapeHtml(email)}</span>
+              </h1>
+            </td></tr>
+
+            <tr><td style="padding:0 32px;"><hr style="border:none;border-top:1px solid rgba(255,255,255,0.07);margin:0;"></td></tr>
+
+            <tr><td style="padding:8px 16px 8px;">
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="padding:12px 16px;width:38%;vertical-align:top;font-size:11px;text-transform:uppercase;letter-spacing:0.18em;color:#8fa8a5;border-bottom:1px solid rgba(255,255,255,0.05);">Email</td>
+                  <td style="padding:12px 16px;vertical-align:top;font-size:14px;color:#e8f0ef;line-height:1.6;border-bottom:1px solid rgba(255,255,255,0.05);">
+                    <a href="mailto:${escapeHtml(email)}" style="color:#7dd3cf;text-decoration:none;">${escapeHtml(email)}</a>
+                  </td>
+                </tr>
+                ${firstName ? `<tr>
+                  <td style="padding:12px 16px;width:38%;vertical-align:top;font-size:11px;text-transform:uppercase;letter-spacing:0.18em;color:#8fa8a5;border-bottom:1px solid rgba(255,255,255,0.05);">First Name</td>
+                  <td style="padding:12px 16px;vertical-align:top;font-size:14px;color:#e8f0ef;line-height:1.6;border-bottom:1px solid rgba(255,255,255,0.05);">${escapeHtml(firstName)}</td>
+                </tr>` : ''}
+                <tr>
+                  <td style="padding:12px 16px;width:38%;vertical-align:top;font-size:11px;text-transform:uppercase;letter-spacing:0.18em;color:#8fa8a5;">Joined</td>
+                  <td style="padding:12px 16px;vertical-align:top;font-size:14px;color:#e8f0ef;line-height:1.6;">${joinedAt}</td>
+                </tr>
+              </table>
+            </td></tr>
+
+            <tr><td style="padding:20px 32px 28px;text-align:center;">
+              <a href="mailto:${escapeHtml(email)}"
+                 style="display:inline-block;background:#7dd3cf;color:#041114;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.18em;text-decoration:none;padding:12px 28px;border-radius:100px;">
+                Send a note
+              </a>
+            </td></tr>
+
+          </table>
+        </td></tr>
+
+        <!-- Footer -->
+        <tr><td style="padding:20px 0 0;text-align:center;">
+          <p style="margin:0;font-size:11px;color:#3d5a58;letter-spacing:0.1em;">
+            RÌNWÁ Hospitality &nbsp;·&nbsp; Internal notification &nbsp;·&nbsp; Do not forward
+          </p>
+        </td></tr>
+
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`;
+}
+
+export async function sendCommunityEmails({
+  email,
+  firstName,
+  adminEmails,
+}: CommunityEmailPayload): Promise<EmailResult> {
+  const resend = getResend();
+  const warnings: string[] = [];
+
+  if (!resend) {
+    warnings.push('RESEND_API_KEY is not configured');
+    return { sent: false, warnings };
+  }
+
+  const from = process.env.RESEND_FROM || `RÌNWÁ Hospitality <no-reply@rinwahospitality.com>`;
+
+  const userResult = await resend.emails.send({
+    from,
+    to: [email],
+    subject: "You've arrived — Welcome to the RÌNWÁ community",
+    text: `Welcome to the RÌNWÁ community${firstName ? `, ${firstName}` : ''}! You'll receive behind-the-scenes stories, exclusive invites, and curated moments.`,
+    html: buildCommunityWelcomeHtml(email, firstName),
+  });
+
+  if (userResult.error) {
+    console.error('Failed to send community welcome email:', userResult.error);
+    warnings.push('Failed to send welcome email');
+  }
+
+  const adminResults = await Promise.all(
+    adminEmails.map((to) =>
+      resend.emails.send({
+        from,
+        to: [to],
+        replyTo: email,
+        subject: `[Community] New member — ${firstName ? `${firstName} · ` : ''}${email}`,
+        text: `New community member: ${firstName || 'Anonymous'} (${email})`,
+        html: buildCommunityAdminHtml(email, firstName),
+      })
+    )
+  );
+
+  adminResults.forEach((result, i) => {
+    if (result.error) {
+      console.error(`Admin community email failed for ${adminEmails[i]}:`, result.error);
+      warnings.push(`Failed to send admin notification to ${adminEmails[i]}`);
+    }
+  });
+
+  const adminFailed = adminResults.some((r) => r.error);
+  return { sent: !adminFailed && !userResult.error, warnings };
+}
+
+// ─── Generic Email ─────────────────────────────────────────────────────────────
+
 type GenericEmailPayload = {
   to: string;
   subject: string;

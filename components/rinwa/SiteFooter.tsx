@@ -8,7 +8,7 @@ export function SiteFooter() {
         <div>
           <Link href={'/admin'}>Admin</Link>
         </div>
-        <p>Hospitality, storytelling, and curated moments.</p>
+        <p>Premium hospitality, brand storytelling, and curated moments</p>
       </div>
     </footer>
   );

@@ -5,48 +5,44 @@ import { motion, useReducedMotion } from "framer-motion";
 const services = [
   {
     number: "01",
-    category: "Cultural Experiences",
-    title: "Cultural Immersive Curation & Production",
+    category: "Market Entry",
+    title: "Ecosystem Integration",
     whatWeDo:
-      "Curate custom luxury itineraries, private VIP dinners, international trade delegations, and experiential brand pop-ups.",
+      "We partner with international institutions looking to anchor themselves in the Nigerian or Canadian market. We audit your brand's readiness for the local landscape, navigate regulatory hurdles, and deploy deep regional insights to ensure a seamless integration.",
     whatYouGet:
-      "You bypass the friction and trial-and-error of navigating a new city, saving invaluable time while accessing the ecosystem at its highest echelon.",
+      "The market-entry blueprint. You gain the precise cultural know-how to scale your brand or launch a global production in a new city without facing operational friction, legal blindspots, or cultural missteps.",
+    centered: false,
   },
   {
     number: "02",
-    category: "Market Entry",
-    title: "Market Entry & Ecosystem Access",
+    category: "Social Capital",
+    title: "Corporate & Social Access",
     whatWeDo:
-      "Execute market immersion strategies, map key cross-border partnerships, facilitate warm stakeholder introductions, and guide you through corporate, nonprofit, and institutional sectors.",
+      "We serve as your high-credibility proxy and local gateway. We bridge the doors to the rooms that matter for your brand's success.",
     whatYouGet:
-      "Flawless, culturally intelligent integration into local markets, completely insulated from cultural missteps.",
+      "Direct access to key decision makers. By leveraging our vetted network and handling stakeholder alignment for you, we secure the trusted regional partnerships needed to run smooth, flawless productions while you stay focused on your vision.",
+    centered: false,
   },
   {
     number: "03",
-    category: "PR & Media",
-    title: "Strategic PR, Media & Brand Positioning",
+    category: "Cultural Experiences",
+    title: "Experiential Design",
     whatWeDo:
-      "Secure high-impact features across top-tier African media houses and digital platforms, arrange strategic podcast appearances, produce exclusive press launches, and direct narrative strategies.",
+      "Leveraging the foundation of The Badést Events, we design high-touch experiences, executive travel itineraries, and world-class brand activations. We strategically weave local flavor with international luxury standards using audience psychology.",
     whatYouGet:
-      "Immediate authority, institutional trust, and undeniable thought leadership from day one.",
-  },
-  {
-    number: "04",
-    category: "Networking",
-    title: "Relationship Capital & High-Net-Worth Networking",
-    whatWeDo:
-      "Facilitate exclusive, warm introductions to local founders, creators, tastemakers, and institutional gatekeepers through intentionally designed, closed-door conversation spaces.",
-    whatYouGet:
-      "Instant placement at the tables that matter, rapidly accelerating your brand equity.",
+      "Emotionally rich and high-converting environments intentionally built to captivate stakeholders, talent, and attendees alike. Your activations transition from traditional events into unforgettable, secure, and culturally resonant experiences that build absolute institutional trust.",
+    centered: true,
   },
 ];
 
 const pillars = [
-  "Insight",
-  "Access",
-  "Relationship Capital",
-  "Positioning",
+  "Social Capital",
+  "Local Intelligence",
+  "Brand Positioning",
   "Cultural Fluency",
+  "Cross-Border Expansion",
+  "Premium Hospitality",
+  "Diaspora Engagement",
 ];
 
 export function ServicesSection() {
@@ -68,7 +64,7 @@ export function ServicesSection() {
           </div>
 
           {/* Pillars */}
-          <div className="flex flex-wrap gap-2 lg:max-w-xs lg:justify-end">
+          <div className="flex flex-wrap gap-2 lg:max-w-xl lg:justify-end">
             {pillars.map((pillar) => (
               <span
                 key={pillar}
@@ -80,8 +76,8 @@ export function ServicesSection() {
           </div>
         </div>
 
-        {/* 2×2 service grid */}
-        <div className="grid gap-5 sm:grid-cols-2 lg:gap-6">
+        {/* Service grid — 01 & 02 side by side, 03 centred below */}
+        <div className="grid gap-5 sm:grid-cols-4 lg:gap-6">
           {services.map((service, i) => (
             <motion.div
               key={service.number}
@@ -89,7 +85,12 @@ export function ServicesSection() {
               whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.18 }}
               transition={{ duration: 0.65, ease: "easeOut", delay: i * 0.1 }}
-              className="flex flex-col rounded-[2.25rem] border border-white/10 bg-[#041114]/50 p-8 shadow-[0_20px_60px_rgba(0,0,0,0.38)]"
+              className={[
+                "flex flex-col rounded-[2.25rem] border border-white/10 bg-[#041114]/50 p-8 shadow-[0_20px_60px_rgba(0,0,0,0.38)]",
+                service.centered
+                  ? "sm:col-span-2 sm:col-start-2"
+                  : "sm:col-span-2",
+              ].join(" ")}
             >
               {/* Card header */}
               <div className="mb-5 flex items-start justify-between gap-3">

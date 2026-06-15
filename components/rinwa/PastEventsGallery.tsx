@@ -92,7 +92,7 @@ export function PastEventsGallery() {
 
   
   return (
-    <section className="px-5 py-24 sm:px-8 lg:px-12 lg:py-28">
+    <section id="past-events" className="px-5 py-24 sm:px-8 lg:px-12 lg:py-28">
       <div className="mx-auto max-w-7xl">
         <div className="max-w-2xl">
           <p className="text-[0.72rem] uppercase tracking-[0.38em] text-teal-200/75">Past events</p>
