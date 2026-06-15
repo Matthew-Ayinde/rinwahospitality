@@ -20,12 +20,28 @@ export function OurStorySection() {
           <p className="text-[0.72rem] uppercase tracking-[0.38em] text-teal-200/75">
             Our Story
           </p>
-          <h2 className="mt-5 font-serif text-[clamp(2.6rem,7vw,5.5rem)] leading-[0.9] tracking-[-0.055em] text-white">
-            14 Years Away.{" "}
-            <span className="text-white/45">3 Months.</span>
-            <br />
-            1 Reconnection.
-          </h2>
+          <div className="max-w-2xl">
+  {/* Milestone stats */}
+            <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+              {milestones.map((m, i) => (
+                <motion.div
+                  key={m.label}
+                  initial={shouldReduceMotion ? false : { opacity: 0, y: 18 }}
+                  whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.5 }}
+                  transition={{ duration: 0.6, ease: "easeOut", delay: i * 0.1 }}
+                  className="rounded-[1.6rem] border border-white/10 bg-[#041114]/50 p-5 text-center"
+                >
+                  <p className="font-serif text-[clamp(2rem,4.5vw,3rem)] leading-none tracking-[-0.04em] text-teal-300">
+                    {m.number}
+                  </p>
+                  <p className="mt-2.5 text-[0.63rem] uppercase tracking-[0.22em] text-white/42">
+                    {m.label}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Main two‑column layout */}
@@ -64,26 +80,7 @@ export function OurStorySection() {
               </p>
             </div>
 
-            {/* Milestone stats */}
-            <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-4">
-              {milestones.map((m, i) => (
-                <motion.div
-                  key={m.label}
-                  initial={shouldReduceMotion ? false : { opacity: 0, y: 18 }}
-                  whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.5 }}
-                  transition={{ duration: 0.6, ease: "easeOut", delay: i * 0.1 }}
-                  className="rounded-[1.6rem] border border-white/10 bg-[#041114]/50 p-5 text-center"
-                >
-                  <p className="font-serif text-[clamp(2rem,4.5vw,3rem)] leading-none tracking-[-0.04em] text-teal-300">
-                    {m.number}
-                  </p>
-                  <p className="mt-2.5 text-[0.63rem] uppercase tracking-[0.22em] text-white/42">
-                    {m.label}
-                  </p>
-                </motion.div>
-              ))}
-            </div>
+          
           </div>
 
           {/* Right — feature cards */}

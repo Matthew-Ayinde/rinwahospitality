@@ -79,7 +79,7 @@ export default function Page() {
       <FeaturedEventCarousel />
       <PastEventsGallery />
       <TestimonialsSection />
-      <CulturalBridgeCTA />
+      {/* <CulturalBridgeCTA /> */}
       <JoinTeamSection />
       {/* <MediaGallery /> */}
        <ContactForm />

@@ -94,7 +94,7 @@ export default function AboutSections() {
           >
             <div className="rounded-[2.25rem] border border-white/10 bg-[#041114]/50 p-8 shadow-[0_20px_60px_rgba(0,0,0,0.38)]">
               <p className="text-[0.72rem] uppercase tracking-[0.38em] text-teal-200/75">
-                Who We Empower
+                Who We Are
               </p>
               <p className="mt-4 font-serif text-[clamp(1.25rem,2.4vw,1.65rem)] leading-[1.22] tracking-[-0.02em] text-white">
                 Visionary founders, global brands, and institutions to:
