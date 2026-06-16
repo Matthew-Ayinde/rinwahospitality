@@ -185,40 +185,42 @@ export function SocialPresence() {
             </div>
           </motion.a>
 
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1 xl:gap-6">
+          <div className="flex h-full flex-col gap-3">
             {platforms.map((platform, index) => (
               <motion.article
                 key={platform.name}
-                initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
-                whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.6, delay: index * 0.06, ease: "easeOut" }}
-                whileHover={shouldReduceMotion ? undefined : { y: -4 }}
-                className="group relative overflow-hidden rounded-4xl border border-white/10 bg-white/4"
+                initial={shouldReduceMotion ? false : { opacity: 0, x: 16 }}
+                whileInView={shouldReduceMotion ? undefined : { opacity: 1, x: 0 }}
+                viewport={{ once: true, amount: 0.4 }}
+                transition={{ duration: 0.5, delay: index * 0.07, ease: "easeOut" }}
+                className="group relative flex flex-1 overflow-hidden rounded-2xl border border-white/10 bg-white/4"
               >
                 <div className={`absolute inset-0 bg-linear-to-br ${platform.gradient} opacity-90 transition duration-500 group-hover:opacity-100`} />
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(125,211,207,0.16),transparent_35%)]" />
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_left,rgba(125,211,207,0.10),transparent_50%)]" />
 
-                <div className="relative flex h-full min-h-64 flex-col justify-between p-5">
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex items-center gap-3">
-                      <div className="grid h-11 w-11 place-items-center rounded-full border border-white/10 bg-black/20">
-                        <SocialIcon platform={platform.name} />
-                      </div>
-                      <div>
-                        <p className="text-sm text-white/65">{platform.handle}</p>
-                      </div>
-                    </div>
+                <div className="relative flex w-full items-center gap-4 px-5 py-4">
+                  <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/10 bg-black/20">
+                    <SocialIcon platform={platform.name} />
                   </div>
 
-                  <div className="mt-8 space-y-5">
-                    <p className="max-w-xs text-sm leading-7 text-white/72">{platform.preview}</p>
-                    <div className="flex flex-wrap gap-2">
-                      <Link href={platform.link} target="_blank" rel="noreferrer" className="rounded-full cursor-pointer bg-teal-300 px-4 py-2 text-sm font-semibold text-slate-950 transition duration-300 hover:bg-teal-200">
-                        View profile
-                      </Link>
-                    </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-medium text-white/90">{platform.name}</p>
+                    <p className="text-xs text-white/50">{platform.handle}</p>
                   </div>
+
+                  <div className="shrink-0 text-right">
+                    <p className="text-base font-semibold text-teal-200">{platform.followers}</p>
+                    <p className="text-[0.65rem] uppercase tracking-[0.2em] text-white/40">followers</p>
+                  </div>
+
+                  <Link
+                    href={platform.link}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="ml-2 shrink-0 rounded-full border border-white/14 bg-white/8 px-3.5 py-1.5 text-xs font-semibold text-white/80 transition duration-300 hover:bg-teal-300 hover:text-slate-950 hover:border-teal-300"
+                  >
+                    {platform.cta}
+                  </Link>
                 </div>
               </motion.article>
             ))}
