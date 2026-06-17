@@ -67,7 +67,7 @@ function buildAdminEmailHtml(submission: InquiryEmailPayload['submission']) {
 
   return `<!DOCTYPE html>
 <html lang="en">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>New Inquiry</title></head>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Client Discovery Brief</title></head>
 <body style="margin:0;padding:0;background:#041114;font-family:Arial,Helvetica,sans-serif;">
   <table width="100%" cellpadding="0" cellspacing="0" style="background:#041114;padding:40px 16px;">
     <tr><td align="center">
@@ -91,7 +91,7 @@ function buildAdminEmailHtml(submission: InquiryEmailPayload['submission']) {
                 </table>
               </td>
               <td align="right" style="vertical-align:middle;">
-                <span style="display:inline-block;background:#7dd3cf;color:#041114;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.24em;padding:5px 12px;border-radius:100px;">New Inquiry</span>
+                <span style="display:inline-block;background:#7dd3cf;color:#041114;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.24em;padding:5px 12px;border-radius:100px;">Client Discovery Brief</span>
               </td>
             </tr>
           </table>
@@ -299,7 +299,7 @@ export async function sendInquiryEmails({ submission, adminEmails }: InquiryEmai
   const adminPayload = {
     from,
     replyTo: submission.email,
-    subject: `[New Inquiry] ${submission.fullName} — ${submission.company}`,
+    subject: `[Client Discovery Brief] ${submission.fullName} — ${submission.company}`,
     text: [
       `Name: ${submission.fullName}`,
       `Email: ${submission.email}`,
