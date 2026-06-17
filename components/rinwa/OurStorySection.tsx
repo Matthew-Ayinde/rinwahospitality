@@ -127,14 +127,14 @@ export function OurStorySection() {
             </div>
 
             {/* Badge */}
-            <div className="self-start">
+            {/* <div className="self-start">
               <div className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/4 px-5 py-3">
                 <span className="h-1.5 w-1.5 rounded-full bg-teal-300" />
                 <span className="text-[0.67rem] uppercase tracking-[0.28em] text-white/50">
                   Built on Cultural Fluency &amp; Relationship Capital
                 </span>
               </div>
-            </div>
+            </div> */}
 
           </motion.div>
         </div>
