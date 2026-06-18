@@ -87,25 +87,25 @@ export default function QuestionnairePage() {
 
       const headers = [
         'Submitted At','Full Name','Email','Phone','Organization',
-        'Event Name','Event Purpose','Objectives','Event Date','Host City','Venue Location','Official Hashtags','Format','Attendee Count','Target Audience',
+        'Project Name','Project Purpose','Objectives','Project Date','Host City','Venue Location','Official Hashtags','Format','Attendee Count','Target Audience',
         'Responsibilities','Managing Scope','Existing Vendors','Vendor Details','Internal Team','Team Details',
         'Venue Secured','Venue Preferences','Required Spaces','Production Needs','Special Production',
         'Registration Method','Ticketing Support','VIP Guests','VIP Details','Accessibility Required','Accessibility Details','Guest Touchpoints','Speaker Count','Travel Coordination','Speaker Management',
-        'Staffing Required','Volunteers','Staffing Recruitment','Catering Provided','Service Style','Dietary Requirements','Attendee Communications','Marketing Management','Event Materials',
-        'Transportation','Hotel Blocks','Airport Transfers','Sponsors Involved','Sponsor Deliverables','Exhibitor Activations','Event Insurance','Permits Required','Security Required','Contingency Plans',
-        'Budget Range','Budget Constraints','Decision Makers','Procurement Process','Planning Start','Major Milestones','Post-Event Reporting','Success Definition',
+        'Staffing Required','Volunteers','Staffing Recruitment','Catering Provided','Service Style','Dietary Requirements','Attendee Communications','Marketing Management','Project Materials',
+        'Transportation','Hotel Blocks','Airport Transfers','Sponsors Involved','Sponsor Deliverables','Exhibitor Activations','Project Insurance','Permits Required','Security Required','Contingency Plans',
+        'Budget Range','Budget Constraints','Decision Makers','Procurement Process','Planning Start','Major Milestones','Post-Project Reporting','Success Definition',
       ];
 
       const csvRows = rows.map(r => [
         cell(new Date(r.createdAt).toLocaleDateString('en-GB')),
         cell(r.fullName), cell(r.email), cell(r.phone), cell(r.company),
-        cell(r.eventName), cell(r.eventPurpose), cell(r.objectives), cell(r.eventDate), cell(r.hostCity), cell(r.venueLocation), cell(r.eventHashtags), cell(r.eventFormat), cell(r.attendeeCount), cell(r.targetAudience),
+        cell(r.projectName), cell(r.projectPurpose), cell(r.objectives), cell(r.projectDate), cell(r.hostCity), cell(r.venueLocation), cell(r.projectHashtags), cell(r.projectFormat), cell(r.attendeeCount), cell(r.targetAudience),
         cell(r.responsibilities), cell(r.managingScope), cell(r.existingVendors), cell(r.existingVendorDetails), cell(r.internalTeam), cell(r.internalTeamDetails),
         cell(r.venueSecured), cell(r.venuePreferences), cell(r.requiredSpaces), cell(r.productionNeeds), cell(r.specialProduction),
         cell(r.registrationMethod), cell(r.ticketingSupport), cell(r.vipGuests), cell(r.vipDetails), cell(r.accessibilityRequired), cell(r.accessibilityDetails), cell(r.guestTouchpoints), cell(r.speakerCount), cell(r.travelCoordination), cell(r.speakerManagement),
-        cell(r.staffingRequired), cell(r.volunteersNeeded), cell(r.staffingRecruitment), cell(r.cateringProvided), cell(r.serviceStyle), cell(r.dietaryRequirements), cell(r.attendeeCommunications), cell(r.marketingManagement), cell(r.eventMaterials),
-        cell(r.transportationRequired), cell(r.hotelBlocks), cell(r.airportTransfers), cell(r.sponsorsInvolved), cell(r.sponsorDeliverables), cell(r.exhibitorActivations), cell(r.eventInsurance), cell(r.permitsRequired), cell(r.securityRequired), cell(r.contingencyPlans),
-        cell(r.budgetRange), cell(r.budgetConstraints), cell(r.decisionMakers), cell(r.procurementProcess), cell(r.planningStart), cell(r.majorMilestones), cell(r.postEventReporting), cell(r.successDefinition),
+        cell(r.staffingRequired), cell(r.volunteersNeeded), cell(r.staffingRecruitment), cell(r.cateringProvided), cell(r.serviceStyle), cell(r.dietaryRequirements), cell(r.attendeeCommunications), cell(r.marketingManagement), cell(r.projectMaterials),
+        cell(r.transportationRequired), cell(r.hotelBlocks), cell(r.airportTransfers), cell(r.sponsorsInvolved), cell(r.sponsorDeliverables), cell(r.exhibitorActivations), cell(r.projectInsurance), cell(r.permitsRequired), cell(r.securityRequired), cell(r.contingencyPlans),
+        cell(r.budgetRange), cell(r.budgetConstraints), cell(r.decisionMakers), cell(r.procurementProcess), cell(r.planningStart), cell(r.majorMilestones), cell(r.postProjectReporting), cell(r.successDefinition),
       ].join(','));
 
       const csv = [headers.map(h => `"${h}"`).join(','), ...csvRows].join('\r\n');
@@ -144,8 +144,8 @@ export default function QuestionnairePage() {
     { key: 'fullName', label: 'Name', sortable: true },
     { key: 'email',    label: 'Email' },
     { key: 'company',  label: 'Organization', sortable: true },
-    { key: 'eventName', label: 'Event', render: (_: any, row: any) => row.eventName || '—' },
-    { key: 'eventDate', label: 'Date', render: (_: any, row: any) => row.eventDate || '—' },
+    { key: 'projectName', label: 'Project', render: (_: any, row: any) => row.projectName || '—' },
+    { key: 'projectDate', label: 'Date', render: (_: any, row: any) => row.projectDate || '—' },
     {
       key: 'createdAt',
       label: 'Submitted',
@@ -172,9 +172,9 @@ export default function QuestionnairePage() {
     <div className="p-4 sm:p-6 md:p-8 max-w-7xl mx-auto">
       <div className="mb-6 md:mb-8 flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="font-serif text-2xl sm:text-4xl text-white/90">Event Questionnaires</h1>
+          <h1 className="font-serif text-2xl sm:text-4xl text-white/90">Project Questionnaires</h1>
           <p className="text-white/50 mt-1 md:mt-2 text-sm md:text-base">
-            Event Logistics & Operations Discovery responses
+            Project Logistics & Operations Discovery responses
           </p>
         </div>
         {total > 0 && (
@@ -205,7 +205,7 @@ export default function QuestionnairePage() {
                     <p className="text-white/90 font-medium truncate">{row.fullName}</p>
                     <p className="text-teal-300/80 text-xs mt-0.5 truncate">{row.email}</p>
                     <p className="text-white/55 text-xs mt-1">{row.company}</p>
-                    {row.eventName && <p className="text-white/40 text-xs mt-1 italic">{row.eventName}</p>}
+                    {row.projectName && <p className="text-white/40 text-xs mt-1 italic">{row.projectName}</p>}
                   </div>
                   <div className="flex gap-1 flex-shrink-0">
                     <button onClick={() => setSelected(row)} className="p-2 hover:bg-teal-300/20 text-teal-300 rounded-lg transition">
@@ -256,15 +256,15 @@ export default function QuestionnairePage() {
               <Detail label="Organization" value={selected.company} />
             </Section>
 
-            <Section title="Event Overview">
-              <Detail label="Event Name" value={selected.eventName} />
-              <Detail label="Event Purpose" value={selected.eventPurpose} />
+            <Section title="Project Overview">
+              <Detail label="Project Name" value={selected.projectName} />
+              <Detail label="Project Purpose" value={selected.projectPurpose} />
               <Detail label="Objectives & Success Metrics" value={selected.objectives} />
-              <Detail label="Event Date(s)" value={selected.eventDate} />
+              <Detail label="Project Date(s)" value={selected.projectDate} />
               <Detail label="Host City" value={selected.hostCity} />
               <Detail label="Venue Location" value={selected.venueLocation} />
-              <Detail label="Official Hashtags" value={selected.eventHashtags} />
-              <Detail label="Format" value={selected.eventFormat} />
+              <Detail label="Official Hashtags" value={selected.projectHashtags} />
+              <Detail label="Format" value={selected.projectFormat} />
               <Detail label="Attendee Count" value={selected.attendeeCount} />
               <Detail label="Target Audience" value={selected.targetAudience} />
             </Section>
@@ -308,7 +308,7 @@ export default function QuestionnairePage() {
               <Detail label="Dietary Requirements" value={selected.dietaryRequirements} />
               <Detail label="Attendee Communications" value={selected.attendeeCommunications} />
               <Detail label="Marketing Management" value={selected.marketingManagement} />
-              <Detail label="Event Materials" value={selected.eventMaterials} />
+              <Detail label="Project Materials" value={selected.projectMaterials} />
             </Section>
 
             <Section title="Logistics & Risk">
@@ -318,7 +318,7 @@ export default function QuestionnairePage() {
               <Detail label="Sponsors Involved" value={selected.sponsorsInvolved} />
               <Detail label="Sponsor Deliverables" value={selected.sponsorDeliverables} />
               <Detail label="Exhibitor Activations" value={selected.exhibitorActivations} />
-              <Detail label="Event Insurance" value={selected.eventInsurance} />
+              <Detail label="Project Insurance" value={selected.projectInsurance} />
               <Detail label="Permits Required" value={selected.permitsRequired} />
               <Detail label="Security Required" value={selected.securityRequired} />
               <Detail label="Contingency Plans" value={selected.contingencyPlans} />
@@ -331,12 +331,12 @@ export default function QuestionnairePage() {
               <Detail label="Procurement Process" value={selected.procurementProcess} />
               <Detail label="Planning Start" value={selected.planningStart} />
               <Detail label="Major Milestones" value={selected.majorMilestones} />
-              <Detail label="Post-Event Reporting" value={selected.postEventReporting} />
+              <Detail label="Post-Project Reporting" value={selected.postProjectReporting} />
               <Detail label="Success Definition" value={selected.successDefinition} />
             </Section>
 
             <div className="pt-2">
-              <AdminButton onClick={() => window.open(`mailto:${selected.email}?subject=Re: Your RÌNWÁ Event Questionnaire`)} variant="primary" className="w-full">
+              <AdminButton onClick={() => window.open(`mailto:${selected.email}?subject=Re: Your RÌNWÁ Project Questionnaire`)} variant="primary" className="w-full">
                 <Mail size={17} className="inline mr-2" />
                 Reply via Email
               </AdminButton>

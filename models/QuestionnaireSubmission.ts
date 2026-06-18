@@ -5,12 +5,12 @@ export interface IQuestionnaireSubmission extends Document {
   email: string;
   phone: string;
   company: string;
-  eventName?: string;
-  eventPurpose?: string;
+  projectName?: string;
+  projectPurpose?: string;
   objectives?: string;
-  eventDate?: string;
+  projectDate?: string;
   cityVenue?: string;
-  eventFormat?: string;
+  projectFormat?: string;
   attendeeCount?: string;
   targetAudience?: string;
   responsibilities?: string;
@@ -42,14 +42,14 @@ export interface IQuestionnaireSubmission extends Document {
   dietaryRequirements?: string;
   attendeeCommunications?: string;
   marketingManagement?: string;
-  eventMaterials?: string[];
+  projectMaterials?: string[];
   transportationRequired?: string;
   hotelBlocks?: string;
   airportTransfers?: string;
   sponsorsInvolved?: string;
   sponsorDeliverables?: string;
   exhibitorActivations?: string;
-  eventInsurance?: string;
+  projectInsurance?: string;
   permitsRequired?: string;
   securityRequired?: string;
   contingencyPlans?: string;
@@ -59,7 +59,7 @@ export interface IQuestionnaireSubmission extends Document {
   procurementProcess?: string;
   planningStart?: string;
   majorMilestones?: string;
-  postEventReporting?: string;
+  postProjectReporting?: string;
   successDefinition?: string;
   status: string;
   createdAt: Date;
@@ -75,12 +75,12 @@ const QuestionnaireSubmissionSchema = new Schema<IQuestionnaireSubmission>(
     email: { type: String, required: true },
     phone: { type: String, required: true },
     company: { type: String, required: true },
-    eventName: str,
-    eventPurpose: str,
+    projectName: str,
+    projectPurpose: str,
     objectives: str,
-    eventDate: str,
+    projectDate: str,
     cityVenue: str,
-    eventFormat: str,
+    projectFormat: str,
     attendeeCount: str,
     targetAudience: str,
     responsibilities: str,
@@ -112,14 +112,14 @@ const QuestionnaireSubmissionSchema = new Schema<IQuestionnaireSubmission>(
     dietaryRequirements: str,
     attendeeCommunications: str,
     marketingManagement: str,
-    eventMaterials: arr,
+    projectMaterials: arr,
     transportationRequired: str,
     hotelBlocks: str,
     airportTransfers: str,
     sponsorsInvolved: str,
     sponsorDeliverables: str,
     exhibitorActivations: str,
-    eventInsurance: str,
+    projectInsurance: str,
     permitsRequired: str,
     securityRequired: str,
     contingencyPlans: str,
@@ -129,7 +129,7 @@ const QuestionnaireSubmissionSchema = new Schema<IQuestionnaireSubmission>(
     procurementProcess: str,
     planningStart: str,
     majorMilestones: str,
-    postEventReporting: str,
+    postProjectReporting: str,
     successDefinition: str,
     status: { type: String, default: 'new' },
   },

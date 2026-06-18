@@ -407,7 +407,7 @@ function buildAdminQuestionnaireEmailHtml(s: Record<string, any>) {
                     </td>
                     <td style="vertical-align:middle;border-left:1px solid rgba(125,211,207,0.25);padding-left:18px;">
                       <div style="font-family:Georgia,'Times New Roman',serif;font-size:26px;letter-spacing:0.12em;color:#f5f0e8;line-height:1;">RÌNWÁ</div>
-                      <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.32em;color:#8fa8a5;margin-top:5px;">Event Logistics Discovery</div>
+                      <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.32em;color:#8fa8a5;margin-top:5px;">Project Logistics Discovery</div>
                     </td>
                   </tr>
                 </table>
@@ -426,7 +426,7 @@ function buildAdminQuestionnaireEmailHtml(s: Record<string, any>) {
                 ${escapeHtml(s.fullName)}<br>
                 <span style="color:#8fa8a5;font-size:17px;">from ${escapeHtml(s.company)}</span>
               </h1>
-              ${s.eventName ? `<p style="margin:12px 0 0;font-size:13px;color:#7dd3cf;font-style:italic;">${escapeHtml(s.eventName)}</p>` : ''}
+              ${s.projectName ? `<p style="margin:12px 0 0;font-size:13px;color:#7dd3cf;font-style:italic;">${escapeHtml(s.projectName)}</p>` : ''}
             </td></tr>
             <tr><td style="padding:0 32px;"><hr style="border:none;border-top:1px solid rgba(255,255,255,0.07);margin:0;"></td></tr>
             <tr><td style="padding:4px 16px 8px;">
@@ -437,12 +437,12 @@ function buildAdminQuestionnaireEmailHtml(s: Record<string, any>) {
                   qRow('Phone', s.phone),
                   qRow('Organization', s.company),
                 ].join(''))}
-                ${qSection('Event Overview', [
-                  qRow('Event Name & Purpose', s.eventName || s.eventPurpose),
+                ${qSection('Project Overview', [
+                  qRow('Project Name & Purpose', s.projectName || s.projectPurpose),
                   qRow('Objectives & Success Metrics', s.objectives),
-                  qRow('Event Date(s)', s.eventDate),
+                  qRow('Project Date(s)', s.projectDate),
                   qRow('City & Venue', s.cityVenue),
-                  qRow('Format', s.eventFormat),
+                  qRow('Format', s.projectFormat),
                   qRow('Attendee Count', s.attendeeCount),
                   qRow('Target Audience', s.targetAudience),
                 ].join(''))}
@@ -482,7 +482,7 @@ function buildAdminQuestionnaireEmailHtml(s: Record<string, any>) {
                   qRow('Dietary Requirements', s.dietaryRequirements),
                   qRow('Attendee Communications', s.attendeeCommunications),
                   qRow('Marketing Management', s.marketingManagement),
-                  qRow('Event Materials', s.eventMaterials),
+                  qRow('Project Materials', s.projectMaterials),
                 ].join(''))}
                 ${qSection('Logistics & Risk', [
                   qRow('Transportation', s.transportationRequired),
@@ -491,7 +491,7 @@ function buildAdminQuestionnaireEmailHtml(s: Record<string, any>) {
                   qRow('Sponsors Involved', s.sponsorsInvolved),
                   qRow('Sponsor Deliverables', s.sponsorDeliverables),
                   qRow('Exhibitor Activations', s.exhibitorActivations),
-                  qRow('Event Insurance', s.eventInsurance),
+                  qRow('Project Insurance', s.projectInsurance),
                   qRow('Permits Required', s.permitsRequired),
                   qRow('Security Required', s.securityRequired),
                   qRow('Contingency Plans', s.contingencyPlans),
@@ -503,13 +503,13 @@ function buildAdminQuestionnaireEmailHtml(s: Record<string, any>) {
                   qRow('Procurement Process', s.procurementProcess),
                   qRow('Planning Start', s.planningStart),
                   qRow('Major Milestones', s.majorMilestones),
-                  qRow('Post-Event Reporting', s.postEventReporting),
+                  qRow('Post-Project Reporting', s.postProjectReporting),
                   qRow('Success Definition', s.successDefinition),
                 ].join(''))}
               </table>
             </td></tr>
             <tr><td style="padding:24px 32px 28px;text-align:center;">
-              <a href="mailto:${escapeHtml(s.email)}?subject=Re: Your RÌNWÁ Event Questionnaire"
+              <a href="mailto:${escapeHtml(s.email)}?subject=Re: Your RÌNWÁ Project Questionnaire"
                  style="display:inline-block;background:#7dd3cf;color:#041114;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.18em;text-decoration:none;padding:13px 28px;border-radius:100px;">
                 Reply to ${escapeHtml((s.fullName || '').split(' ')[0] || 'Client')}
               </a>
@@ -562,11 +562,11 @@ function buildUserQuestionnaireEmailHtml(s: Record<string, any>) {
               </p>
             </td></tr>
             <tr><td style="padding:0 32px;"><hr style="border:none;border-top:1px solid rgba(255,255,255,0.07);margin:0;"></td></tr>
-            ${s.eventName ? `
+            ${s.projectName ? `
             <tr><td style="padding:22px 32px;">
-              <p style="margin:0 0 6px;font-size:10px;text-transform:uppercase;letter-spacing:0.28em;color:#7dd3cf;">Your event</p>
-              <p style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:18px;color:#f5f0e8;">${escapeHtml(s.eventName)}</p>
-              ${s.eventDate ? `<p style="margin:4px 0 0;font-size:13px;color:#8fa8a5;">${escapeHtml(s.eventDate)}</p>` : ''}
+              <p style="margin:0 0 6px;font-size:10px;text-transform:uppercase;letter-spacing:0.28em;color:#7dd3cf;">Your project</p>
+              <p style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:18px;color:#f5f0e8;">${escapeHtml(s.projectName)}</p>
+              ${s.projectDate ? `<p style="margin:4px 0 0;font-size:13px;color:#8fa8a5;">${escapeHtml(s.projectDate)}</p>` : ''}
             </td></tr>
             <tr><td style="padding:0 32px;"><hr style="border:none;border-top:1px solid rgba(255,255,255,0.07);margin:0;"></td></tr>
             ` : ''}
@@ -617,7 +617,7 @@ function buildUserQuestionnaireEmailHtml(s: Record<string, any>) {
           </table>
         </td></tr>
         <tr><td style="padding:20px 0 0;text-align:center;">
-          <p style="margin:0;font-size:11px;color:#3d5a58;">You received this because you completed the RÌNWÁ event questionnaire.</p>
+          <p style="margin:0;font-size:11px;color:#3d5a58;">You received this because you completed the RÌNWÁ project questionnaire.</p>
         </td></tr>
       </table>
     </td></tr>
@@ -639,12 +639,12 @@ export async function sendQuestionnaireEmails({
   }
 
   const from = process.env.RESEND_FROM || `RÌNWÁ Hospitality <no-reply@rinwahospitality.com>`;
-  const eventLabel = submission.eventName ? ` — ${submission.eventName}` : '';
+  const projectLabel = submission.projectName ? ` — ${submission.projectName}` : '';
 
   const adminPayload = {
     from,
     replyTo: submission.email,
-    subject: `[Questionnaire] ${submission.fullName} · ${submission.company}${eventLabel}`,
+    subject: `[Questionnaire] ${submission.fullName} · ${submission.company}${projectLabel}`,
     text: `New questionnaire from ${submission.fullName} (${submission.email}) at ${submission.company}.`,
     html: buildAdminQuestionnaireEmailHtml(submission),
   };
@@ -754,7 +754,7 @@ function buildCommunityWelcomeHtml(email: string, firstName?: string) {
                     </td>
                     <td style="padding-left:14px;vertical-align:top;">
                       <p style="margin:0 0 3px;font-size:13px;font-weight:700;color:#f5f0e8;">Exclusive invites &amp; curated moments</p>
-                      <p style="margin:0;font-size:13px;color:#8fa8a5;line-height:1.6;">First access to RÌNWÁ events, pop-ups, and experiences across Lagos and beyond.</p>
+                      <p style="margin:0;font-size:13px;color:#8fa8a5;line-height:1.6;">First access to RÌNWÁ projects, pop-ups, and experiences across Lagos and beyond.</p>
                     </td>
                   </tr></table>
                 </td></tr>
