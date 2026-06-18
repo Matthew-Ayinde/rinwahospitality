@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { heroSlides as fallbackSlides } from "./data";
@@ -100,7 +101,13 @@ export function HeroCarousel() {
           <div className="flex items-center">
             <Image src="/images/logo-home.png" alt="RÌNWÁ logo" width={60} height={18} className="object-contain" />
           </div>
-          <div className="hidden gap-2 sm:flex">    
+          <div className="hidden gap-2 sm:flex">
+            <Link
+              href="/questionnaire"
+              className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-white/85 backdrop-blur-sm transition duration-300 hover:border-teal-300/40 hover:bg-white/10 hover:text-white"
+            >
+              Take Our Quiz
+            </Link>
             <button
               type="button"
               className="rounded-full bg-teal-300 px-4 py-2 text-sm font-medium text-slate-950 transition duration-300 hover:bg-teal-200"
@@ -109,13 +116,21 @@ export function HeroCarousel() {
               Partner With Us
             </button>
           </div>
-          <button
-            type="button"
-            className="rounded-full bg-teal-300 px-3.5 py-3 text-xs font-medium text-slate-950 transition duration-300 hover:bg-teal-200 sm:hidden"
-            onClick={() => window.document.getElementById("partnerships")?.scrollIntoView({ behavior: "smooth" })}
-          >
-            Partner With Us
-          </button>
+          <div className="flex gap-2 sm:hidden">
+            <Link
+              href="/questionnaire"
+              className="rounded-full border border-white/15 bg-white/5 px-3 py-2 text-xs font-medium text-white/85 backdrop-blur-sm transition duration-300 hover:border-teal-300/40 hover:bg-white/10 hover:text-white"
+            >
+              Take Our Quiz
+            </Link>
+            <button
+              type="button"
+              className="rounded-full bg-teal-300 px-3 py-2 text-xs font-medium text-slate-950 transition duration-300 hover:bg-teal-200"
+              onClick={() => window.document.getElementById("partnerships")?.scrollIntoView({ behavior: "smooth" })}
+            >
+              Partner With Us
+            </button>
+          </div>
         </header>
 
         <div className="grid items-end gap-10 pb-8 lg:grid-cols-[1.2fr_0.8fr] lg:gap-8 lg:pb-12">
@@ -137,7 +152,7 @@ export function HeroCarousel() {
             >
               RÌNWÁ
               <span className="block text-[0.42em] font-sans font-normal tracking-[0.12em] text-teal-100/90 sm:text-[0.25em]">
-               Your cross-continental authority in ecosystem matchmaking & intelligent experiential design
+              Your Execution Partner for the Canada-Africa Corridor
                   </span>
             </motion.h1>
 
