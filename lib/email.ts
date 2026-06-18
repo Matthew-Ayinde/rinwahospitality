@@ -299,7 +299,7 @@ export async function sendInquiryEmails({ submission, adminEmails }: InquiryEmai
   const adminPayload = {
     from,
     replyTo: submission.email,
-    subject: `[Client Discovery Brief] ${submission.fullName} — ${submission.company}`,
+    subject: `Client discovery brief`,
     text: [
       `Name: ${submission.fullName}`,
       `Email: ${submission.email}`,

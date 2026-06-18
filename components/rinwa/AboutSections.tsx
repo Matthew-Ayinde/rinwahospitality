@@ -53,7 +53,7 @@ export default function AboutSections() {
           </div>
           <div className="mt-5 flex items-end justify-between gap-x-8 gap-y-4">
             <h2 className="font-serif text-[clamp(2.6rem,6vw,4.8rem)] leading-[0.92] tracking-[-0.05em] text-white">
-              Your cultural bridge<br className="hidden sm:block" /> across the diaspora.
+              Expanding into a new market<br className="hidden sm:block" /> across the diaspora.
             </h2>
             <div className="mb-1 hidden sm:flex items-center gap-6 pr-16">
               {["Ottawa", "Toronto", "Lagos"].map((city, i) => (
@@ -82,7 +82,7 @@ export default function AboutSections() {
           <div>
             <div className="space-y-5 text-base leading-[1.95] text-white/68">
               <p>
-                Expanding into an unfamiliar market should never feel like a guessing game.
+                Should never be a guessing game.
                 RÌNWÁ operates as a premium cultural connector and experience architect,
                 bridging the gap between distinct global ecosystems. We guide brands,
                 institutions, and forward‑thinking founders through the complexities of the
@@ -125,7 +125,7 @@ export default function AboutSections() {
                 Who We Are
               </p>
               <p className="mt-4 font-serif text-[clamp(1.25rem,2.4vw,1.65rem)] leading-[1.22] tracking-[-0.02em] text-white">
-                Visionary founders, global brands, and institutions.
+               Your cultural bridge across the diaspora. 
               </p>
 
               <p className="mt-7 text-[0.72rem] uppercase tracking-[0.38em] text-teal-200/75">

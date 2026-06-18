@@ -106,7 +106,7 @@ export function HeroCarousel() {
               href="/questionnaire"
               className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-white/85 backdrop-blur-sm transition duration-300 hover:border-teal-300/40 hover:bg-white/10 hover:text-white"
             >
-              Take Our Quiz
+              Find Your Fit
             </Link>
             <button
               type="button"
@@ -121,7 +121,7 @@ export function HeroCarousel() {
               href="/questionnaire"
               className="rounded-full border border-white/15 bg-white/5 px-3 py-2 text-xs font-medium text-white/85 backdrop-blur-sm transition duration-300 hover:border-teal-300/40 hover:bg-white/10 hover:text-white"
             >
-              Take Our Quiz
+              Find Your Fit
             </Link>
             <button
               type="button"
@@ -162,7 +162,7 @@ export function HeroCarousel() {
               transition={{ delay: 0.55, duration: 0.85, ease: "easeInOut" }}
               className="mt-8 max-w-2xl text-[clamp(1rem,2.2vw,1.5rem)] font-light leading-[1.2] tracking-[-0.04em] text-white/92"
             >
-              With a decade of industry experience, we have built a proven track record of designing trusted environments across the Canada-Nigeria corridor. We engineer premium physical and digital touchpoints that influence global audiences to come, engage, stay longer, share freely, and return intentionally.
+              With a decade of industry experience, we have built a proven track record of designing trusted environments across the Canada-Nigeria corridor. We engineer premium physical and digital experiences that influence global audiences to come, engage, stay longer, share freely, and return intentionally.
                      </motion.p>
 
             <motion.div
