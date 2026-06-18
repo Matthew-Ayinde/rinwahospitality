@@ -55,17 +55,17 @@ export default function AboutSections() {
             <h2 className="font-serif text-[clamp(2.6rem,6vw,4.8rem)] leading-[0.92] tracking-[-0.05em] text-white">
               Your cultural bridge<br className="hidden sm:block" /> across the diaspora.
             </h2>
-            <div className="mb-1 hidden sm:flex items-center gap-5">
+            <div className="mb-1 hidden sm:flex items-center gap-6 pr-16">
               {["Ottawa", "Toronto", "Lagos"].map((city, i) => (
-                <div key={city} className="flex items-center gap-5">
-                  {i > 0 && <span className="h-4 w-px bg-white/10" />}
-                  <div className="flex items-center gap-1.5 group">
+                <div key={city} className="flex items-center gap-6">
+                  {i > 0 && <span className="h-6 w-px bg-white/15" />}
+                  <div className="flex items-center gap-2.5 group">
                     <MapPin
-                      size={13}
-                      className="text-teal-400/80 drop-shadow-[0_0_6px_rgba(94,234,212,0.6)]"
-                      strokeWidth={2.2}
+                      size={20}
+                      className="text-teal-400 drop-shadow-[0_0_8px_rgba(94,234,212,0.7)]"
+                      strokeWidth={2}
                     />
-                    <span className="text-[0.72rem] uppercase tracking-[0.22em] text-white/55">
+                    <span className="text-sm uppercase tracking-[0.22em] text-white/80 font-medium">
                       {city}
                     </span>
                   </div>
