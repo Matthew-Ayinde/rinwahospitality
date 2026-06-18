@@ -301,7 +301,7 @@ export function SocialPresence() {
     <section aria-labelledby="social-presence" className="px-5 py-24 sm:px-8 lg:px-12 lg:py-28">
       <div className="mx-auto max-w-7xl">
         <div className="max-w-2xl">
-          <p className="text-[0.72rem] uppercase tracking-[0.38em] text-teal-200/75">Social presence</p>
+          <p className="text-[0.72rem] uppercase tracking-[0.38em] text-teal-200/75">Digital presence</p>
           <h2 id="social-presence" className="mt-4 font-serif text-[clamp(3rem,7vw,5.2rem)] leading-[0.92] tracking-tighter text-white">
             Come online.
           </h2>
@@ -420,12 +420,6 @@ export function SocialPresence() {
                       </Link>
                   </div>
 
-                  <div className="mt-8 space-y-5">
-                    <p className="max-w-xs text-sm leading-7 text-white/72">{platform.preview}</p>
-                    <div className="flex flex-wrap gap-2">
-                     
-                    </div>
-                  </div>
                 </div>
               </motion.article>
             ))}

@@ -169,7 +169,7 @@ export function ContactForm() {
     <section id="contact" className="px-5 py-24 sm:px-8 lg:px-12 lg:py-28">
       <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.82fr_1.18fr] lg:gap-12">
         <div className="max-w-xl">
-          <p className="text-[0.72rem] uppercase tracking-[0.38em] text-teal-200/75">Contact / inquiry</p>
+          <p className="text-[0.72rem] uppercase tracking-[0.38em] text-teal-200/75">Contact</p>
           <h2 className="mt-4 font-serif text-[clamp(3rem,7vw,5.2rem)] leading-[0.94] tracking-tighter text-white">
             Have a vision? We’re listening.
           </h2>

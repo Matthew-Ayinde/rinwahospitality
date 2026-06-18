@@ -120,7 +120,7 @@ export function OurStorySection() {
                 </p>
                 <footer className="mt-5">
                   <p className="text-[0.67rem] uppercase tracking-[0.28em] text-white/38">
-                    — Bade Obasa, Founder of RÌNWÁ
+                    — Bade Obasa, Founder &amp; CEO, RÌNWÁ
                   </p>
                 </footer>
               </blockquote>
