@@ -152,7 +152,7 @@ export function HeroCarousel() {
             >
               RÌNWÁ
               <span className="block text-[0.42em] font-sans font-normal tracking-[0.12em] text-teal-100/90 sm:text-[0.25em]">
-              Your Execution Partner for the Canada-Africa Corridor
+              Your Operational Delivery Partner for the Canada-Africa Corridor
                   </span>
             </motion.h1>
 
